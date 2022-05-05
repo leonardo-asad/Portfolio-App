@@ -19,7 +19,7 @@ RUN apt-get update \
     && apt-get -y install git iproute2 procps lsb-release \
     #
     # Install pylint
-    #&& pip install pylint \
+    && pip install pylint \
     #
     # Update Python environment based on requirements.txt
     && pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
