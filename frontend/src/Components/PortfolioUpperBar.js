@@ -5,18 +5,21 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import FaceIcon from '@mui/icons-material/Face';
 
 export default function PortfolioUpperBar(props) {
   const loggedOut = (
     <Box>
       <Button
-      onClick={props.handleDisplayLogin}
+      onClick={(event) => props.handleDisplay(event, 'login')}
       color="inherit"
       >
       Log In
       </Button>
       <Button
-      onClick={props.handleDisplaySignUp}
+      onClick={(event) => props.handleDisplay(event, 'signup')}
       color="inherit"
       >
       Sign Up
@@ -49,7 +52,11 @@ export default function PortfolioUpperBar(props) {
             Portfolio Manager
           </Typography>
         </Box>
-        { props.isLoggedIn && username }
+        { props.isLoggedIn &&
+          <Stack direction="row" spacing={1}>
+            <Chip icon={<FaceIcon style={{color: 'white'}} />} label={username} variant="outlined" style={{ color: 'white' }} />
+          </Stack>
+        }
         { props.isLoggedIn ? loggedIn : loggedOut}
       </Toolbar>
     </AppBar>

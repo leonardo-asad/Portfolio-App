@@ -17,6 +17,8 @@ function App() {
       return 'holdings'
     }
   })
+  const [portfolios, SetPortfolios] = useState([])
+  const [selectedPortfolio, setSelectedPortfolio] = useState({})
 
   const handleDisplay = (event, display) => {
     event.preventDefault();
@@ -58,6 +60,15 @@ function App() {
     })
   };
 
+  const handleLogOut = () => {
+    localStorage.removeItem('token')
+    setUsername('')
+    SetPortfolios([])
+    setSelectedPortfolio({})
+    setIsLoggedIn(false)
+    setDisplay('login')
+  }
+
   const handleSignUp = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -92,7 +103,12 @@ function App() {
 
   return (
     <div className="App">
-      <PortfolioUpperBar />
+      <PortfolioUpperBar
+      username={username}
+      isLoggedIn={isLoggedIn}
+      handleLogOut={handleLogOut}
+      handleDisplay={handleDisplay}
+      />
       <Toolbar />
 
       <Box sx={{ display: 'flex' }}>
