@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import './App.css';
@@ -7,9 +7,33 @@ import LogIn from './Components/LogIn';
 import SignUp from './Components/SignUp';
 import PortfolioUpperBar from './Components/PortfolioUpperBar';
 
+import Holdings from './Containers/Holdings';
+
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('token') ? true : false
+  });
   const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/user/', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        response.json()
+        .then(json => {
+          console.log(json)
+          setUsername(json.username)
+        })
+      } else {
+        console.log("Cannot fetch username")
+      }
+    })
+  }, [])
+
   const [display, setDisplay] = useState(() => {
     if (!isLoggedIn) {
       return 'login'
@@ -112,19 +136,22 @@ function App() {
       <Toolbar />
 
       <Box sx={{ display: 'flex' }}>
-
         { display === 'login' &&
           <LogIn
           handleLogIn={handleLogIn}
           handleDisplay={handleDisplay}
           />
         }
-
         {
           display === 'signup' &&
           <SignUp
           handleSignUp={handleSignUp}
           handleDisplay={handleDisplay}
+          />
+        }
+        {
+          display === 'holdings' &&
+          <Holdings
           />
         }
       </Box>
