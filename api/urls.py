@@ -17,7 +17,13 @@ portfolio_detail = views.PortfolioViewSet.as_view({
     'delete':'destroy'
 })
 
+portfolio_purchases_list = views.PurchasesListViewSet.as_view({
+    'get':'list',
+})
+
 urlpatterns = [
+    path('portfolio/purchases/<int:pk>', portfolio_purchases_list, name='portfolio_purchases'),
+    path('portfolio/holdings/<int:pk>', views.HoldingsView, name='holdings'),
     path('portfolio/', portfolio_list, name='portfolio-list'),
     path('portfolio/<int:pk>', portfolio_detail, name='portfolio-detail'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

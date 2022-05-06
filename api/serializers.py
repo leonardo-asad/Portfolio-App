@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Portfolio
+from .models import Portfolio, Purchase
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -48,3 +48,10 @@ class PortfolioSerializer(serializers.ModelSerializer):
 class PortfolioHoldingsSerializer(serializers.Serializer):
     ticker = serializers.CharField(max_length=64)
     shares = serializers.IntegerField()
+
+class PurchaseSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='portfolio.owner.username')
+
+    class Meta:
+        model = Purchase
+        fields = ['pk','owner','ticker','portfolio', 'date', 'price', 'shares']

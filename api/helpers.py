@@ -1,7 +1,7 @@
 import os
 import requests
 
-def lookupAFinnHub(symbol):
+def lookup(symbol):
     """Look up quote for symbol."""
 
     # Contact API
@@ -27,3 +27,6 @@ def lookupAFinnHub(symbol):
 
     except (KeyError, TypeError, ValueError):
         return None
+
+if __name__ == "__main__":
+    print(lookup("AAPL"))
