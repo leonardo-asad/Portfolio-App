@@ -19,7 +19,6 @@ def lookupAFinnHub(symbol):
     # Parse response
     try:
         quote = response.json()
-
         return {
             'price': quote['c'],
             'change': quote['d'],
