@@ -56,7 +56,7 @@ export default function SideBar(props) {
               onClick={(event) => props.onClick({
                 'pk':object.pk,
                 'name':object.name,
-                'holdingss_url': object.holdingss_url,
+                'holdings_url': object.holdings_url,
                 'purchases_url': object.purchases_url},
                 event)}
               >
