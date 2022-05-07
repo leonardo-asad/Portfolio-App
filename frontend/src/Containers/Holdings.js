@@ -87,11 +87,75 @@ export default function Holdings(props) {
     })
   }
 
+  const handleEditPortfolio = (e, pk, name) => {
+    e.preventDefault()
+    fetch(`http://localhost:8000/api/portfolio/${pk}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({'name': name})
+    })
+    .then(response => {
+      if (response.status === 200) {
+        props.updatePortfolioList()
+        console.log(`Portfolio Edited succesfully`)
+      } else {
+        response.json()
+        .then(json => console.log(json.detail))
+      }
+    })
+  }
+
+  const handleDeletePortfolio = (e, pk) => {
+    e.preventDefault()
+    fetch(`http://localhost:8000/api/portfolio/${pk}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (response.status === 204) {
+        props.updatePortfolioList()
+        console.log("Portfolio Deleted Succesfully")
+      } else {
+        response.json()
+        .then(json => console.log(json.detail))
+      }
+    })
+  }
+
+  const handleCreatePortfolio = (e, name) => {
+    fetch('http://localhost:8000/api/portfolio/', {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({'name': name})
+    })
+    .then(response => {
+      if (response.status === 201) {
+        props.updatePortfolioList()
+        console.log(`Portfolio Created succesfully`)
+      } else {
+        response.json()
+        .then(json => console.log(json.detail))
+      }
+    })
+  }
+
   return (
     <React.Fragment>
       <SideBar
       portfolios={props.portfolios}
       onClick={props.handleSelectPortfolio}
+      handleEditPortfolio={handleEditPortfolio}
+      handleDeletePortfolio={handleDeletePortfolio}
+      handleCreatePortfolio={handleCreatePortfolio}
       />
       <Box component="div" sx={{ flexGrow: 1, p: 3 }} >
         <NavTabs

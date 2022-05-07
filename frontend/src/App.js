@@ -65,6 +65,23 @@ function App() {
     }
   }, [isLoggedIn] )
 
+  const updatePortfolioList = () => {
+    fetch('http://localhost:8000/api/portfolio/', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        response.json()
+        .then(data => {
+          console.log("Set portfolio list")
+          SetPortfolios(data)
+        })
+      }
+    })
+  }
+
   const handleSelectPortfolio = (portfolio, event) => {
     setDisplay('holdings')
     if (selectedPortfolio.name === portfolio.name) {
@@ -84,7 +101,6 @@ function App() {
       setDisplay('login')
     }
   }
-
 
   const handleLogIn = (event) => {
     event.preventDefault();
@@ -188,6 +204,7 @@ function App() {
           portfolios={portfolios}
           selectedPortfolio={selectedPortfolio}
           handleSelectPortfolio={handleSelectPortfolio}
+          updatePortfolioList={updatePortfolioList}
           />
         }
       </Box>

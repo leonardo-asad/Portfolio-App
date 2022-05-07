@@ -12,6 +12,10 @@ import { Collapse } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 
+import EditPortfolioDialog from './EditPortfolioDialog';
+import DeletePortfolioDialog from './DeletePortfolioDIalog';
+import CreatePortfolioDialog from './CreatePortfolioDialog';
+
 
 export default function SideBar(props) {
   const [open, setOpen] = useState(false)
@@ -61,13 +65,21 @@ export default function SideBar(props) {
                 event)}
               >
                 <ListItemText primary={object.name} />
-
-
+                <EditPortfolioDialog
+                portfolio={object}
+                handleEditPortfolio={props.handleEditPortfolio}
+                />
+                <DeletePortfolioDialog
+                portfolio={object}
+                handleDeletePortfolio={props.handleDeletePortfolio}
+                />
               </ListItem>
             ))}
           </List>
           <Divider />
-
+          <CreatePortfolioDialog
+          handleCreatePortfolio={props.handleCreatePortfolio}
+          />
         </Collapse>
 
 
