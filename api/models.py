@@ -17,7 +17,7 @@ class Portfolio(models.Model):
         balance = self.purchases.values(
             'ticker').annotate(shares=Sum('shares')).filter(ticker=ticker)
         if not balance.exists():
-            return True
+            return False
         if balance[0]['shares'] >= abs(int(shares)):
             return True
         return False

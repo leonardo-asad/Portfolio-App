@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+
+
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
@@ -19,6 +21,7 @@ import CreatePortfolioDialog from './CreatePortfolioDialog';
 
 export default function SideBar(props) {
   const [open, setOpen] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(null)
 
   const portfolios = props.portfolios;
 
@@ -28,6 +31,10 @@ export default function SideBar(props) {
     setOpen(!open);
   }
 
+  const handleSelectItem = (index, object, event) => {
+    setSelectedIndex(index)
+    props.onClick(object, event)
+  }
 
   return (
     <Drawer
@@ -56,13 +63,18 @@ export default function SideBar(props) {
             {portfolios.map((object, index) => (
               <ListItem
               button
+              selected={selectedIndex === index}
               key={object.pk}
-              onClick={(event) => props.onClick({
+              onClick={(event) => handleSelectItem(
+                index,
+                {
                 'pk':object.pk,
                 'name':object.name,
                 'holdings_url': object.holdings_url,
-                'purchases_url': object.purchases_url},
-                event)}
+                'purchases_url': object.purchases_url
+                },
+                event
+                )}
               >
                 <ListItemText primary={object.name} />
                 <EditPortfolioDialog

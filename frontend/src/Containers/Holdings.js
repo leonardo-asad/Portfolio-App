@@ -5,14 +5,17 @@ import SideBar from '../Components/SideBar';
 import NavTabs from '../Components/NavTabs';
 import HoldingsTable from '../Components/HoldingsTable';
 import TradesTable from '../Components/TradesTable';
+import CircularIndeterminate from '../Components/CircularIndeterminate';
 
 export default function Holdings(props) {
   const [tab, setTab] = useState(0);
   const [holdings, setHoldings] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const [trades, setTrades] = useState([])
 
   useEffect(() => {
     if (JSON.stringify(props.selectedPortfolio) !== "{}") {
+      setIsLoading(true)
       console.log(`Fetching to :${props.selectedPortfolio.holdings_url}`)
       fetch(props.selectedPortfolio.holdings_url, {
         headers: {
@@ -22,6 +25,7 @@ export default function Holdings(props) {
       .then(response => response.json())
       .then(json => {
         setHoldings(json)
+        setIsLoading(false)
       })
     }
   }, [props.selectedPortfolio] )
@@ -60,31 +64,34 @@ export default function Holdings(props) {
 
   const handleAddTrade = (event, formInput) => {
     event.preventDefault();
-    const data = {
-      ...formInput,
-      'portfolio': props.selectedPortfolio.pk
-    }
-    console.log( data );
-
-    fetch('http://localhost:8000/api/portfolio/purchases/', {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => {
-      if (response.status === 201) {
-        response.json()
-        .then(trade => setTrades([trade, ...trades]))
-        .then(() => updateHoldings())
-        console.log("Added new trade")
-      } else {
-        response.json()
-        .then(json => alert(json.detail))
+    if (JSON.stringify(props.selectedPortfolio) === "{}") {
+      alert("Please select a Portfolio to submit a new trade")
+    } else {
+      const data = {
+        ...formInput,
+        'portfolio': props.selectedPortfolio.pk
       }
-    })
+      console.log( data );
+      fetch('http://localhost:8000/api/portfolio/purchases/', {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (response.status === 201) {
+          response.json()
+          .then(trade => setTrades([trade, ...trades]))
+          .then(() => updateHoldings())
+          console.log("Added new trade")
+        } else {
+          response.json()
+          .then(json => alert(json.detail))
+        }
+      })
+    }
   }
 
   const handleEditPortfolio = (e, pk, name) => {
@@ -162,22 +169,25 @@ export default function Holdings(props) {
         tab={tab}
         onClick={handleChange}
         />
-        { tab === 0 &&
-          <HoldingsTable
-          holdings={holdings}
-          handleAddTrade={handleAddTrade}
-          />
+
+        { isLoading ?
+
+          <CircularIndeterminate /> :
+
+          <>
+            { tab === 0 &&
+              <HoldingsTable
+              holdings={holdings}
+              handleAddTrade={handleAddTrade}
+              />
+            }
+            { tab === 1 &&
+              <TradesTable
+              trades={trades}
+              />
+            }
+          </>
         }
-
-        { tab === 1 &&
-          <TradesTable
-          trades={trades}
-          />
-
-
-        }
-
-
       </Box>
     </React.Fragment>
   )

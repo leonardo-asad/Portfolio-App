@@ -21,8 +21,18 @@ export default function AddTradeForm(props) {
     setFormInput({ [name]: value });
   }
 
-  const handleSubmit = (event) => {
-    props.handleAddTrade(event, formInput);
+  const handleSubmit = (event, order, formInput) => {
+    const shares = parseInt(formInput.shares)
+    if (shares <= 0) {
+      alert("Invalid shares Input")
+    } else {
+      if (order === "buy") {
+        props.handleAddTrade(event, formInput);
+      } else {
+        formInput.shares = -shares
+        props.handleAddTrade(event, formInput);
+      }
+    }
     setFormInput({
       ticker: '',
       shares: ""
@@ -39,7 +49,6 @@ export default function AddTradeForm(props) {
         }}
         noValidate
         autoComplete="off"
-        onSubmit={handleSubmit}
       >
         <TextField
           size='small'
@@ -53,6 +62,7 @@ export default function AddTradeForm(props) {
 
         />
         <TextField
+          type="number"
           size='small'
           required
           name="shares"
@@ -63,12 +73,20 @@ export default function AddTradeForm(props) {
           onChange={handleChange}
         />
         <Button
-          type="submit"
           variant='contained'
-          color='primary'
+          color='success'
           className='classes.button'
+          onClick={(e) => handleSubmit(e, "buy", formInput)}
         >
-          Add Trade
+          Buy
+        </Button>
+        <Button
+          variant='contained'
+          color='error'
+          className='classes.button'
+          onClick={(e) => handleSubmit(e, "sell", formInput)}
+        >
+          Sell
         </Button>
       </Box>
   )
