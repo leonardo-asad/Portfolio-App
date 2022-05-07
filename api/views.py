@@ -1,11 +1,12 @@
-from rest_framework.views import APIView
+import datetime
 from rest_framework import permissions, status, viewsets
-from django.db.models import Sum
-from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
+from django.db.models import Sum
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Portfolio
+from .models import Portfolio, Purchase
 from .serializers import UserSerializerWithToken, UserSerializer, \
      PortfolioSerializer, PortfolioHoldingsSerializer, PurchaseSerializer
 from .permissions import IsOwner
@@ -35,6 +36,9 @@ class UserView(APIView):
         return Response(serializer.data)
 
 class PortfolioViewSet(viewsets.ModelViewSet):
+    """
+    View User's Portfolios and Create a new one
+    """
     queryset = Portfolio.objects.all()
     serializer_class = PortfolioSerializer
 
@@ -57,6 +61,9 @@ class PortfolioViewSet(viewsets.ModelViewSet):
 
 @api_view(["GET"])
 def HoldingsView(request, pk):
+    """
+    View Portfolio's holdings
+    """
     # Filter portfolios by its owner
     try:
         portfolio = Portfolio.objects.get(pk=pk)
@@ -90,6 +97,9 @@ def HoldingsView(request, pk):
     return Response(holdings)
 
 class PurchasesListViewSet(viewsets.ModelViewSet):
+    """
+    View Portfolio's Purchases
+    """
     queryset = Portfolio.objects.all()
     serializer_class = PurchaseSerializer
     permission_classes = [permissions.IsAuthenticated,
@@ -104,3 +114,56 @@ class PurchasesListViewSet(viewsets.ModelViewSet):
         portfolio = self.get_object()
 
         return portfolio.purchases
+
+@api_view(["GET", "POST"])
+def PurchaseCreateView(request):
+    """
+    Save a new Purchase
+    """
+    if request.method == "GET":
+        queryset = Purchase.objects.filter(portfolio__owner = request.user)
+        serializer = PurchaseSerializer(queryset, many=True)
+
+        return Response(serializer.data)
+
+    if request.method == "POST":
+        purchase = request.data
+
+        purchase['date'] = datetime.date.today()
+
+        quote = lookup(purchase['ticker'])
+
+        if quote is None:
+            return Response({"detail": "Finhub API is not responding. Please try againg."},
+                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        if quote['price'] == 0:
+            return Response({"detail": "Invalid Symbol"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        purchase['price'] = quote['price']
+
+        serializer = PurchaseSerializer(data=purchase)
+
+        if serializer.is_valid(raise_exception=True):
+
+            shares = int(serializer.validated_data['shares'])
+            ticker = serializer.validated_data['ticker']
+            portfolio = serializer.validated_data['portfolio']
+
+            if shares < 0:
+                portfolio = Portfolio.objects.get(pk=portfolio.pk)
+
+                check_balance = portfolio.check_balance(ticker, shares)
+
+                if check_balance:
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+                return Response(
+                    {"detail": "Not enough balance"},
+                    status=status.HTTP_400_BAD_REQUEST
+                    )
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

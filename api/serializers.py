@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.reverse import reverse
+from django.contrib.auth import get_user_model
 
 from .models import Portfolio, Purchase
 
@@ -9,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     User serializer without tokens
     """
     class Meta:
-        model = settings.AUTH_USER_MODEL
+        model = get_user_model()
         fields = ['id', 'username']
 
 class UserSerializerWithToken(serializers.ModelSerializer):
@@ -35,14 +36,28 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         return instance
 
     class Meta:
-        model = settings.AUTH_USER_MODEL
+        model = get_user_model()
         fields = ('token', 'username', 'email' ,'password')
 
 class PortfolioSerializer(serializers.ModelSerializer):
+    holdings_url = serializers.SerializerMethodField(read_only=True)
+    purchases_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Portfolio
-        fields = ['pk','name']
+        fields = ['pk','name', 'holdings_url', 'purchases_url']
+
+    def get_holdings_url(self, obj):
+        request = self.context.get('request')
+        if request is None:
+            return None
+        return reverse("holdings", kwargs={"pk": obj.pk}, request=request)
+
+    def get_purchases_url(self, obj):
+        request = self.context.get('request')
+        if request is None:
+            return None
+        return reverse("portfolio_purchases", kwargs={"pk": obj.pk}, request=request)
 
 #pylint: disable=W0223
 class PortfolioHoldingsSerializer(serializers.Serializer):

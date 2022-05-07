@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import './App.css';
@@ -16,23 +16,25 @@ function App() {
   const [username, setUsername] = useState('')
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/user/', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    .then(response => {
-      if (response.status === 200) {
-        response.json()
-        .then(json => {
-          console.log(json)
-          setUsername(json.username)
-        })
-      } else {
-        console.log("Cannot fetch username")
-      }
-    })
-  }, [])
+    if (isLoggedIn) {
+      fetch('http://localhost:8000/api/user/', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(response => {
+        if (response.status === 200) {
+          response.json()
+          .then(json => {
+            console.log(json)
+            setUsername(json.username)
+          })
+        } else {
+          console.log("Cannot fetch username")
+        }
+      })
+    }
+  }, [isLoggedIn])
 
   const [display, setDisplay] = useState(() => {
     if (!isLoggedIn) {
@@ -44,6 +46,36 @@ function App() {
   const [portfolios, SetPortfolios] = useState([])
   const [selectedPortfolio, setSelectedPortfolio] = useState({})
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetch('http://localhost:8000/api/portfolio/', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(response => {
+        if (response.status === 200) {
+          response.json()
+          .then(data => {
+            console.log("Set portfolio list")
+            SetPortfolios(data)
+          })
+        }
+      })
+    }
+  }, [isLoggedIn] )
+
+  const handleSelectPortfolio = (portfolio, event) => {
+    setDisplay('holdings')
+    if (selectedPortfolio.name === portfolio.name) {
+      console.log(`Portfolio already selected!`)
+      return;
+    }
+
+    console.log(`Selected: ${portfolio.name}. Id: ${portfolio.pk}`)
+    setSelectedPortfolio(portfolio)
+  }
+
   const handleDisplay = (event, display) => {
     event.preventDefault();
     if (display === 'signup') {
@@ -52,6 +84,7 @@ function App() {
       setDisplay('login')
     }
   }
+
 
   const handleLogIn = (event) => {
     event.preventDefault();
@@ -152,6 +185,9 @@ function App() {
         {
           display === 'holdings' &&
           <Holdings
+          portfolios={portfolios}
+          selectedPortfolio={selectedPortfolio}
+          handleSelectPortfolio={handleSelectPortfolio}
           />
         }
       </Box>
