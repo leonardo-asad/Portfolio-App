@@ -43,27 +43,29 @@ function App() {
       return 'holdings'
     }
   })
-  const [portfolios, SetPortfolios] = useState([])
-  const [selectedPortfolio, setSelectedPortfolio] = useState({})
+  const [portfolios, SetPortfolios] = useState([]);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      fetch('http://localhost:8000/api/portfolio/', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      .then(response => {
-        if (response.status === 200) {
-          response.json()
-          .then(data => {
+    fetch('http://localhost:8000/api/portfolio/', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        response.json()
+        .then(data => {
+          if (data.length > 0) {
             console.log("Set portfolio list")
             SetPortfolios(data)
-          })
-        }
-      })
-    }
+            setSelectedPortfolio(data[0])
+          }
+        })
+      }
+    })
   }, [isLoggedIn] )
+
+  const [selectedPortfolio, setSelectedPortfolio] = useState({})
 
   const updatePortfolioList = () => {
     fetch('http://localhost:8000/api/portfolio/', {
@@ -74,9 +76,8 @@ function App() {
     .then(response => {
       if (response.status === 200) {
         response.json()
-        .then(data => {
-          console.log("Set portfolio list")
-          SetPortfolios(data)
+        .then(portfolios => {
+          SetPortfolios(portfolios)
         })
       }
     })

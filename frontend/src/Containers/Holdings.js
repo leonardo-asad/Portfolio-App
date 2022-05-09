@@ -4,8 +4,11 @@ import Box from '@mui/material/Box';
 import SideBar from '../Components/SideBar';
 import NavTabs from '../Components/NavTabs';
 import HoldingsTable from '../Components/HoldingsTable';
+import HoldingsGrid from '../Components/HoldingsGrid';
 import TradesTable from '../Components/TradesTable';
 import CircularIndeterminate from '../Components/CircularIndeterminate';
+import OutlinedCard from '../Components/Card';
+import AddTradeForm2 from '../Components/AddTradeForm2';
 
 export default function Holdings(props) {
   const [tab, setTab] = useState(0);
@@ -133,6 +136,13 @@ export default function Holdings(props) {
         .then(json => console.log(json.detail))
       }
     })
+    .then(() => {
+      if (props.portfolios.length > 1) {
+        props.handleSelectPortfolio(props.portfolios[0])
+      } else {
+        props.handleSelectPortfolio({})
+      }
+    })
   }
 
   const handleCreatePortfolio = (e, name) => {
@@ -175,13 +185,34 @@ export default function Holdings(props) {
           <CircularIndeterminate /> :
 
           <>
-            { tab === 0 &&
+            { (tab === 3 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
               <HoldingsTable
               holdings={holdings}
               handleAddTrade={handleAddTrade}
               />
             }
-            { tab === 1 &&
+            { (tab === 0 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
+              <>
+                <Box
+                sx={{
+                  m: 5,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 5
+                }}
+                >
+                  <AddTradeForm2
+                  handleAddTrade={handleAddTrade}
+                  />
+                  <OutlinedCard />
+                </Box>
+
+                <HoldingsGrid
+                holdings={holdings}
+                />
+              </>
+            }
+            { (tab === 1 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
               <TradesTable
               trades={trades}
               />

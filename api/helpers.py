@@ -29,4 +29,4 @@ def lookup(symbol):
         return None
 
 if __name__ == "__main__":
-    print(lookup("sdfasd"))
+    print(lookup("XLF"))

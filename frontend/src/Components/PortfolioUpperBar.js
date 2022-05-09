@@ -13,14 +13,14 @@ export default function PortfolioUpperBar(props) {
   const loggedOut = (
     <Box>
       <Button
-      onClick={(event) => props.handleDisplay(event, 'login')}
-      color="inherit"
+        onClick={(event) => props.handleDisplay(event, 'login')}
+        color="inherit"
       >
       Log In
       </Button>
       <Button
-      onClick={(event) => props.handleDisplay(event, 'signup')}
-      color="inherit"
+        onClick={(event) => props.handleDisplay(event, 'signup')}
+        color="inherit"
       >
       Sign Up
       </Button>
