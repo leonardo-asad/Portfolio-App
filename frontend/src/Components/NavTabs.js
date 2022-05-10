@@ -18,7 +18,7 @@ export default function NavTabs(props) {
 
   return (
     <Tabs value={props.tab} onChange={props.onClick}>
-      <LinkTab label="My Holdings" />
+      <LinkTab label="Dashboard" />
       <LinkTab label="History" />
     </Tabs>
   )

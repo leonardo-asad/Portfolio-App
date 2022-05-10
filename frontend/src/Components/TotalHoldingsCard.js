@@ -8,15 +8,19 @@ export default function TotalHoldingsCard(props) {
     <Box
     sx={{
       display: 'flex',
-      minWidth: '200px',
-      width: 1,
-      justifyContent: 'center',
       flexDirection: 'column',
-      border: 1,
-      borderRadius: 2,
-      borderColor: 'grey.300'
+      justifyContent: 'center',
+      height: 1,
+      padding: 1,
+      borderRadius: 3,
+      boxShadow: 3
       }}
     >
+       <Box>
+        <Typography sx={{ m: 1 }} variant="h4">
+          {props.selectedPortfolio.name}
+        </Typography>
+      </Box>
       <Box>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Total Worth

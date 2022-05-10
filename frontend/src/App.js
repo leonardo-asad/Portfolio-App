@@ -6,8 +6,11 @@ import './App.css';
 import LogIn from './Components/LogIn';
 import SignUp from './Components/SignUp';
 import PortfolioUpperBar from './Components/PortfolioUpperBar';
-
 import Holdings from './Containers/Holdings';
+
+import { ThemeProvider } from '@mui/material/styles';
+
+import { theme } from './theme'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -176,41 +179,42 @@ function App() {
 
 
   return (
-    <div className="App">
-      <PortfolioUpperBar
-      username={username}
-      isLoggedIn={isLoggedIn}
-      handleLogOut={handleLogOut}
-      handleDisplay={handleDisplay}
-      />
-      <Toolbar />
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <PortfolioUpperBar
+        username={username}
+        isLoggedIn={isLoggedIn}
+        handleLogOut={handleLogOut}
+        handleDisplay={handleDisplay}
+        />
+        <Toolbar />
 
-      <Box sx={{ display: 'flex' }}>
-        { display === 'login' &&
-          <LogIn
-          handleLogIn={handleLogIn}
-          handleDisplay={handleDisplay}
-          />
-        }
-        {
-          display === 'signup' &&
-          <SignUp
-          handleSignUp={handleSignUp}
-          handleDisplay={handleDisplay}
-          />
-        }
-        {
-          display === 'holdings' &&
-          <Holdings
-          portfolios={portfolios}
-          selectedPortfolio={selectedPortfolio}
-          handleSelectPortfolio={handleSelectPortfolio}
-          updatePortfolioList={updatePortfolioList}
-          />
-        }
-      </Box>
-
-    </div>
+        <Box sx={{ display: 'flex' }}>
+          { display === 'login' &&
+            <LogIn
+            handleLogIn={handleLogIn}
+            handleDisplay={handleDisplay}
+            />
+          }
+          {
+            display === 'signup' &&
+            <SignUp
+            handleSignUp={handleSignUp}
+            handleDisplay={handleDisplay}
+            />
+          }
+          {
+            display === 'holdings' &&
+            <Holdings
+            portfolios={portfolios}
+            selectedPortfolio={selectedPortfolio}
+            handleSelectPortfolio={handleSelectPortfolio}
+            updatePortfolioList={updatePortfolioList}
+            />
+          }
+        </Box>
+      </div>
+    </ThemeProvider>
   );
 }
 

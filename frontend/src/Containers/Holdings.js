@@ -3,14 +3,10 @@ import Box from '@mui/material/Box';
 
 import SideBar from '../Components/SideBar';
 import NavTabs from '../Components/NavTabs';
-import HoldingsTable from '../Components/HoldingsTable';
 import HoldingsGrid from '../Components/HoldingsGrid';
 import TradesTable from '../Components/TradesTable';
 import CircularIndeterminate from '../Components/CircularIndeterminate';
-import OutlinedCard from '../Components/Card';
-import AddTradeForm2 from '../Components/AddTradeForm2';
-import TotalHoldingsCard from '../Components/TotalHoldingsCard';
-import BarChart from '../Components/PieChart';
+import Dashboard from '../Components/Dashboard';
 
 export default function Holdings(props) {
   const [tab, setTab] = useState(0);
@@ -142,6 +138,10 @@ export default function Holdings(props) {
     .then(response => {
       if (response.status === 204) {
         props.updatePortfolioList()
+        setHoldings([])
+        setTrades([])
+        setTotalHoldings(null)
+        setTotalPercentChange(null)
         console.log("Portfolio Deleted Succesfully")
       } else {
         response.json()
@@ -197,39 +197,24 @@ export default function Holdings(props) {
           <CircularIndeterminate /> :
 
           <>
-            { (tab === 3 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
-              <HoldingsTable
-              holdings={holdings}
-              handleAddTrade={handleAddTrade}
-              />
-            }
-            { (tab === 0 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
-              <>
-                <Box
-                sx={{
-                  m: 5,
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  gap: 5,
-                }}
-                >
-                  <AddTradeForm2
+            { (tab === 0 && props.portfolios.length > 0 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
+              <React.Fragment>
+                  <Dashboard
                   handleAddTrade={handleAddTrade}
-                  />
-                  <TotalHoldingsCard
+                  selectedPortfolio={props.selectedPortfolio}
                   totalHoldings={totalHoldings}
                   totalPercentChange={totalPercentChange}
-                  />
-                  <BarChart />
-                </Box>
-
-                <HoldingsGrid
                   holdings={holdings}
-                  handleTotalHoldings={handleTotalHoldings}
-                  handleTotalPercentChange={handleTotalPercentChange}
-                />
-              </>
+                  />
+
+                  <HoldingsGrid
+                    holdings={holdings}
+                    handleTotalHoldings={handleTotalHoldings}
+                    handleTotalPercentChange={handleTotalPercentChange}
+                  />
+              </React.Fragment>
             }
+
             { (tab === 1 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
               <TradesTable
               trades={trades}

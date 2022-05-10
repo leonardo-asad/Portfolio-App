@@ -1,37 +1,41 @@
-import React, { Component } from "react";
+import React from "react";
+import Box from '@mui/material/Box';
 import Chart from "react-apexcharts";
 
-class BarChart extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      options: {
-        chart: {
-          id: 'pie'
-        },
-        labels: ['Apple', 'Mango', 'Orange', 'Watermelon']
-      },
-      series: [44, 55, 41, 17, 15],
-    };
-  }
-
-  render() {
-    return (
-      <div className="app">
-        <div className="row">
-          <div className="mixed-chart">
-            <Chart
-              options={this.state.options}
-              series={this.state.series}
-              type="pie"
-              width="500"
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
+function getValue(holding_object) {
+  const shares = parseFloat(holding_object.shares)
+  const price = parseFloat(holding_object.price)
+  const value = shares * price
+  return Math.round(value)
 }
 
-export default BarChart;
+export default function PieChart(props) {
+
+  const holdings = props.holdings
+
+  const symbols = holdings.map(({ticker}) => ticker)
+
+  const values = holdings.map((holding_object) => getValue(holding_object))
+
+  return (
+    <Box
+    sx={{
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      height: 1,
+      padding: 1,
+      borderRadius: 3,
+      boxShadow: 3
+    }}
+    >
+      <Chart
+        options={{ labels: symbols }}
+        series={values}
+        type="pie"
+        width="350"
+      />
+    </Box>
+  );
+}

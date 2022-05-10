@@ -48,7 +48,9 @@ export default function SideBar(props) {
 
     <Toolbar />
 
-    <Box sx={{ overflow: 'auto' }}>
+    <Box
+    sx={{ overflow: 'auto' }}
+    >
       <List>
         <ListItem button onClick={handleClick}>
           <ListItemIcon>
@@ -76,7 +78,10 @@ export default function SideBar(props) {
                 event
                 )}
               >
-                <ListItemText primary={object.name} />
+                <ListItemText
+                primary={object.name}
+                sx={{ display: 'flex', justifyContent: 'center' }}
+                />
                 <EditPortfolioDialog
                 portfolio={object}
                 handleEditPortfolio={props.handleEditPortfolio}
@@ -88,13 +93,11 @@ export default function SideBar(props) {
               </ListItem>
             ))}
           </List>
-          <Divider />
-          <CreatePortfolioDialog
-          handleCreatePortfolio={props.handleCreatePortfolio}
-          />
         </Collapse>
-
-
+        <Divider />
+        <CreatePortfolioDialog
+        handleCreatePortfolio={props.handleCreatePortfolio}
+        />
       </List>
     </Box>
 

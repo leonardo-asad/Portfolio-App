@@ -137,16 +137,21 @@ export default function HoldingsGrid(props) {
     <Box
       sx={{
         m: 5,
+        boxShadow: 3,
+        borderRadius: 3,
         '& .super-app-theme--cell': {
-          fontWeight: '600',
+          fontWeight: '700',
+          fontSize: 15,
         },
         '& .super-app.negative': {
           color: '#f44336',
-          fontWeight: '600',
+          fontWeight: '700',
+          fontSize: 15,
         },
         '& .super-app.positive': {
           color: '#4caf50',
-          fontWeight: '600',
+          fontWeight: '700',
+          fontSize: 15,
         },
       }}
     >
