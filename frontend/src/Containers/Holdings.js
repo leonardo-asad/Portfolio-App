@@ -9,12 +9,16 @@ import TradesTable from '../Components/TradesTable';
 import CircularIndeterminate from '../Components/CircularIndeterminate';
 import OutlinedCard from '../Components/Card';
 import AddTradeForm2 from '../Components/AddTradeForm2';
+import TotalHoldingsCard from '../Components/TotalHoldingsCard';
+import BarChart from '../Components/PieChart';
 
 export default function Holdings(props) {
   const [tab, setTab] = useState(0);
   const [holdings, setHoldings] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [trades, setTrades] = useState([])
+  const [totalHoldings, setTotalHoldings] = useState(null)
+  const [totalPercentChange, setTotalPercentChange] = useState(null)
 
   useEffect(() => {
     if (JSON.stringify(props.selectedPortfolio) !== "{}") {
@@ -51,6 +55,14 @@ export default function Holdings(props) {
   const handleChange = (event, newTab) => {
     setTab(newTab);
   };
+
+  const handleTotalHoldings = (totalHoldings) => {
+    setTotalHoldings(totalHoldings);
+  }
+
+  const handleTotalPercentChange = (totalPercentChange) => {
+    setTotalPercentChange(totalPercentChange);
+  }
 
   const updateHoldings = () => {
     console.log(`Fetching to :${props.selectedPortfolio.holdings_url}`)
@@ -198,17 +210,23 @@ export default function Holdings(props) {
                   m: 5,
                   display: 'flex',
                   justifyContent: 'space-between',
-                  gap: 5
+                  gap: 5,
                 }}
                 >
                   <AddTradeForm2
                   handleAddTrade={handleAddTrade}
                   />
-                  <OutlinedCard />
+                  <TotalHoldingsCard
+                  totalHoldings={totalHoldings}
+                  totalPercentChange={totalPercentChange}
+                  />
+                  <BarChart />
                 </Box>
 
                 <HoldingsGrid
-                holdings={holdings}
+                  holdings={holdings}
+                  handleTotalHoldings={handleTotalHoldings}
+                  handleTotalPercentChange={handleTotalPercentChange}
                 />
               </>
             }

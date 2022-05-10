@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import clsx from 'clsx';
 
-
 const columns = [
   {
     field: 'ticker',
@@ -81,6 +80,11 @@ function marketValueRow(shares, price) {
   return shares * price;
 }
 
+function previousValueRow(value, change_percent) {
+  const change = parseFloat(change_percent) / 100
+  return (1 - change)*value
+}
+
 
 function createRow(holding_object, index) {
   const id = index;
@@ -90,11 +94,16 @@ function createRow(holding_object, index) {
   const change = ccyFormat(parseFloat(holding_object.change));
   const change_percent = ccyFormat(parseFloat(holding_object.change_percent));
   const value = ccyFormat(marketValueRow(shares, price));
-  return { id, ticker, shares, price, change, change_percent, value };
+  const previousValue = ccyFormat(previousValueRow(value, change_percent))
+  return { id, ticker, shares, price, change, change_percent, value, previousValue };
 }
 
 function total(items) {
   return items.map(({ value }) => parseFloat(value)).reduce((sum, i) => sum + i, 0);
+}
+
+function prevTotal(items) {
+  return items.map(({ previousValue }) => parseFloat(previousValue)).reduce((sum, i) => sum + i, 0);
 }
 
 function weight(holding, total) {
@@ -106,27 +115,22 @@ function weight(holding, total) {
   return { ...holding, weight }
 }
 
-// const rows = [
-//   {
-//     id: 1,
-//     ticker: 'AAPL',
-//     price: 100,
-//     change: -5,
-//     change_percent: -5,
-//     shares: 10,
-//     value:1000,
-//     weight: 100
-//   },
-
-// ];
-
 export default function HoldingsGrid(props) {
   let rows = props.holdings.map((holding, index) => createRow(holding, index));
-  //debugger
 
-  const holdingsSubtotal = ccyFormat(total(rows));
+  const totalHoldings = ccyFormat(total(rows));
 
-  rows = rows.map(row => weight(row, holdingsSubtotal))
+  const prevTotalHoldings = ccyFormat(prevTotal(rows));
+
+  const totalPercentChange = ccyFormat((1 - prevTotalHoldings / totalHoldings) * 100)
+
+
+  React.useEffect(() => {
+    props.handleTotalHoldings(totalHoldings)
+    props.handleTotalPercentChange(totalPercentChange)
+  })
+
+  rows = rows.map(row => weight(row, totalHoldings))
 
 
   return (

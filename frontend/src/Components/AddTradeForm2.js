@@ -43,19 +43,22 @@ export default function AddTradeForm2(props) {
   return (
     <Box
     sx={{
+      minWidth: '350px',
+      width: 1,
       display: 'flex',
       justifyContent: 'center',
       flexDirection: 'column',
       border: 1,
-      borderRadius: 1,
-      borderColor: 'grey.500'
+      borderRadius: 2,
+      borderColor: 'grey.300'
     }}
     >
       <Box
         sx={{
           display: 'flex',
           width: 1,
-          justifyContent: 'center'
+          justifyContent: 'center',
+          m: 2
         }}
       >
         <Typography variant="h5" >
