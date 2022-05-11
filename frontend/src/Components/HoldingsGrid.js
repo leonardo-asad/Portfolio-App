@@ -6,12 +6,14 @@ import clsx from 'clsx';
 const columns = [
   {
     field: 'ticker',
+    headerClassName: 'super-app-theme--header',
     headerName: 'Ticker',
     flex: 1,
     cellClassName: 'super-app-theme--cell',
   },
   {
     field: 'price',
+    headerClassName: 'super-app-theme--header',
     headerName: 'Price',
     flex: 1,
     type: 'number',
@@ -19,6 +21,7 @@ const columns = [
   },
   {
     field: 'change',
+    headerClassName: 'super-app-theme--header',
     headerName: 'Change',
     flex: 1,
     type: 'number',
@@ -35,6 +38,7 @@ const columns = [
   },
   {
     field: 'change_percent',
+    headerClassName: 'super-app-theme--header',
     headerName: 'Change %',
     flex: 1,
     type: 'number',
@@ -51,6 +55,7 @@ const columns = [
   },
   {
     field: 'shares',
+    headerClassName: 'super-app-theme--header',
     headerName: 'Shares',
     flex: 1,
     type: 'number',
@@ -58,6 +63,7 @@ const columns = [
   },
   {
     field: 'value',
+    headerClassName: 'super-app-theme--header',
     headerName: 'Value USD',
     flex: 1,
     type: 'number',
@@ -65,6 +71,7 @@ const columns = [
   },
   {
     field: 'weight',
+    headerClassName: 'super-app-theme--header',
     headerName: 'Weight %',
     flex: 1,
     type: 'number',
@@ -139,6 +146,10 @@ export default function HoldingsGrid(props) {
         m: 5,
         boxShadow: 3,
         borderRadius: 3,
+        '& .super-app-theme--header': {
+          backgroundColor: "primary.main",
+          color: 'white'
+        },
         '& .super-app-theme--cell': {
           fontWeight: '700',
           fontSize: 15,

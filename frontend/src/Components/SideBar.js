@@ -17,10 +17,10 @@ import Toolbar from '@mui/material/Toolbar';
 import EditPortfolioDialog from './EditPortfolioDialog';
 import DeletePortfolioDialog from './DeletePortfolioDIalog';
 import CreatePortfolioDialog from './CreatePortfolioDialog';
-
+import SetAlertDialog from './SetAlertDialog';
 
 export default function SideBar(props) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   const portfolios = props.portfolios;
@@ -97,6 +97,9 @@ export default function SideBar(props) {
         <Divider />
         <CreatePortfolioDialog
         handleCreatePortfolio={props.handleCreatePortfolio}
+        />
+        <SetAlertDialog
+        holdings={props.holdings}
         />
       </List>
     </Box>

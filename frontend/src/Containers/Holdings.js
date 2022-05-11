@@ -181,12 +181,17 @@ export default function Holdings(props) {
     <React.Fragment>
       <SideBar
       portfolios={props.portfolios}
+      holdings={holdings}
       onClick={props.handleSelectPortfolio}
       handleEditPortfolio={handleEditPortfolio}
       handleDeletePortfolio={handleDeletePortfolio}
       handleCreatePortfolio={handleCreatePortfolio}
       />
-      <Box component="div" sx={{ flexGrow: 1, p: 3 }} >
+
+      <Box
+      component="div"
+      sx={{ flexGrow: 1, p: 3 }}
+      >
         <NavTabs
         tab={tab}
         onClick={handleChange}
@@ -223,6 +228,7 @@ export default function Holdings(props) {
           </>
         }
       </Box>
+
     </React.Fragment>
   )
 }

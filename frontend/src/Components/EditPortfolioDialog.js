@@ -38,7 +38,7 @@ export default function EditPortfolioDialog(props) {
     <div>
       <Tooltip title="Edit">
         <IconButton onClick={handleClickOpen}>
-          <EditIcon />
+          <EditIcon color='primary'/>
         </IconButton>
       </Tooltip>
 

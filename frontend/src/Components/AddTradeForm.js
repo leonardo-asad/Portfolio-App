@@ -61,7 +61,7 @@ export default function AddTradeForm(props) {
         }}
       >
         <Typography variant="h4" >
-          Add Trade
+          Manage Assets
         </Typography>
       </Box>
 
@@ -113,7 +113,7 @@ export default function AddTradeForm(props) {
             className='classes.button'
             onClick={(e) => handleSubmit(e, "buy", formInput)}
           >
-            Buy
+            Add
           </Button>
           <Button
             variant='contained'
@@ -121,7 +121,7 @@ export default function AddTradeForm(props) {
             className='classes.button'
             onClick={(e) => handleSubmit(e, "sell", formInput)}
           >
-            Sell
+            Remove
           </Button>
         </Box>
 

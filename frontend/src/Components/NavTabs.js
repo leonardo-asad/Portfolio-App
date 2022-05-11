@@ -20,6 +20,7 @@ export default function NavTabs(props) {
     <Tabs value={props.tab} onChange={props.onClick}>
       <LinkTab label="Dashboard" />
       <LinkTab label="History" />
+      <LinkTab label="Alerts" />
     </Tabs>
   )
 }

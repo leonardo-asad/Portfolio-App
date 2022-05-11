@@ -29,7 +29,7 @@ export default function DeletePortfolioDialog(props) {
     <div>
       <Tooltip title="Delete">
         <IconButton onClick={handleClickOpen}>
-          <DeleteIcon />
+          <DeleteIcon color='primary'/>
         </IconButton>
       </Tooltip>
 
