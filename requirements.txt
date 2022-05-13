@@ -1,8 +1,9 @@
 Django
 djangorestframework
-pylint-django
+django-rest-registration
 djangorestframework-simplejwt
 django-cors-headers
+pylint-django
 psycopg2
 django-storages[azure]
 urllib3==1.25.3
