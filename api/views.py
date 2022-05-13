@@ -1,4 +1,6 @@
+import os
 import datetime
+from django.http import HttpResponse
 from rest_framework import permissions, status, viewsets
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
@@ -6,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from backend import settings
 from .models import Portfolio, Purchase
 from .serializers import UserSerializerWithToken, UserSerializer, \
      PortfolioSerializer, PortfolioHoldingsSerializer, PurchaseSerializer
@@ -167,3 +170,16 @@ def PurchaseCreateView(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# View to return the static front-end code
+def index(request):
+    try:
+        with open(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html'), encoding="utf-8") as f:
+            return HttpResponse(f.read())
+    except FileNotFoundError:
+        return HttpResponse(
+            """
+            Please build the front-end using cd frontend && npm install && npm run build
+            """,
+            status=501,
+        )
