@@ -9,7 +9,6 @@ ADD .env /nodebuild
 RUN export $(grep -v '^#' .env | xargs) && npm install && npm install --save react-apexcharts apexcharts && npm run build
 
 FROM tiangolo/uwsgi-nginx
-#FROM tiangolo/meinheld-gunicorn:python3.9
 
 EXPOSE 8000
 
