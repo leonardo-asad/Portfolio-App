@@ -23,9 +23,7 @@ COPY requirements.txt /app
 RUN python3 -m pip install -r requirements.txt
 
 ADD . /app
-RUN chown www-data /app
-RUN chown www-data /app/db.sqlite3
-RUN chmod 777 /app/db.sqlite3
+RUN chmod a+w /app && chmod a+wx /app/db.sqlite3
 
 COPY --from=0 /nodebuild/build /app/frontend/build
 
