@@ -1,23 +1,36 @@
-# For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:3.8-slim
+FROM node
 
-# Keeps Python from generating .pyc files in the container
-ENV PYTHONDONTWRITEBYTECODE=1
+WORKDIR /nodebuild
+ADD frontend /nodebuild
 
-# Turns off buffering for easier container logging
-ENV PYTHONUNBUFFERED=1
+# Set environment variables from .env during node build
+# so that the app uses the production location for static files
+ADD .env /nodebuild
+RUN export $(grep -v '^#' .env | xargs) && npm install && npm install --save react-apexcharts apexcharts && npm run build
 
-# Install pip requirements
-COPY requirements.txt .
-RUN python -m pip install -r requirements.txt
+FROM tiangolo/uwsgi-nginx
+#FROM tiangolo/meinheld-gunicorn:python3.9
+
+EXPOSE 8000
+
+# Indicate where uwsgi.ini lives
+ENV UWSGI_INI uwsgi.ini
 
 WORKDIR /app
-COPY . /app
 
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
+# Using pip:
+COPY requirements.txt /app
+RUN python3 -m pip install -r requirements.txt
 
-# During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["python", "manage.py"]
+ADD . /app
+RUN chown www-data /app
+RUN chown www-data /app/db.sqlite3
+RUN chmod 777 /app/db.sqlite3
+
+COPY --from=0 /nodebuild/build /app/frontend/build
+
+# Set environment variables from .env during collect static
+# so that the app uses the production location for static files
+RUN export $(grep -v '^#' .env | xargs) && python3 manage.py collectstatic --noinput
+
+RUN rm .env
