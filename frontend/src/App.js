@@ -29,7 +29,6 @@ function App() {
         if (response.status === 200) {
           response.json()
           .then(json => {
-            console.log(json)
             setUsername(json.username)
           })
         } else {
@@ -49,23 +48,24 @@ function App() {
   const [portfolios, SetPortfolios] = useState([]);
 
   useEffect(() => {
-    fetch('/api/portfolio/', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    .then(response => {
-      if (response.status === 200) {
-        response.json()
-        .then(data => {
-          if (data.length > 0) {
-            console.log("Set portfolio list")
-            SetPortfolios(data)
-            setSelectedPortfolio(data[0])
-          }
-        })
-      }
-    })
+    if (isLoggedIn) {
+      fetch('/api/portfolio/', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(response => {
+        if (response.status === 200) {
+          response.json()
+          .then(data => {
+            if (data.length > 0) {
+              SetPortfolios(data)
+              setSelectedPortfolio(data[0])
+            }
+          })
+        }
+      })
+    }
   }, [isLoggedIn] )
 
   const [selectedPortfolio, setSelectedPortfolio] = useState({})
@@ -89,11 +89,8 @@ function App() {
   const handleSelectPortfolio = (portfolio, event) => {
     setDisplay('holdings')
     if (selectedPortfolio.name === portfolio.name) {
-      console.log(`Portfolio already selected!`)
       return;
     }
-
-    console.log(`Selected: ${portfolio.name}. Id: ${portfolio.pk}`)
     setSelectedPortfolio(portfolio)
   }
 
@@ -121,8 +118,6 @@ function App() {
       if (response.status === 200) {
         response.json()
         .then(json => {
-          console.log(`${data.username} Logged In`)
-
           localStorage.setItem('token', json.access);
 
           setUsername(data.username)

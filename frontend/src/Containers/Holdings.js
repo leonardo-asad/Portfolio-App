@@ -19,7 +19,6 @@ export default function Holdings(props) {
   useEffect(() => {
     if (JSON.stringify(props.selectedPortfolio) !== "{}") {
       setIsLoading(true)
-      console.log(`Fetching to :${props.selectedPortfolio.holdings_url}`)
       fetch(props.selectedPortfolio.holdings_url, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -35,7 +34,6 @@ export default function Holdings(props) {
 
   useEffect(() => {
     if (JSON.stringify(props.selectedPortfolio) !== "{}") {
-      console.log(`Fetching to :${props.selectedPortfolio.purchases_url}`)
       fetch(props.selectedPortfolio.purchases_url, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -61,7 +59,6 @@ export default function Holdings(props) {
   }
 
   const updateHoldings = () => {
-    console.log(`Fetching to :${props.selectedPortfolio.holdings_url}`)
     fetch(props.selectedPortfolio.holdings_url, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -82,7 +79,6 @@ export default function Holdings(props) {
         ...formInput,
         'portfolio': props.selectedPortfolio.pk
       }
-      console.log( data );
       fetch('/api/portfolio/purchases/', {
         method: "POST",
         headers: {
@@ -96,7 +92,6 @@ export default function Holdings(props) {
           response.json()
           .then(trade => setTrades([trade, ...trades]))
           .then(() => updateHoldings())
-          console.log("Added new trade")
         } else {
           response.json()
           .then(json => alert(json.detail))
@@ -118,7 +113,6 @@ export default function Holdings(props) {
     .then(response => {
       if (response.status === 200) {
         props.updatePortfolioList()
-        console.log(`Portfolio Edited succesfully`)
       } else {
         response.json()
         .then(json => console.log(json.detail))
@@ -142,7 +136,6 @@ export default function Holdings(props) {
         setTrades([])
         setTotalHoldings(null)
         setTotalPercentChange(null)
-        console.log("Portfolio Deleted Succesfully")
       } else {
         response.json()
         .then(json => console.log(json.detail))
@@ -169,7 +162,6 @@ export default function Holdings(props) {
     .then(response => {
       if (response.status === 201) {
         props.updatePortfolioList()
-        console.log(`Portfolio Created succesfully`)
       } else {
         response.json()
         .then(json => console.log(json.detail))
