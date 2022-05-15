@@ -20,7 +20,7 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      fetch('http://localhost:8000/api/user/', {
+      fetch('/api/user/', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -49,7 +49,7 @@ function App() {
   const [portfolios, SetPortfolios] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/portfolio/', {
+    fetch('/api/portfolio/', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -71,7 +71,7 @@ function App() {
   const [selectedPortfolio, setSelectedPortfolio] = useState({})
 
   const updatePortfolioList = () => {
-    fetch('http://localhost:8000/api/portfolio/', {
+    fetch('/api/portfolio/', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -110,7 +110,7 @@ function App() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = {'username': formData.get('username'), 'password': formData.get('password')}
-    fetch('http://localhost:8000/api/token/', {
+    fetch('/api/token/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -154,7 +154,7 @@ function App() {
       'email' : formData.get('email'),
       'password': formData.get('password')
     }
-    fetch('http://localhost:8000/api/create_user/', {
+    fetch('/api/create_user/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

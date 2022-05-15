@@ -83,7 +83,7 @@ export default function Holdings(props) {
         'portfolio': props.selectedPortfolio.pk
       }
       console.log( data );
-      fetch('http://localhost:8000/api/portfolio/purchases/', {
+      fetch('/api/portfolio/purchases/', {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -107,7 +107,7 @@ export default function Holdings(props) {
 
   const handleEditPortfolio = (e, pk, name) => {
     e.preventDefault()
-    fetch(`http://localhost:8000/api/portfolio/${pk}`, {
+    fetch(`/api/portfolio/${pk}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -128,7 +128,7 @@ export default function Holdings(props) {
 
   const handleDeletePortfolio = (e, pk) => {
     e.preventDefault()
-    fetch(`http://localhost:8000/api/portfolio/${pk}`, {
+    fetch(`/api/portfolio/${pk}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -158,7 +158,7 @@ export default function Holdings(props) {
   }
 
   const handleCreatePortfolio = (e, name) => {
-    fetch('http://localhost:8000/api/portfolio/', {
+    fetch('/api/portfolio/', {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
