@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Box from '@mui/material/Box';
 
 import SideBar from '../Components/SideBar';
@@ -15,34 +15,53 @@ export default function Holdings(props) {
   const [trades, setTrades] = useState([])
   const [totalHoldings, setTotalHoldings] = useState(null)
   const [totalPercentChange, setTotalPercentChange] = useState(null)
+  const [totalChange, setTotalChange] = useState(null)
 
-  useEffect(() => {
-    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
-      setIsLoading(true)
-      fetch(props.selectedPortfolio.holdings_url, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      .then(response => response.json())
-      .then(json => {
-        setHoldings(json)
-        setIsLoading(false)
-      })
+  const updateHoldings = useCallback(async () => {
+    setIsLoading(true)
+    const response = await fetch(props.selectedPortfolio.holdings_url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    if (response.status === 200) {
+      const holdings = await response.json();
+      setHoldings(holdings);
+    } else {
+      const json = await response.json();
+      console.log(json);
     }
-  }, [props.selectedPortfolio] )
+    setIsLoading(false);
+  }, [props.selectedPortfolio])
 
   useEffect(() => {
     if (JSON.stringify(props.selectedPortfolio) !== "{}") {
-      fetch(props.selectedPortfolio.purchases_url, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+      updateHoldings()
+      // Catch any error
+        .catch(console.error);
+    }
+  }, [props.selectedPortfolio, updateHoldings] )
+
+  useEffect(() => {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
+      const fetchData = async () => {
+        const response = await fetch(props.selectedPortfolio.purchases_url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        if (response.status === 200) {
+          const trades = await response.json();
+          setTrades(trades);
+        } else {
+          const json = await response.json();
+          console.log(json);
         }
-      })
-      .then(response => response.json())
-      .then(json => {
-        setTrades(json)
-      })
+      }
+      // Call the function
+      fetchData()
+      // Catch any error
+        .catch(console.error);
     }
   }, [props.selectedPortfolio] )
 
@@ -54,125 +73,133 @@ export default function Holdings(props) {
     setTotalHoldings(totalHoldings);
   }
 
-  const handleTotalPercentChange = (totalPercentChange) => {
+  const handleWorthChange = (totalPercentChange, totalChange) => {
     setTotalPercentChange(totalPercentChange);
+    setTotalChange(totalChange);
   }
 
-  const updateHoldings = () => {
-    fetch(props.selectedPortfolio.holdings_url, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    .then(response => response.json())
-    .then(json => {
-      setHoldings(json)
-    })
-  }
+
 
   const handleAddTrade = (event, formInput) => {
     event.preventDefault();
     if (JSON.stringify(props.selectedPortfolio) === "{}") {
-      alert("Please select a Portfolio to submit a new trade")
+      alert("Please select a Portfolio to add a new trade")
     } else {
       const data = {
         ...formInput,
         'portfolio': props.selectedPortfolio.pk
       }
-      fetch('/api/portfolio/purchases/', {
+      const addTrade = async () => {
+        //cambiar
+        const response = await fetch('http://localhost:8000/api/portfolio/purchases/', {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        if (response.status === 201) {
+          const trade = await response.json();
+          setTrades([trade, ...trades]);
+          updateHoldings();
+        } else {
+          const json = await response.json();
+          console.log(JSON.stringify(json));
+        }
+      }
+      // Call the function
+      addTrade()
+      // Catch any error
+        .catch(console.error);
+    }
+  }
+
+  const handleEditPortfolio = (event, pk, name) => {
+    event.preventDefault();
+    const editPortfolio = async (pk) => {
+      //Cambiar
+      const response = await fetch(`http://localhost:8000/api/portfolio/${pk}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'name': name})
+      })
+      if (response.status === 200) {
+        props.updatePortfolioList()
+      } else {
+        const json = await response.json();
+        console.log(JSON.stringify(json));
+      }
+    }
+    editPortfolio(pk)
+      // Catch any error
+      .catch(console.error);
+  }
+
+  const handleDeletePortfolio = (event, pk) => {
+    event.preventDefault();
+    const deletePortfolio = async (pk) => {
+      //cambiar
+      const response = await fetch(`http://localhost:8000/api/portfolio/${pk}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      if (response.status === 204) {
+        props.updatePortfolioList();
+        setHoldings([]);
+        setTrades([]);
+        setTotalHoldings(null);
+        setTotalPercentChange(null);
+        if (props.portfolios.length > 1) {
+          props.handleSelectPortfolio(props.portfolios[props.portfolios.length - 2])
+        } else {
+          props.handleSelectPortfolio({})
+        }
+      } else {
+        const json = await response.json();
+        console.log(JSON.stringify(json));
+      }
+    }
+    deletePortfolio(pk)
+      .catch(console.error);
+  }
+
+  const handleCreatePortfolio = (event, name) => {
+    event.preventDefault();
+    const createPortfolio = async (name) => {
+      //cambiar
+      const response = await fetch('http://localhost:8000/api/portfolio/', {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({'name': name})
       })
-      .then(response => {
-        if (response.status === 201) {
-          response.json()
-          .then(trade => setTrades([trade, ...trades]))
-          .then(() => updateHoldings())
-        } else {
-          response.json()
-          .then(json => alert(json.detail))
-        }
-      })
-    }
-  }
-
-  const handleEditPortfolio = (e, pk, name) => {
-    e.preventDefault()
-    fetch(`/api/portfolio/${pk}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({'name': name})
-    })
-    .then(response => {
-      if (response.status === 200) {
-        props.updatePortfolioList()
-      } else {
-        response.json()
-        .then(json => console.log(json.detail))
-      }
-    })
-  }
-
-  const handleDeletePortfolio = (e, pk) => {
-    e.preventDefault()
-    fetch(`/api/portfolio/${pk}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      if (response.status === 204) {
-        props.updatePortfolioList()
-        setHoldings([])
-        setTrades([])
-        setTotalHoldings(null)
-        setTotalPercentChange(null)
-      } else {
-        response.json()
-        .then(json => console.log(json.detail))
-      }
-    })
-    .then(() => {
-      if (props.portfolios.length > 1) {
-        props.handleSelectPortfolio(props.portfolios[0])
-      } else {
-        props.handleSelectPortfolio({})
-      }
-    })
-  }
-
-  const handleCreatePortfolio = (e, name) => {
-    fetch('/api/portfolio/', {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({'name': name})
-    })
-    .then(response => {
       if (response.status === 201) {
-        props.updatePortfolioList()
+        const portfolio = await response.json();
+        props.updatePortfolioList();
+        props.handleSelectPortfolio(portfolio);
       } else {
-        response.json()
-        .then(json => console.log(json.detail))
+        const json = await response.json();
+        console.log(JSON.stringify(json));
       }
-    })
+    }
+    createPortfolio(name)
+      .catch(console.error);
   }
 
   return (
     <React.Fragment>
       <SideBar
       portfolios={props.portfolios}
+      selectedPortfolio={props.selectedPortfolio}
       holdings={holdings}
       onClick={props.handleSelectPortfolio}
       handleEditPortfolio={handleEditPortfolio}
@@ -201,13 +228,14 @@ export default function Holdings(props) {
                   selectedPortfolio={props.selectedPortfolio}
                   totalHoldings={totalHoldings}
                   totalPercentChange={totalPercentChange}
+                  totalChange={totalChange}
                   holdings={holdings}
                   />
 
                   <HoldingsGrid
                     holdings={holdings}
                     handleTotalHoldings={handleTotalHoldings}
-                    handleTotalPercentChange={handleTotalPercentChange}
+                    handleWorthChange={handleWorthChange}
                   />
               </React.Fragment>
             }

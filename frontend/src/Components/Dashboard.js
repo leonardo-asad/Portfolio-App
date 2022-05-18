@@ -27,6 +27,7 @@ export default function Dashboard(props) {
               selectedPortfolio={props.selectedPortfolio}
               totalHoldings={props.totalHoldings}
               totalPercentChange={props.totalPercentChange}
+              totalChange={props.totalChange}
               />
             </Grid>
             <Grid item xs>

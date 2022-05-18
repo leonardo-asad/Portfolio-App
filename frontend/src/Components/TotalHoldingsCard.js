@@ -4,6 +4,8 @@ import Typography from '@mui/material/Typography';
 
 
 export default function TotalHoldingsCard(props) {
+  const color = props.totalPercentChange > 0 ? 'green' : 'red'
+
   return (
     <Box
     sx={{
@@ -32,8 +34,8 @@ export default function TotalHoldingsCard(props) {
         </Typography>
       </Box>
       <Box>
-        <Typography sx={{ fontSize: 16 }} color="text.secondary">
-          {props.totalPercentChange} %
+        <Typography sx={{ fontSize: 16, color: color }}>
+          {props.totalPercentChange} % ({props.totalChange})
         </Typography>
       </Box>
     </Box>

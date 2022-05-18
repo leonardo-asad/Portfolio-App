@@ -20,21 +20,24 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      fetch('/api/user/', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      .then(response => {
+      const fetchData = async() => {
+        const response = await fetch('/api/user/', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
         if (response.status === 200) {
-          response.json()
-          .then(json => {
-            setUsername(json.username)
-          })
+          const json = await response.json();
+          setUsername(json.username);
         } else {
-          console.log("Cannot fetch username")
+          const json = await response.json();
+          console.log(JSON.stringify(json));
         }
-      })
+      }
+      // Call the function
+      fetchData()
+      // Catch any error
+        .catch(console.error);
     }
   }, [isLoggedIn])
 
@@ -49,41 +52,45 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      fetch('/api/portfolio/', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      .then(response => {
+      const fetchData = async () => {
+        //Cambiar
+        const response = await fetch('http://localhost:8000/api/portfolio/', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
         if (response.status === 200) {
-          response.json()
-          .then(data => {
-            if (data.length > 0) {
-              SetPortfolios(data)
-              setSelectedPortfolio(data[0])
-            }
-          })
+          const portfolios = await response.json();
+          SetPortfolios(portfolios);
+          setSelectedPortfolio(portfolios[0]);
+        } else {
+          const json = await response.json();
+          console.log(JSON.stringify(json));
         }
-      })
+      }
+      // Call the function
+      fetchData()
+      // Catch any error
+        .catch(console.error);
     }
   }, [isLoggedIn] )
 
   const [selectedPortfolio, setSelectedPortfolio] = useState({})
 
-  const updatePortfolioList = () => {
-    fetch('/api/portfolio/', {
+  const updatePortfolioList = async () => {
+    //cambiar
+    const response = await fetch('http://localhost:8000/api/portfolio/', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
-    .then(response => {
-      if (response.status === 200) {
-        response.json()
-        .then(portfolios => {
-          SetPortfolios(portfolios)
-        })
-      }
-    })
+    if (response.status === 200) {
+      const portfolios = await response.json();
+      SetPortfolios(portfolios);
+    } else {
+      const json = await response.json();
+      console.log(JSON.stringify(json));
+    }
   }
 
   const handleSelectPortfolio = (portfolio, event) => {
@@ -91,7 +98,7 @@ function App() {
     if (selectedPortfolio.name === portfolio.name) {
       return;
     }
-    setSelectedPortfolio(portfolio)
+    setSelectedPortfolio(portfolio);
   }
 
   const handleDisplay = (event, display) => {
@@ -135,12 +142,12 @@ function App() {
 
 
   const handleLogOut = () => {
-    localStorage.removeItem('token')
-    setUsername('')
-    SetPortfolios([])
-    setSelectedPortfolio({})
-    setIsLoggedIn(false)
-    setDisplay('login')
+    localStorage.removeItem('token');
+    setUsername('');
+    SetPortfolios([]);
+    setSelectedPortfolio({});
+    setIsLoggedIn(false);
+    setDisplay('login');
   }
 
   const handleSignUp = (event) => {
