@@ -116,7 +116,7 @@ class PurchasesListViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         portfolio = self.get_object()
 
-        return portfolio.purchases
+        return portfolio.purchases.order_by('-date')
 
 @api_view(["GET", "POST"])
 def PurchaseCreateView(request):

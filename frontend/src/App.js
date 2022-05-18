@@ -53,8 +53,7 @@ function App() {
   useEffect(() => {
     if (isLoggedIn) {
       const fetchData = async () => {
-        //Cambiar
-        const response = await fetch('http://localhost:8000/api/portfolio/', {
+        const response = await fetch('/api/portfolio/', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -78,8 +77,7 @@ function App() {
   const [selectedPortfolio, setSelectedPortfolio] = useState({})
 
   const updatePortfolioList = async () => {
-    //cambiar
-    const response = await fetch('http://localhost:8000/api/portfolio/', {
+    const response = await fetch('/api/portfolio/', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }

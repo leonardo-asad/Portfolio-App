@@ -90,8 +90,7 @@ export default function Holdings(props) {
         'portfolio': props.selectedPortfolio.pk
       }
       const addTrade = async () => {
-        //cambiar
-        const response = await fetch('http://localhost:8000/api/portfolio/purchases/', {
+        const response = await fetch('/api/portfolio/purchases/', {
           method: "POST",
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -118,8 +117,7 @@ export default function Holdings(props) {
   const handleEditPortfolio = (event, pk, name) => {
     event.preventDefault();
     const editPortfolio = async (pk) => {
-      //Cambiar
-      const response = await fetch(`http://localhost:8000/api/portfolio/${pk}`, {
+      const response = await fetch(`/api/portfolio/${pk}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -142,8 +140,7 @@ export default function Holdings(props) {
   const handleDeletePortfolio = (event, pk) => {
     event.preventDefault();
     const deletePortfolio = async (pk) => {
-      //cambiar
-      const response = await fetch(`http://localhost:8000/api/portfolio/${pk}`, {
+      const response = await fetch(`/api/portfolio/${pk}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -173,8 +170,7 @@ export default function Holdings(props) {
   const handleCreatePortfolio = (event, name) => {
     event.preventDefault();
     const createPortfolio = async (name) => {
-      //cambiar
-      const response = await fetch('http://localhost:8000/api/portfolio/', {
+      const response = await fetch('/api/portfolio/', {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
