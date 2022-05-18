@@ -107,30 +107,32 @@ function App() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = {'username': formData.get('username'), 'password': formData.get('password')}
-    fetch('/api/token/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body:  JSON.stringify(data)
-    })
-    .then(response => {
+    const fetchData = async () => {
+      // Get token from the API
+      const response = await fetch('/api/token/', {
+        method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body:  JSON.stringify(data)
+      })
       if (response.status === 200) {
-        response.json()
-        .then(json => {
-          localStorage.setItem('token', json.access);
-
-          setUsername(data.username)
-          setIsLoggedIn(true)
-          setDisplay('holdings')
-
-        })
+        const json = await response.json();
+        localStorage.setItem('token', json.access);
+        setUsername(data.username);
+        setIsLoggedIn(true);
+        setDisplay('holdings');
       } else {
-        response.json()
-        .then(json => alert(json.detail))
+        const json = await response.json();
+        console.log(JSON.stringify(json));
       }
-    })
-  };
+    }
+    // Call the function
+    fetchData()
+    // Catch any error
+      .catch(console.error);
+  }
+
 
   const handleLogOut = () => {
     localStorage.removeItem('token')
@@ -149,28 +151,30 @@ function App() {
       'email' : formData.get('email'),
       'password': formData.get('password')
     }
-    fetch('/api/create_user/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-    })
-    .then(response => {
+    const fetchData = async () => {
+      const response = await fetch('/api/create_user/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      })
       if (response.status === 201) {
-        response.json()
-        .then(json => {
-          localStorage.setItem('token', json.token)
-          setIsLoggedIn(true)
-          setUsername(json.username)
-          setDisplay('holdings')
-        })
+        const json = await response.json();
+        localStorage.setItem('token', json.token)
+        setIsLoggedIn(true);
+        setUsername(json.username);
+        setDisplay('holdings');
       } else {
-        response.json()
-        .then(json => alert(json.username))
+        const json = await response.json()
+        console.log(JSON.stringify(json))
       }
-    })
-  };
+    }
+    // Call the function
+    fetchData()
+    // Catch any error
+      .catch(console.error);
+  }
 
 
   return (
