@@ -129,12 +129,13 @@ export default function HoldingsGrid(props) {
 
   const prevTotalHoldings = ccyFormat(prevTotal(rows));
 
-  const totalPercentChange = ccyFormat((1 - prevTotalHoldings / totalHoldings) * 100)
+  const totalPercentChange = ccyFormat((1 - prevTotalHoldings / totalHoldings) * 100);
 
+  const totalChange = ccyFormat(totalHoldings - prevTotalHoldings);
 
   React.useEffect(() => {
-    props.handleTotalHoldings(totalHoldings)
-    props.handleTotalPercentChange(totalPercentChange)
+    props.handleTotalHoldings(totalHoldings);
+    props.handleWorthChange(totalPercentChange, totalChange);
   })
 
   rows = rows.map(row => weight(row, totalHoldings))

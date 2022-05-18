@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 import Box from '@mui/material/Box';
@@ -23,16 +23,20 @@ export default function SideBar(props) {
   const [open, setOpen] = useState(true)
   const [selectedIndex, setSelectedIndex] = useState(null)
 
+  useEffect(() => {
+    setSelectedIndex(props.selectedPortfolio.pk);
+  }, [props.selectedPortfolio])
+
   const portfolios = props.portfolios;
 
-  const drawerWidth = 240;
+  const drawerWidth = 280;
 
   const handleClick = () => {
     setOpen(!open);
   }
 
   const handleSelectItem = (index, object, event) => {
-    setSelectedIndex(index)
+    setSelectedIndex(object.pk)
     props.onClick(object, event)
   }
 
@@ -65,7 +69,7 @@ export default function SideBar(props) {
             {portfolios.map((object, index) => (
               <ListItem
               button
-              selected={selectedIndex === index}
+              selected={selectedIndex === object.pk}
               key={object.pk}
               onClick={(event) => handleSelectItem(
                 index,
@@ -80,7 +84,7 @@ export default function SideBar(props) {
               >
                 <ListItemText
                 primary={object.name}
-                sx={{ display: 'flex', justifyContent: 'center' }}
+                sx={{ display: 'flex', justifyContent: 'left' }}
                 />
                 <EditPortfolioDialog
                 portfolio={object}
