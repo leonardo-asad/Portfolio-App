@@ -6,7 +6,7 @@ shares to it. You will see a dashboard showing you the composition of your portf
 the total worth of your assets. Additionally, you can switch to another view where you can see all the transactions you have made.
 
 This application has a decoupled architecture. The backend was made using Django Rest Framework and the frontend using Reactjs. 
-To deploy set up uses a combination of uWSGI and Nginx.
+The deployment set up uses a combination of uWSGI and Nginx.
 
 The following features are going to be implemented in the future:
 1) Implement email validation
