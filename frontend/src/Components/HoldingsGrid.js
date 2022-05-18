@@ -144,6 +144,7 @@ export default function HoldingsGrid(props) {
   return (
     <Box
       sx={{
+        display: 'flex',
         m: 5,
         boxShadow: 3,
         borderRadius: 3,
