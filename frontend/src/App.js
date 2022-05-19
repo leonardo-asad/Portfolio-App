@@ -16,7 +16,8 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return localStorage.getItem('token') ? true : false
   });
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -29,6 +30,7 @@ function App() {
         if (response.status === 200) {
           const json = await response.json();
           setUsername(json.username);
+          setEmail(json.email);
         } else {
           const json = await response.json();
           console.log(JSON.stringify(json));
@@ -210,6 +212,8 @@ function App() {
           {
             display === 'holdings' &&
             <Holdings
+            username={username}
+            email={email}
             portfolios={portfolios}
             selectedPortfolio={selectedPortfolio}
             handleSelectPortfolio={handleSelectPortfolio}

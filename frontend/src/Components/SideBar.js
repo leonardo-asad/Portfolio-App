@@ -103,6 +103,8 @@ export default function SideBar(props) {
         handleCreatePortfolio={props.handleCreatePortfolio}
         />
         <SetAlertDialog
+        username={props.username}
+        email={props.email}
         holdings={props.holdings}
         />
       </List>

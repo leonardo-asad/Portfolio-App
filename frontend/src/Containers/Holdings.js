@@ -194,6 +194,8 @@ export default function Holdings(props) {
   return (
     <React.Fragment>
       <SideBar
+      username={props.username}
+      email={props.email}
       portfolios={props.portfolios}
       selectedPortfolio={props.selectedPortfolio}
       holdings={holdings}

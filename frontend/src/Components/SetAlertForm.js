@@ -7,22 +7,9 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
 export default function SetAlertForm(props) {
-  const [ticker, setTicker] = React.useState('');
-  const [threshold, setThreshold] = React.useState('');
-
-  const handleChangeTicker = (event) => {
-    setTicker(event.target.value);
-  };
-
-
-  const handleChangeThreshold = (e) => {
-    const onlyNums = e.target.value.replace(/[^0-9]/g, '');
-    setThreshold(onlyNums);
-}
-
-
   return (
     <Box
+    component="form"
     sx={{
       display:'flex',
       gap: 2,
@@ -35,20 +22,33 @@ export default function SetAlertForm(props) {
         <Select
           labelId="asset"
           id="asset"
-          value={ticker}
+          value={props.selected_holding}
           label="Asset"
-          onChange={handleChangeTicker}
+          onChange={props.handleSetHolding}
         >
-          {props.holdings.map((holding) => {
-            return <MenuItem value={holding.ticker}>{holding.ticker}</MenuItem>
+          {props.holdings.map((holding, index) => {
+            return <MenuItem key={index} value={holding}>{holding.ticker}</MenuItem>
           })}
+        </Select>
+      </FormControl>
+      <FormControl sx={{ width: '25ch' }}>
+      <InputLabel id="demo-simple-select-label">Type</InputLabel>
+        <Select
+          labelId="type"
+          id="type"
+          value={props.type}
+          onChange={props.handleChangeType}
+          label="Type"
+        >
+          <MenuItem value={'Lower'}>Lower</MenuItem>
+          <MenuItem value={'Upper'}>Upper</MenuItem>
         </Select>
       </FormControl>
       <FormControl sx={{ width: '25ch' }}>
         <TextField
           id="outlined-basic"
-          value={threshold}
-          onChange={handleChangeThreshold}
+          value={props.threshold}
+          onChange={props.handleChangeThreshold}
           label="Threshold"
           variant="outlined"
         />
