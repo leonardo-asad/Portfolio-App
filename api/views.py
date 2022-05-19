@@ -1,7 +1,7 @@
 import os
 import datetime
 from django.http import HttpResponse
-from rest_framework import permissions, status, viewsets
+from rest_framework import permissions, status, viewsets, generics
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from rest_framework.views import APIView

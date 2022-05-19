@@ -3,7 +3,7 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 
 
-def send_alert_email(symbol):
+def send_alert_email(user_email, symbol):
 
     context = {
         'name': "Leo",
@@ -15,6 +15,6 @@ def send_alert_email(symbol):
 
     email = EmailMessage(
         email_subject, email_body,
-        settings.DEFAULT_FROM_EMAIL, ['lyz4rd15@gmail.com', ],
+        settings.DEFAULT_FROM_EMAIL, [user_email, ],
     )
     return email.send(fail_silently=False)

@@ -16,5 +16,5 @@ def xsum(numbers):
     return sum(numbers)
 
 @shared_task(name="send_alert")
-def check_price():
-    return send_alert_email('AAPL')
+def check_price(user_email, symbol):
+    return send_alert_email(user_email, symbol)

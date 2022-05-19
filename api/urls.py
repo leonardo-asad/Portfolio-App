@@ -22,6 +22,8 @@ portfolio_purchases_list = views.PurchasesListViewSet.as_view({
 })
 
 urlpatterns = [
+    path('tasks/', views.PeriodicTaskList.as_view()),
+    path('tasks/<int:pk>/', views.PeriodicTask.as_view()),
     path('portfolio/purchases/', views.PurchaseCreateView, name="create_purchase"),
     path('portfolio/purchases/<int:pk>', portfolio_purchases_list, name='portfolio_purchases'),
     path('portfolio/holdings/<int:pk>', views.HoldingsView, name='holdings'),
