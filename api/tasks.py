@@ -1,4 +1,5 @@
 import random
+from api.email import send_alert_email
 from celery import shared_task
 
 @shared_task(name="sum_two_numbers")
@@ -13,3 +14,7 @@ def mul(x, y):
 @shared_task(name="sum_list_numbers")
 def xsum(numbers):
     return sum(numbers)
+
+@shared_task(name="send_alert")
+def check_price():
+    return send_alert_email('AAPL')

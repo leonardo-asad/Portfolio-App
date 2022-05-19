@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.reverse import reverse
 from django.contrib.auth import get_user_model
+from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
 from .models import Portfolio, Purchase
 
@@ -70,3 +71,13 @@ class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
         fields = ['pk','owner','ticker','portfolio', 'date', 'price', 'shares']
+
+class PeriodicTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PeriodicTask
+        fields = ['id','interval', 'name', 'task', 'args']
+
+class IntervalScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IntervalSchedule
+        fields = ['every', 'period']

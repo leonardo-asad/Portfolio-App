@@ -10,8 +10,10 @@ from rest_framework.response import Response
 
 from backend import settings
 from .models import Portfolio, Purchase
+from django_celery_beat.models import PeriodicTask, IntervalSchedule
 from .serializers import UserSerializerWithToken, UserSerializer, \
-     PortfolioSerializer, PortfolioHoldingsSerializer, PurchaseSerializer
+     PortfolioSerializer, PortfolioHoldingsSerializer, PurchaseSerializer, \
+     PeriodicTaskSerializer
 from .permissions import IsOwner
 from .helpers import lookup
 
@@ -170,6 +172,14 @@ def PurchaseCreateView(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PeriodicTaskList(generics.ListCreateAPIView):
+    queryset = PeriodicTask.objects.all()
+    serializer_class = PeriodicTaskSerializer
+
+class PeriodicTask(generics.RetrieveDestroyAPIView):
+    queryset = PeriodicTask.objects.all()
+    serializer_class = PeriodicTaskSerializer
 
 # View to return the static front-end code
 def index(request):
