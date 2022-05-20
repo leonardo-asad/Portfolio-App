@@ -24,7 +24,9 @@ export default function SideBar(props) {
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   useEffect(() => {
-    setSelectedIndex(props.selectedPortfolio.pk);
+    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
+      //setSelectedIndex(props.selectedPortfolio.pk);
+    }
   }, [props.selectedPortfolio])
 
   const portfolios = props.portfolios;

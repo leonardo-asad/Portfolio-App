@@ -37,8 +37,6 @@ export default function Holdings(props) {
   useEffect(() => {
     if (JSON.stringify(props.selectedPortfolio) !== "{}") {
       updateHoldings()
-      // Catch any error
-        .catch(console.error);
     }
   }, [props.selectedPortfolio, updateHoldings] )
 
@@ -60,8 +58,6 @@ export default function Holdings(props) {
       }
       // Call the function
       fetchData()
-      // Catch any error
-        .catch(console.error);
     }
   }, [props.selectedPortfolio] )
 
@@ -109,8 +105,6 @@ export default function Holdings(props) {
       }
       // Call the function
       addTrade()
-      // Catch any error
-        .catch(console.error);
     }
   }
 
@@ -133,8 +127,6 @@ export default function Holdings(props) {
       }
     }
     editPortfolio(pk)
-      // Catch any error
-      .catch(console.error);
   }
 
   const handleDeletePortfolio = (event, pk) => {
@@ -164,7 +156,6 @@ export default function Holdings(props) {
       }
     }
     deletePortfolio(pk)
-      .catch(console.error);
   }
 
   const handleCreatePortfolio = (event, name) => {
@@ -188,7 +179,6 @@ export default function Holdings(props) {
       }
     }
     createPortfolio(name)
-      .catch(console.error);
   }
 
   return (

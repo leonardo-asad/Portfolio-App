@@ -1,5 +1,5 @@
 Hello {{name|safe}}
 
-{{symbol|safe}} has suffered a larger variation than your current threshold.
+{{symbol|safe}} price has reached your current threshold (${{threshold|safe}}).
 
 Thank you!

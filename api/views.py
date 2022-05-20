@@ -1,4 +1,5 @@
 import os
+import json
 import datetime
 from django.http import HttpResponse
 from rest_framework import permissions, status, viewsets, generics
@@ -173,11 +174,33 @@ def PurchaseCreateView(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class PeriodicTaskList(generics.ListCreateAPIView):
-    queryset = PeriodicTask.objects.all()
-    serializer_class = PeriodicTaskSerializer
+@api_view(["GET", "POST"])
+def periodic_task_list(request):
+    if request.method == "GET":
+        queryset = PeriodicTask.objects.all()
+        queryset_filtered = [periodic_task for periodic_task in queryset if 'username' in periodic_task.kwargs]
+        queryset_filtered = [periodic_task for periodic_task in queryset_filtered if json.loads(periodic_task.kwargs)['user_pk'] == request.user.pk]
 
-class PeriodicTask(generics.RetrieveDestroyAPIView):
+        serializer = PeriodicTaskSerializer(queryset_filtered, many=True)
+
+        return Response(serializer.data)
+
+    if request.method == "POST":
+        new_task = {
+            "interval": 1,
+            "task": "send_alert",
+            "one_off": True,
+            "enabled": True,
+            "kwargs": json.dumps(request.data)
+        }
+
+        serializer = PeriodicTaskSerializer(data=new_task)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PeriodicTaskDetail(generics.RetrieveDestroyAPIView):
     queryset = PeriodicTask.objects.all()
     serializer_class = PeriodicTaskSerializer
 

@@ -17,7 +17,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -123,6 +122,7 @@ USE_TZ = True
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -191,8 +191,8 @@ SIMPLE_JWT = {
 # gmail_send/settings.py
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'lyz4rd15@gmail.com'
-EMAIL_HOST_PASSWORD = 'oegpeldcxxagutdk'
+EMAIL_HOST_USER = 'portfoliomanager96@gmail.com'
+EMAIL_HOST_PASSWORD = 'sngdeqmvwjbtlslx'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'lyz4rd15@gmail.com'
+DEFAULT_FROM_EMAIL = 'portfoliomanager96@gmail.com'

@@ -38,8 +38,6 @@ function App() {
       }
       // Call the function
       fetchData()
-      // Catch any error
-        .catch(console.error);
     }
   }, [isLoggedIn])
 
@@ -71,8 +69,6 @@ function App() {
       }
       // Call the function
       fetchData()
-      // Catch any error
-        .catch(console.error);
     }
   }, [isLoggedIn] )
 
@@ -136,8 +132,6 @@ function App() {
     }
     // Call the function
     fetchData()
-    // Catch any error
-      .catch(console.error);
   }
 
 
@@ -179,8 +173,6 @@ function App() {
     }
     // Call the function
     fetchData()
-    // Catch any error
-      .catch(console.error);
   }
 
 

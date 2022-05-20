@@ -3,11 +3,12 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 
 
-def send_alert_email(user_email, symbol):
+def send_alert_email(username, user_email, symbol, threshold):
 
     context = {
-        'name': "Leo",
+        'name': username,
         'symbol': symbol,
+        'threshold': threshold,
     }
 
     email_subject = 'New alert from your Portfolio'

@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.reverse import reverse
 from django.contrib.auth import get_user_model
-from django_celery_beat.models import PeriodicTask, IntervalSchedule
+from django_celery_beat.models import IntervalSchedule, PeriodicTask
 
 from .models import Portfolio, Purchase
 
@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = get_user_model()
-        fields = ['id', 'email', 'username']
+        fields = ['pk', 'email', 'username']
 
 class UserSerializerWithToken(serializers.ModelSerializer):
     """
@@ -73,9 +73,14 @@ class PurchaseSerializer(serializers.ModelSerializer):
         fields = ['pk','owner','ticker','portfolio', 'date', 'price', 'shares']
 
 class PeriodicTaskSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
     class Meta:
         model = PeriodicTask
-        fields = ['id','interval', 'name', 'task', 'args']
+        fields = ['pk', 'interval', 'name', 'task', 'one_off', 'enabled', 'kwargs']
+
+    def get_name(self, obj):
+        return obj.pk
 
 class IntervalScheduleSerializer(serializers.ModelSerializer):
     class Meta:
