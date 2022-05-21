@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from backend import settings
 from .models import Portfolio, Purchase
-from django_celery_beat.models import PeriodicTask, IntervalSchedule
+from django_celery_beat.models import PeriodicTask
 from .serializers import UserSerializerWithToken, UserSerializer, \
      PortfolioSerializer, PortfolioHoldingsSerializer, PurchaseSerializer, \
      PeriodicTaskSerializer
@@ -186,8 +186,16 @@ def periodic_task_list(request):
         return Response(serializer.data)
 
     if request.method == "POST":
+        try:
+            last_instance = PeriodicTask.objects.last()
+            last_pk = last_instance.pk
+            unique_name = last_pk + 1
+        except:
+            unique_name = 1
+
         new_task = {
             "interval": 1,
+            "name": unique_name,
             "task": "send_alert",
             "one_off": True,
             "enabled": True,

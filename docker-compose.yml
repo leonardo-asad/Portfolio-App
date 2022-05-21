@@ -24,6 +24,8 @@ services:
     command: celery -A backend worker --beat --scheduler django --loglevel=info
     volumes:
       - .:/app/
+    env_file:
+      - .env
     depends_on:
       - portfolioapp
       - redis

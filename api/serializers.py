@@ -73,14 +73,10 @@ class PurchaseSerializer(serializers.ModelSerializer):
         fields = ['pk','owner','ticker','portfolio', 'date', 'price', 'shares']
 
 class PeriodicTaskSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
 
     class Meta:
         model = PeriodicTask
         fields = ['pk', 'interval', 'name', 'task', 'one_off', 'enabled', 'kwargs']
-
-    def get_name(self, obj):
-        return obj.pk
 
 class IntervalScheduleSerializer(serializers.ModelSerializer):
     class Meta:

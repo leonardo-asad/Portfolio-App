@@ -35,13 +35,13 @@ export default function Holdings(props) {
   }, [props.selectedPortfolio])
 
   useEffect(() => {
-    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
       updateHoldings()
     }
   }, [props.selectedPortfolio, updateHoldings] )
 
   useEffect(() => {
-    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
       const fetchData = async () => {
         const response = await fetch(props.selectedPortfolio.purchases_url, {
           headers: {
@@ -73,8 +73,6 @@ export default function Holdings(props) {
     setTotalPercentChange(totalPercentChange);
     setTotalChange(totalChange);
   }
-
-
 
   const handleAddTrade = (event, formInput) => {
     event.preventDefault();
