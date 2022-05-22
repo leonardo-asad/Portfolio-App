@@ -18,9 +18,10 @@ export default function Holdings(props) {
   const [totalHoldings, setTotalHoldings] = useState(null)
   const [totalPercentChange, setTotalPercentChange] = useState(null)
   const [totalChange, setTotalChange] = useState(null)
+  const [selectedAlert, setSelectedAlert] = useState([]);
 
   const updateHoldings = useCallback(async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const response = await fetch(props.selectedPortfolio.holdings_url, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -38,7 +39,7 @@ export default function Holdings(props) {
 
   useEffect(() => {
     if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
-      updateHoldings()
+      updateHoldings();
     }
   }, [props.selectedPortfolio, updateHoldings] )
 
@@ -63,25 +64,28 @@ export default function Holdings(props) {
     }
   }, [props.selectedPortfolio] )
 
+  const updateAlert = useCallback(async () => {
+    setIsLoading(true);
+    const response = await fetch(props.selectedPortfolio.alerts_url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    if (response.status === 200) {
+      const tasks = await response.json();
+      setTasks(tasks);
+    } else {
+      const json = await response.json();
+      console.log(JSON.stringify(json));
+    }
+    setIsLoading(false);
+  }, [props.selectedPortfolio])
+
   useEffect(() => {
     if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
-      const fetchData = async () => {
-        const response = await fetch(props.selectedPortfolio.alerts_url, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        if (response.status === 200) {
-          const tasks = await response.json();
-          setTasks(tasks);
-        } else {
-          const json = await response.json();
-          console.log(JSON.stringify(json));
-        }
-      }
-      fetchData();
+      updateAlert();
     }
-  }, [props.selectedPortfolio])
+  }, [props.selectedPortfolio, updateAlert])
 
   const handleChange = (event, newTab) => {
     setTab(newTab);
@@ -148,6 +152,34 @@ export default function Holdings(props) {
       }
     }
     addAlert();
+  }
+
+  const handleSelectedAlert = (newSelectedAlert) => {
+    setSelectedAlert(newSelectedAlert);
+  }
+
+  const handleDeleteAlert = (event) => {
+    event.preventDefault();
+    if (selectedAlert.length > 0) {
+      const alert_pk = selectedAlert[0];
+      const deleteAlert = async (pk) => {
+        const response = await fetch(`/api/tasks/${pk}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        if (response.status === 204) {
+          const filtered_tasks = tasks.filter(task => task.pk !== pk)
+          setTasks(filtered_tasks)
+        } else {
+          const json = await response.json();
+          console.log(JSON.stringify(json));
+        }
+      }
+      deleteAlert(alert_pk);
+    }
   }
 
   const handleEditPortfolio = (event, pk, name) => {
@@ -281,6 +313,9 @@ export default function Holdings(props) {
               (tab === 2 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
               <AlertsGrid
               tasks={tasks}
+              handleSelectedAlert={handleSelectedAlert}
+              selectedAlert={selectedAlert}
+              handleDeleteAlert={handleDeleteAlert}
               />
             }
           </>
