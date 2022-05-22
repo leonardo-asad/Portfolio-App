@@ -79,7 +79,8 @@ export default function SideBar(props) {
                 'pk':object.pk,
                 'name':object.name,
                 'holdings_url': object.holdings_url,
-                'purchases_url': object.purchases_url
+                'purchases_url': object.purchases_url,
+                'alerts_url': object.alerts_url
                 },
                 event
                 )}
@@ -105,8 +106,11 @@ export default function SideBar(props) {
         handleCreatePortfolio={props.handleCreatePortfolio}
         />
         <SetAlertDialog
+        handleAddAlert={props.handleAddAlert}
         username={props.username}
         email={props.email}
+        userPk={props.userPk}
+        selectedPortfolio={props.selectedPortfolio}
         holdings={props.holdings}
         />
       </List>

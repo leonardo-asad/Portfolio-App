@@ -18,6 +18,7 @@ function App() {
   });
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [userPk, setUserPk] = useState('');
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -31,6 +32,7 @@ function App() {
           const json = await response.json();
           setUsername(json.username);
           setEmail(json.email);
+          setUserPk(json.pk);
         } else {
           const json = await response.json();
           console.log(JSON.stringify(json));
@@ -206,6 +208,7 @@ function App() {
             <Holdings
             username={username}
             email={email}
+            userPk={userPk}
             portfolios={portfolios}
             selectedPortfolio={selectedPortfolio}
             handleSelectPortfolio={handleSelectPortfolio}

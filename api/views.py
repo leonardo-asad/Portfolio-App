@@ -174,17 +174,20 @@ def PurchaseCreateView(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(["GET", "POST"])
-def periodic_task_list(request):
+@api_view(["GET"])
+def periodic_task_list(request, pk):
     if request.method == "GET":
         queryset = PeriodicTask.objects.all()
         queryset_filtered = [periodic_task for periodic_task in queryset if 'username' in periodic_task.kwargs]
         queryset_filtered = [periodic_task for periodic_task in queryset_filtered if json.loads(periodic_task.kwargs)['user_pk'] == request.user.pk]
+        queryset_filtered = [periodic_task for periodic_task in queryset_filtered if json.loads(periodic_task.kwargs)['portfolio_pk'] == pk]
 
         serializer = PeriodicTaskSerializer(queryset_filtered, many=True)
 
         return Response(serializer.data)
 
+@api_view(["POST"])
+def periodic_task_create(request):
     if request.method == "POST":
         try:
             last_instance = PeriodicTask.objects.last()

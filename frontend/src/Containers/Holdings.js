@@ -7,12 +7,14 @@ import HoldingsGrid from '../Components/HoldingsGrid';
 import TradesTable from '../Components/TradesTable';
 import CircularIndeterminate from '../Components/CircularIndeterminate';
 import Dashboard from '../Components/Dashboard';
+import AlertsGrid from '../Components/AlertsGrid';
 
 export default function Holdings(props) {
   const [tab, setTab] = useState(0);
   const [holdings, setHoldings] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [trades, setTrades] = useState([])
+  const [tasks, setTasks] = React.useState([]);
   const [totalHoldings, setTotalHoldings] = useState(null)
   const [totalPercentChange, setTotalPercentChange] = useState(null)
   const [totalChange, setTotalChange] = useState(null)
@@ -61,6 +63,26 @@ export default function Holdings(props) {
     }
   }, [props.selectedPortfolio] )
 
+  useEffect(() => {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
+      const fetchData = async () => {
+        const response = await fetch(props.selectedPortfolio.alerts_url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        if (response.status === 200) {
+          const tasks = await response.json();
+          setTasks(tasks);
+        } else {
+          const json = await response.json();
+          console.log(JSON.stringify(json));
+        }
+      }
+      fetchData();
+    }
+  }, [props.selectedPortfolio])
+
   const handleChange = (event, newTab) => {
     setTab(newTab);
   };
@@ -104,6 +126,28 @@ export default function Holdings(props) {
       // Call the function
       addTrade()
     }
+  }
+
+  const handleAddAlert = (event, data) => {
+    event.preventDefault();
+    const addAlert = async () => {
+      const response = await fetch('/api/tasks/', {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      if (response.status === 201) {
+        const alert = await response.json();
+        setTasks([alert, ...tasks]);
+      } else {
+        const json = await response.json();
+        console.log(JSON.stringify(json));
+      }
+    }
+    addAlert();
   }
 
   const handleEditPortfolio = (event, pk, name) => {
@@ -184,6 +228,8 @@ export default function Holdings(props) {
       <SideBar
       username={props.username}
       email={props.email}
+      userPk={props.userPk}
+      handleAddAlert={handleAddAlert}
       portfolios={props.portfolios}
       selectedPortfolio={props.selectedPortfolio}
       holdings={holdings}
@@ -229,6 +275,12 @@ export default function Holdings(props) {
             { (tab === 1 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
               <TradesTable
               trades={trades}
+              />
+            }
+            {
+              (tab === 2 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
+              <AlertsGrid
+              tasks={tasks}
               />
             }
           </>

@@ -38,7 +38,7 @@ export default function SetAlertDialog(props) {
     setOpen(false);
   };
 
-  const handleSubscribe = () => {
+  const handleSubscribe = (event) => {
     if (props.email === "") {
       alert("You must set your email to add alerts")
     } else if (type === 'Lower' && threshold > holding.price) {
@@ -48,9 +48,15 @@ export default function SetAlertDialog(props) {
     } else {
       const ticker = holding.ticker;
       const data = {
-        'args': [props.username, props.email, ticker, type, threshold],
+        'username': props.username,
+        'user_pk': props.userPk,
+        'portfolio_pk': props.selectedPortfolio.pk,
+        'user_email': props.email,
+        'symbol': ticker,
+        'type': type,
+        'threshold': threshold
       }
-      console.log(data)
+      props.handleAddAlert(event, data)
     }
   }
 
