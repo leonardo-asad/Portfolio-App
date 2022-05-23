@@ -15,7 +15,7 @@ export default function SetAlertDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [holding, setHolding] = React.useState('');
   const [type, setType] = React.useState('Lower');
-  const [threshold, setThreshold] = React.useState('');
+  const [threshold, setThreshold] = React.useState(null);
 
   const handleSetHolding = (event) => {
     setHolding(event.target.value);

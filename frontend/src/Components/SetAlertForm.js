@@ -49,6 +49,7 @@ export default function SetAlertForm(props) {
           id="outlined-basic"
           value={props.threshold}
           onChange={props.handleChangeThreshold}
+          type="number"
           label="Threshold"
           variant="outlined"
         />
