@@ -7,9 +7,11 @@ from celery.signals import task_postrun
 def fetch_price(symbol=''):
     return lookup(symbol)['price']
 
-@shared_task(name="send_alert")
-def check_price(user_pk=None, username='', user_email='', symbol='', type='', threshold=None):
+@shared_task(name="check_price")
+def check_price(user_pk=None, portfolio_pk=None, username='', user_email='', symbol='', type='', threshold=None):
     current_price = fetch_price(symbol)
+    threshold = float(threshold)
+
     if type == 'Upper':
         if current_price >= threshold:
             return send_alert_email(username, user_email, symbol, current_price, threshold)

@@ -90,7 +90,7 @@ class PeriodicTaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PeriodicTask
-        fields = ['pk', 'symbol', 'type', 'interval', 'name', 'task', 'one_off', 'enabled', 'threshold', 'price', 'kwargs']
+        fields = ['pk', 'symbol', 'type', 'crontab', 'name', 'task', 'one_off', 'enabled', 'threshold', 'price', 'kwargs']
 
     def get_threshold(self, obj):
         return json.loads(obj.kwargs)['threshold']

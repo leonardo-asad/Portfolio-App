@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from backend import settings
 from .models import Portfolio, Purchase
-from django_celery_beat.models import PeriodicTask
+from django_celery_beat.models import PeriodicTask, CrontabSchedule
 from .serializers import UserSerializerWithToken, UserSerializer, \
      PortfolioSerializer, PortfolioHoldingsSerializer, PurchaseSerializer, \
      PeriodicTaskSerializer
@@ -137,6 +137,8 @@ def PurchaseCreateView(request):
 
         purchase['date'] = datetime.date.today()
 
+        purchase['ticker']= purchase['ticker'].upper()
+
         quote = lookup(purchase['ticker'])
 
         if quote is None:
@@ -196,11 +198,19 @@ def periodic_task_create(request):
         except:
             unique_name = 1
 
+        schedule, _ = CrontabSchedule.objects.get_or_create(
+            minute='30',
+            hour='21',
+            day_of_week='1-5',
+            day_of_month='*',
+            month_of_year='*',
+        )
+
         new_task = {
-            "interval": 1,
+            "crontab":schedule.pk,
             "name": unique_name,
-            "task": "send_alert",
-            "one_off": True,
+            "task": "check_price",
+            "one_off": False,
             "enabled": True,
             "kwargs": json.dumps(request.data)
         }
