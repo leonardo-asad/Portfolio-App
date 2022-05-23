@@ -16,7 +16,9 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return localStorage.getItem('token') ? true : false
   });
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [userPk, setUserPk] = useState('');
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -29,6 +31,8 @@ function App() {
         if (response.status === 200) {
           const json = await response.json();
           setUsername(json.username);
+          setEmail(json.email);
+          setUserPk(json.pk);
         } else {
           const json = await response.json();
           console.log(JSON.stringify(json));
@@ -36,8 +40,6 @@ function App() {
       }
       // Call the function
       fetchData()
-      // Catch any error
-        .catch(console.error);
     }
   }, [isLoggedIn])
 
@@ -69,8 +71,6 @@ function App() {
       }
       // Call the function
       fetchData()
-      // Catch any error
-        .catch(console.error);
     }
   }, [isLoggedIn] )
 
@@ -91,7 +91,7 @@ function App() {
     }
   }
 
-  const handleSelectPortfolio = (portfolio, event) => {
+  const handleSelectPortfolio = (portfolio) => {
     setDisplay('holdings')
     if (selectedPortfolio.name === portfolio.name) {
       return;
@@ -134,8 +134,6 @@ function App() {
     }
     // Call the function
     fetchData()
-    // Catch any error
-      .catch(console.error);
   }
 
 
@@ -177,8 +175,6 @@ function App() {
     }
     // Call the function
     fetchData()
-    // Catch any error
-      .catch(console.error);
   }
 
 
@@ -210,6 +206,9 @@ function App() {
           {
             display === 'holdings' &&
             <Holdings
+            username={username}
+            email={email}
+            userPk={userPk}
             portfolios={portfolios}
             selectedPortfolio={selectedPortfolio}
             handleSelectPortfolio={handleSelectPortfolio}

@@ -1,0 +1,5 @@
+Hello {{name|safe}}
+
+{{symbol|safe}} price (${{current_price|safe}}) has reached your current threshold (${{threshold|safe}}).
+
+Kind regards.

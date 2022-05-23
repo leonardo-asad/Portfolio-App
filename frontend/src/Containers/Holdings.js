@@ -7,18 +7,22 @@ import HoldingsGrid from '../Components/HoldingsGrid';
 import TradesTable from '../Components/TradesTable';
 import CircularIndeterminate from '../Components/CircularIndeterminate';
 import Dashboard from '../Components/Dashboard';
+import AlertsGrid from '../Components/AlertsGrid';
 
 export default function Holdings(props) {
   const [tab, setTab] = useState(0);
   const [holdings, setHoldings] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingHoldings, setIsLoadingHoldings] = useState(false)
+  const [isLoadingAlerts, setIsLoadingAlerts] = useState(false)
   const [trades, setTrades] = useState([])
+  const [tasks, setTasks] = React.useState([]);
   const [totalHoldings, setTotalHoldings] = useState(null)
   const [totalPercentChange, setTotalPercentChange] = useState(null)
   const [totalChange, setTotalChange] = useState(null)
+  const [selectedAlert, setSelectedAlert] = useState([]);
 
   const updateHoldings = useCallback(async () => {
-    setIsLoading(true)
+    setIsLoadingHoldings(true);
     const response = await fetch(props.selectedPortfolio.holdings_url, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -31,19 +35,17 @@ export default function Holdings(props) {
       const json = await response.json();
       console.log(json);
     }
-    setIsLoading(false);
+    setIsLoadingHoldings(false);
   }, [props.selectedPortfolio])
 
   useEffect(() => {
-    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
-      updateHoldings()
-      // Catch any error
-        .catch(console.error);
+    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
+      updateHoldings();
     }
   }, [props.selectedPortfolio, updateHoldings] )
 
   useEffect(() => {
-    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
       const fetchData = async () => {
         const response = await fetch(props.selectedPortfolio.purchases_url, {
           headers: {
@@ -60,10 +62,31 @@ export default function Holdings(props) {
       }
       // Call the function
       fetchData()
-      // Catch any error
-        .catch(console.error);
     }
   }, [props.selectedPortfolio] )
+
+  const updateAlert = useCallback(async () => {
+    setIsLoadingAlerts(true);
+    const response = await fetch(props.selectedPortfolio.alerts_url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    if (response.status === 200) {
+      const tasks = await response.json();
+      setTasks(tasks);
+    } else {
+      const json = await response.json();
+      console.log(JSON.stringify(json));
+    }
+    setIsLoadingAlerts(false);
+  }, [props.selectedPortfolio])
+
+  useEffect(() => {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
+      updateAlert();
+    }
+  }, [props.selectedPortfolio, updateAlert])
 
   const handleChange = (event, newTab) => {
     setTab(newTab);
@@ -77,8 +100,6 @@ export default function Holdings(props) {
     setTotalPercentChange(totalPercentChange);
     setTotalChange(totalChange);
   }
-
-
 
   const handleAddTrade = (event, formInput) => {
     event.preventDefault();
@@ -102,6 +123,9 @@ export default function Holdings(props) {
           const trade = await response.json();
           setTrades([trade, ...trades]);
           updateHoldings();
+        } else if (response.status === 400) {
+          const json = await response.json();
+          alert(json.detail);
         } else {
           const json = await response.json();
           console.log(JSON.stringify(json));
@@ -109,8 +133,56 @@ export default function Holdings(props) {
       }
       // Call the function
       addTrade()
-      // Catch any error
-        .catch(console.error);
+    }
+  }
+
+  const handleAddAlert = (event, data) => {
+    event.preventDefault();
+    const addAlert = async () => {
+      const response = await fetch('/api/tasks/', {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      if (response.status === 201) {
+        const alert = await response.json();
+        setTasks([alert, ...tasks]);
+      } else {
+        const json = await response.json();
+        console.log(JSON.stringify(json));
+      }
+    }
+    addAlert();
+  }
+
+  const handleSelectedAlert = (newSelectedAlert) => {
+    setSelectedAlert(newSelectedAlert);
+  }
+
+  const handleDeleteAlert = (event) => {
+    event.preventDefault();
+    if (selectedAlert.length > 0) {
+      const alert_pk = selectedAlert[0];
+      const deleteAlert = async (pk) => {
+        const response = await fetch(`/api/tasks/${pk}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        if (response.status === 204) {
+          const filtered_tasks = tasks.filter(task => task.pk !== pk)
+          setTasks(filtered_tasks)
+        } else {
+          const json = await response.json();
+          console.log(JSON.stringify(json));
+        }
+      }
+      deleteAlert(alert_pk);
     }
   }
 
@@ -133,8 +205,6 @@ export default function Holdings(props) {
       }
     }
     editPortfolio(pk)
-      // Catch any error
-      .catch(console.error);
   }
 
   const handleDeletePortfolio = (event, pk) => {
@@ -148,23 +218,18 @@ export default function Holdings(props) {
         }
       })
       if (response.status === 204) {
-        props.updatePortfolioList();
+        await props.updatePortfolioList();
         setHoldings([]);
         setTrades([]);
         setTotalHoldings(null);
         setTotalPercentChange(null);
-        if (props.portfolios.length > 1) {
-          props.handleSelectPortfolio(props.portfolios[props.portfolios.length - 2])
-        } else {
-          props.handleSelectPortfolio({})
-        }
+        props.handleSelectPortfolio({})
       } else {
         const json = await response.json();
         console.log(JSON.stringify(json));
       }
     }
     deletePortfolio(pk)
-      .catch(console.error);
   }
 
   const handleCreatePortfolio = (event, name) => {
@@ -188,12 +253,15 @@ export default function Holdings(props) {
       }
     }
     createPortfolio(name)
-      .catch(console.error);
   }
 
   return (
     <React.Fragment>
       <SideBar
+      username={props.username}
+      email={props.email}
+      userPk={props.userPk}
+      handleAddAlert={handleAddAlert}
       portfolios={props.portfolios}
       selectedPortfolio={props.selectedPortfolio}
       holdings={holdings}
@@ -212,11 +280,11 @@ export default function Holdings(props) {
         onClick={handleChange}
         />
 
-        { isLoading ?
+        { (isLoadingHoldings || isLoadingAlerts) ?
 
           <CircularIndeterminate /> :
 
-          <>
+          <React.Fragment>
             { (tab === 0 && props.portfolios.length > 0 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
               <React.Fragment>
                   <Dashboard
@@ -241,10 +309,18 @@ export default function Holdings(props) {
               trades={trades}
               />
             }
-          </>
+            {
+              (tab === 2 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
+              <AlertsGrid
+              tasks={tasks}
+              handleSelectedAlert={handleSelectedAlert}
+              selectedAlert={selectedAlert}
+              handleDeleteAlert={handleDeleteAlert}
+              />
+            }
+          </React.Fragment>
         }
       </Box>
-
     </React.Fragment>
   )
 }

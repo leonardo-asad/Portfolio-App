@@ -1,7 +1,8 @@
 import os
+import json
 import datetime
 from django.http import HttpResponse
-from rest_framework import permissions, status, viewsets
+from rest_framework import permissions, status, viewsets, generics
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from rest_framework.views import APIView
@@ -10,8 +11,10 @@ from rest_framework.response import Response
 
 from backend import settings
 from .models import Portfolio, Purchase
+from django_celery_beat.models import PeriodicTask, CrontabSchedule
 from .serializers import UserSerializerWithToken, UserSerializer, \
-     PortfolioSerializer, PortfolioHoldingsSerializer, PurchaseSerializer
+     PortfolioSerializer, PortfolioHoldingsSerializer, PurchaseSerializer, \
+     PeriodicTaskSerializer
 from .permissions import IsOwner
 from .helpers import lookup
 
@@ -134,6 +137,8 @@ def PurchaseCreateView(request):
 
         purchase['date'] = datetime.date.today()
 
+        purchase['ticker']= purchase['ticker'].upper()
+
         quote = lookup(purchase['ticker'])
 
         if quote is None:
@@ -170,6 +175,55 @@ def PurchaseCreateView(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+def periodic_task_list(request, pk):
+    if request.method == "GET":
+        queryset = PeriodicTask.objects.all()
+        queryset_filtered = [periodic_task for periodic_task in queryset if 'username' in periodic_task.kwargs]
+        queryset_filtered = [periodic_task for periodic_task in queryset_filtered if json.loads(periodic_task.kwargs)['user_pk'] == request.user.pk]
+        queryset_filtered = [periodic_task for periodic_task in queryset_filtered if json.loads(periodic_task.kwargs)['portfolio_pk'] == pk]
+
+        serializer = PeriodicTaskSerializer(queryset_filtered, many=True)
+
+        return Response(serializer.data)
+
+@api_view(["POST"])
+def periodic_task_create(request):
+    if request.method == "POST":
+        try:
+            last_instance = PeriodicTask.objects.last()
+            last_pk = last_instance.pk
+            unique_name = last_pk + 1
+        except:
+            unique_name = 1
+
+        schedule, _ = CrontabSchedule.objects.get_or_create(
+            minute='30',
+            hour='21',
+            day_of_week='1-5',
+            day_of_month='*',
+            month_of_year='*',
+        )
+
+        new_task = {
+            "crontab":schedule.pk,
+            "name": unique_name,
+            "task": "check_price",
+            "one_off": False,
+            "enabled": True,
+            "kwargs": json.dumps(request.data)
+        }
+
+        serializer = PeriodicTaskSerializer(data=new_task)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PeriodicTaskDetail(generics.RetrieveDestroyAPIView):
+    queryset = PeriodicTask.objects.all()
+    serializer_class = PeriodicTaskSerializer
 
 # View to return the static front-end code
 def index(request):

@@ -20,11 +20,22 @@ import CreatePortfolioDialog from './CreatePortfolioDialog';
 import SetAlertDialog from './SetAlertDialog';
 
 export default function SideBar(props) {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (props.portfolios.length > 0) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [props.portfolios] )
+
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   useEffect(() => {
-    setSelectedIndex(props.selectedPortfolio.pk);
+    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
+      setSelectedIndex(props.selectedPortfolio.pk);
+    }
   }, [props.selectedPortfolio])
 
   const portfolios = props.portfolios;
@@ -77,7 +88,8 @@ export default function SideBar(props) {
                 'pk':object.pk,
                 'name':object.name,
                 'holdings_url': object.holdings_url,
-                'purchases_url': object.purchases_url
+                'purchases_url': object.purchases_url,
+                'alerts_url': object.alerts_url
                 },
                 event
                 )}
@@ -103,6 +115,11 @@ export default function SideBar(props) {
         handleCreatePortfolio={props.handleCreatePortfolio}
         />
         <SetAlertDialog
+        handleAddAlert={props.handleAddAlert}
+        username={props.username}
+        email={props.email}
+        userPk={props.userPk}
+        selectedPortfolio={props.selectedPortfolio}
         holdings={props.holdings}
         />
       </List>
