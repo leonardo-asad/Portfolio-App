@@ -9,8 +9,6 @@ This application has a decoupled architecture. The backend was made using Django
 The deployment set up uses a combination of uWSGI and Nginx.
 
 The following features are going to be implemented in the future:
-1) Implement email validation
-2) Set Portfolio alerts when a stock price is below a specified threshold.
 3) Migrate to PostgreSQL
 4) Make the app 100 % responsive
 
