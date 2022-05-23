@@ -91,7 +91,7 @@ function App() {
     }
   }
 
-  const handleSelectPortfolio = (portfolio, event) => {
+  const handleSelectPortfolio = (portfolio) => {
     setDisplay('holdings')
     if (selectedPortfolio.name === portfolio.name) {
       return;

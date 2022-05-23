@@ -20,12 +20,21 @@ import CreatePortfolioDialog from './CreatePortfolioDialog';
 import SetAlertDialog from './SetAlertDialog';
 
 export default function SideBar(props) {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (props.portfolios.length > 0) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [props.portfolios] )
+
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   useEffect(() => {
     if (JSON.stringify(props.selectedPortfolio) !== "{}") {
-      //setSelectedIndex(props.selectedPortfolio.pk);
+      setSelectedIndex(props.selectedPortfolio.pk);
     }
   }, [props.selectedPortfolio])
 
