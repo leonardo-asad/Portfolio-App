@@ -7,43 +7,32 @@ services:
       context: .
       dockerfile: ./Dockerfile
     volumes:
-      - .:/app
-    command: python manage.py runserver 0.0.0.0:8000
+      - myapp:/app
     env_file:
       - .env
     ports:
       - "8000:8000"
     environment:
       - DEBUG=1
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1
       - CELERY_BROKER=redis://redis:6379/0
       - CELERY_BACKEND=redis://redis:6379/0
     depends_on:
       - redis
-  redis:
-    image: "redis:alpine"
   celery:
     image: portfolioapp123.azurecr.io/celery
     build:
       context: .
       dockerfile: ./Dockerfile
+    command: celery -A backend worker --beat --scheduler django --loglevel=info
     volumes:
-      - .:/app
-    command: celery -A backend worker -l info
+      - myapp:/app
     env_file:
       - .env
     depends_on:
-      - redis
       - portfolioapp
-  celery-beat:
-    image: portfolioapp123.azurecr.io/celery-beat
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    volumes:
-      - .:/app
-    command: celery -A backend beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    env_file:
-      - .env
-    depends_on:
       - redis
-      - portfolioap
+  redis:
+    image: "redis:alpine"
+volumes:
+  myapp:
