@@ -26,7 +26,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "portfoliomanager123.azurewebsites.net"]
+AZURE_APPSERVICE_HOSTNAME = os.environ.get('APPSETTING_WEBSITE_SITE_NAME', '')
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", f"{AZURE_APPSERVICE_HOSTNAME}.azurewebsites.net"]
 
 # Application definition
 
@@ -87,7 +88,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
