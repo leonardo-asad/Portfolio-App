@@ -4,12 +4,13 @@ services:
   portfolioapp:
     image: portfolioapp123.azurecr.io/portfolioapp:latest
     volumes:
-      - mystorage:/app
+      - ${WEBAPP_STORAGE_HOME}/site/wwwroot:/var/www/html
     env_file:
       - .env
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
+    restart: always
     environment:
       - DEBUG=1
       - CELERY_BROKER=redis://redis:6379/0
@@ -21,7 +22,8 @@ services:
   celery:
     image: portfolioapp123.azurecr.io/celery:latest
     volumes:
-      - mystorage:/app
+      - ${WEBAPP_STORAGE_HOME}/site/wwwroot:/var/www/html
+    restart: always
     command: celery -A backend worker -l info
     env_file:
       - .env
@@ -31,7 +33,8 @@ services:
   celery-beat:
     image: portfolioapp123.azurecr.io/celery-beat:latest
     volumes:
-      - mystorage:/app
+      - ${WEBAPP_STORAGE_HOME}/site/wwwroot:/var/www/html
+    restart: always
     command: celery -A backend beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     env_file:
       - .env
