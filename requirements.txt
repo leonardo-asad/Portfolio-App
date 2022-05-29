@@ -7,6 +7,7 @@ redis
 django-celery-beat
 django-on-heroku
 gunicorn
+whitenoise
 psycopg2-binary
 requests
 pylint-django
