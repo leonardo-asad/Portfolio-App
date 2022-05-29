@@ -33,7 +33,7 @@ export default function SideBar(props) {
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   useEffect(() => {
-    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
       setSelectedIndex(props.selectedPortfolio.pk);
     }
   }, [props.selectedPortfolio])
@@ -76,39 +76,41 @@ export default function SideBar(props) {
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Divider />
-          <List component="div" disablePadding>
+          {portfolios.length > 0 &&
+            <List component="div" disablePadding>
             {portfolios.map((object, index) => (
               <ListItem
-              button
-              selected={selectedIndex === object.pk}
-              key={object.pk}
-              onClick={(event) => handleSelectItem(
-                index,
-                {
-                'pk':object.pk,
-                'name':object.name,
-                'holdings_url': object.holdings_url,
-                'purchases_url': object.purchases_url,
-                'alerts_url': object.alerts_url
-                },
-                event
-                )}
-              >
-                <ListItemText
-                primary={object.name}
-                sx={{ display: 'flex', justifyContent: 'left' }}
-                />
-                <EditPortfolioDialog
-                portfolio={object}
-                handleEditPortfolio={props.handleEditPortfolio}
-                />
-                <DeletePortfolioDialog
-                portfolio={object}
-                handleDeletePortfolio={props.handleDeletePortfolio}
-                />
-              </ListItem>
-            ))}
-          </List>
+                button
+                selected={selectedIndex === object.pk}
+                key={object.pk}
+                onClick={(event) => handleSelectItem(
+                  index,
+                  {
+                  'pk':object.pk,
+                  'name':object.name,
+                  'holdings_url': object.holdings_url,
+                  'purchases_url': object.purchases_url,
+                  'alerts_url': object.alerts_url
+                  },
+                  event
+                  )}
+                >
+                  <ListItemText
+                  primary={object.name}
+                  sx={{ display: 'flex', justifyContent: 'left' }}
+                  />
+                  <EditPortfolioDialog
+                  portfolio={object}
+                  handleEditPortfolio={props.handleEditPortfolio}
+                  />
+                  <DeletePortfolioDialog
+                  portfolio={object}
+                  handleDeletePortfolio={props.handleDeletePortfolio}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          }
         </Collapse>
         <Divider />
         <CreatePortfolioDialog

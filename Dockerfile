@@ -19,7 +19,6 @@ COPY requirements.txt /usr/src/app
 RUN python3 -m pip install -r requirements.txt
 
 ADD . /usr/src/app
-RUN chmod a+w /usr/src/app && chmod a+wx /usr/src/app/db.sqlite3
 
 COPY --from=0 /nodebuild/build /usr/src/app/frontend/build
 
