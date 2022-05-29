@@ -2,9 +2,9 @@ Django
 djangorestframework
 djangorestframework-simplejwt
 django-cors-headers
-#Celery
-#redis
-#django-celery-beat
+celery
+redis
+django-celery-beat
 django-on-heroku
 gunicorn
 psycopg2-binary
