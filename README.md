@@ -9,8 +9,4 @@ This application has a decoupled architecture. The backend was made using Django
 The deployment set up uses a combination of uWSGI and Nginx.
 
 The following features are going to be implemented in the future:
-3) Migrate to PostgreSQL
-4) Make the app 100 % responsive
-
-You can use the app with the following link:
-https://portfoliomanager123.azurewebsites.net/
+1) Make the app 100 % responsive
