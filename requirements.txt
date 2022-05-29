@@ -1,6 +1,7 @@
 requests
 Django
 djangorestframework
+psycopg2
 djangorestframework-simplejwt
 django-cors-headers
 pylint-django
