@@ -133,12 +133,18 @@ CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 
-#REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
+# REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
+
+# STATICFILES_DIRS = [
+#     os.path.join(REACT_APP_DIR, 'build', 'static'),
+# ]
+
+STATIC_URL = '/assets/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'build', 'static'),
+  os.path.join(BASE_DIR, 'build'),
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
