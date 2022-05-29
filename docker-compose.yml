@@ -1,51 +1,24 @@
-version: '3.4'
+version: "3.8"
 
 services:
   portfolioapp:
-    image: portfolioapp123.azurecr.io/portfolioapp
     build:
       context: .
       dockerfile: ./Dockerfile
-    volumes:
-      - myapp:/home/site/wwwroot
-    command: python manage.py runserver 0.0.0.0:8000
+    container_name: portfolioapp
     env_file:
       - .env
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/app
     ports:
       - "8000:8000"
+    depends_on:
+      - pgdb
+  pgdb:
+    image: postgres
+    container_name: pgdb
     environment:
-      - DEBUG=1
-      - CELERY_BROKER=redis://redis:6379/0
-      - CELERY_BACKEND=redis://redis:6379/0
-    depends_on:
-      - redis
-  redis:
-    image: "redis:alpine"
-  celery:
-    image: portfolioapp123.azurecr.io/celery
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    volumes:
-      - myapp:/home/site/wwwroot
-    command: celery -A backend worker -l info
-    env_file:
-      - .env
-    depends_on:
-      - redis
-      - portfolioapp
-  celery-beat:
-    image: portfolioapp123.azurecr.io/celery-beat
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    volumes:
-      - myapp:/home/site/wwwroot
-    command: celery -A backend beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    env_file:
-      - .env
-    depends_on:
-      - redis
-      - portfolioap
-volumes:
-  myapp:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
