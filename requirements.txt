@@ -9,6 +9,7 @@ django-on-heroku
 gunicorn
 whitenoise
 psycopg2-binary
+dj-database-url
 requests
 pylint-django
 urllib3==1.25.3

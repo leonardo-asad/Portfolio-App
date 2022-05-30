@@ -14,6 +14,7 @@ from pathlib import Path
 from datetime import timedelta
 import os
 import django_on_heroku
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -84,15 +85,21 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# Uncomment for local development
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'pgdb',
+#         'PORT': 5432,
+#     }
+# }
+
+# Connect lo Heroku Postgres DB
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'pgdb',
-        'PORT': 5432,
-    }
+    'default':  dj_database_url.config(conn_max_age=600, ssl_require=True)
 }
 
 # Password validation
