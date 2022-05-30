@@ -24,7 +24,7 @@ def check_price(user_pk=None, portfolio_pk=None, username='', user_email='', sym
             return send_alert_email(username, user_email, symbol, current_price, threshold)
     return None
 
-@task_postrun.connect
-def on_task_postrun(**kwargs):
-    kwargs =  kwargs['kwargs']
-    print(kwargs)
+# @task_postrun.connect
+# def on_task_postrun(**kwargs):
+#     kwargs =  kwargs['kwargs']
+#     print(kwargs)
