@@ -138,6 +138,9 @@ USE_TZ = True
 # CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 
 # Connect to Redis on Heroku
+
+CELERY_BROKER_URL = os.environ.get("REDIS_URL")
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
