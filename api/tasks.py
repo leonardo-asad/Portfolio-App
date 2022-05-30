@@ -3,6 +3,10 @@ from celery import shared_task
 from .helpers import lookup
 from celery.signals import task_postrun
 
+@shared_task(name="add")
+def add(x, y):
+    return x + y
+
 @shared_task(name="fetch_price")
 def fetch_price(symbol=''):
     return lookup(symbol)['price']
