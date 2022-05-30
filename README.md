@@ -10,3 +10,6 @@ The deployment set up uses a combination of uWSGI and Nginx.
 
 The following features are going to be implemented in the future:
 1) Make the app 100 % responsive
+
+To visit the App go to the following link:
+https://portfolioapp111.herokuapp.com/
