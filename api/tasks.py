@@ -12,7 +12,8 @@ def fetch_price(symbol=''):
 
 @shared_task(name="check_price")
 def check_price(user_pk=None, portfolio_pk=None, username='', user_email='', symbol='', type='', threshold=None):
-    current_price = fetch_price(symbol)
+    #current_price = fetch_price(symbol)
+    current_price=130
     threshold = float(threshold)
 
     if type == 'Upper':
