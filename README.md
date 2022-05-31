@@ -6,20 +6,16 @@ This web app keeps track of your investments in Stocks and ETFs of the New York 
 -
 
 # Technology Stack of the Website
--
 ![webstack](https://user-images.githubusercontent.com/64209661/171296628-d3dbd967-0219-496e-a0f0-11b78525e81e.png)
 
 # Explore the app
--
 Visit the following link, create a user and start exploring the app!
 https://portfolioapp111.herokuapp.com/
 
 # Run locally
--
 1) Docker Compose
 2) Heroku local
 
 # Future Implementations
--
 The following features are going to be implemented in the future:
 1) Use Typescript instead of Javascript
