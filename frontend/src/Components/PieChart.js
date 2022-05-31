@@ -1,6 +1,7 @@
 import React from "react";
 import Box from '@mui/material/Box';
 import Chart from "react-apexcharts";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 function getValue(holding_object) {
@@ -11,6 +12,8 @@ function getValue(holding_object) {
 }
 
 export default function PieChart(props) {
+  const matches = useMediaQuery('(min-width:920px)');
+  const width = matches ? 350 : 300;
 
   const holdings = props.holdings
 
@@ -34,7 +37,7 @@ export default function PieChart(props) {
         options={{ labels: symbols }}
         series={values}
         type="pie"
-        width="350"
+        width={width}
       />
     </Box>
   );

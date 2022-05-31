@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -32,18 +33,23 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export default function PortfolioUpperBar(props) {
+  const matches = useMediaQuery('(min-width:600px)');
+  const titleFontSize = matches ? 28 : 14;
+  const buttonsFontSize = matches ? 14 : 10;
 
   const loggedOut = (
     <Box>
       <Button
         onClick={(event) => props.handleDisplay(event, 'login')}
         color="inherit"
+        sx={{ fontSize: buttonsFontSize }}
       >
       Log In
       </Button>
       <Button
         onClick={(event) => props.handleDisplay(event, 'signup')}
         color="inherit"
+        sx={{ fontSize: buttonsFontSize }}
       >
       Sign Up
       </Button>
@@ -55,6 +61,7 @@ export default function PortfolioUpperBar(props) {
       <Button
       onClick={props.handleLogOut}
       color="inherit"
+      sx={{ fontSize: buttonsFontSize }}
       >
       Log Out
       </Button>
@@ -62,7 +69,11 @@ export default function PortfolioUpperBar(props) {
   )
 
   const username = (
-    <Typography variant="string" noWrap component="div">
+    <Typography
+    variant="string"
+    noWrap component="div"
+    sx={{ fontSize: buttonsFontSize }}
+    >
       {props.username}
     </Typography>
   )
@@ -76,7 +87,11 @@ export default function PortfolioUpperBar(props) {
         }}
     >
       <Toolbar>
-        <Box display='flex' flexGrow={1}>
+        <Box
+        display='flex'
+        flexGrow={1}
+        flexDirection= 'row'
+        >
           {props.isLoggedIn &&
             <IconButton
               color="inherit"
@@ -88,9 +103,15 @@ export default function PortfolioUpperBar(props) {
               <MenuIcon />
             </IconButton>
           }
-          <Typography variant="h6" noWrap component="div">
-            Portfolio Manager
-          </Typography>
+          <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          >
+            <Typography sx={{ fontSize: titleFontSize }} noWrap component="div">
+              Portfolio Manager
+            </Typography>
+          </Box>
         </Box>
         { props.isLoggedIn &&
           <Stack direction="row" spacing={1}>

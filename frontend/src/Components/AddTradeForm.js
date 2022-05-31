@@ -53,15 +53,8 @@ export default function AddTradeForm(props) {
       boxShadow: 3
     }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          width: 1,
-          justifyContent: 'center',
-          m: 2
-        }}
-      >
-        <Typography variant="h4" >
+      <Box>
+        <Typography sx={{ m: 1 }} variant="h4" >
           Manage Assets
         </Typography>
       </Box>

@@ -57,6 +57,7 @@ function createRow(trade_object, index) {
 export default function TradesGrid(props) {
   const matches = useMediaQuery('(min-width:920px)');
   const fontSize = matches ? 15 : 8;
+  const margin = matches ? 5 : 0;
 
   let rows = props.trades.map((trade_object, index) => createRow(trade_object, index));
 
@@ -64,7 +65,8 @@ export default function TradesGrid(props) {
     <Box
       sx={{
         display: 'flex',
-        m: 5,
+        mx: margin,
+        my: 5,
         boxShadow: 3,
         borderRadius: 3,
         '& .super-app-theme--header': {

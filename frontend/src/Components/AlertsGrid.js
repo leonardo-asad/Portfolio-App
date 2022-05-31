@@ -77,6 +77,7 @@ function createRow(task_object) {
 export default function AlertsGrid(props) {
   const matches = useMediaQuery('(min-width:920px)');
   const fontSize = matches ? 15 : 8;
+  const margin = matches ? 5 : 0;
 
   let rows = props.tasks.map((task) => createRow(task));
 
@@ -85,7 +86,8 @@ export default function AlertsGrid(props) {
       <Box
         sx={{
           display: 'flex',
-          m: 5,
+          mx: margin,
+          my: 5,
           boxShadow: 3,
           borderRadius: 3,
           '& .super-app-theme--header': {

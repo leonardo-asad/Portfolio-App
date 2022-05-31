@@ -126,6 +126,7 @@ function weight(holding, total) {
 export default function HoldingsGrid(props) {
   const matches = useMediaQuery('(min-width:920px)');
   const fontSize = matches ? 15 : 8;
+  const margin = matches ? 5 : 0;
 
   let rows = props.holdings.map((holding, index) => createRow(holding, index));
 
@@ -149,7 +150,7 @@ export default function HoldingsGrid(props) {
     <Box
       sx={{
         display: 'flex',
-        m: 5,
+        m: margin,
         boxShadow: 3,
         borderRadius: 3,
         '& .super-app-theme--header': {
