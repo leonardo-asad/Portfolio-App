@@ -1,13 +1,34 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
 
 import SideBar from '../Components/SideBar';
 import NavTabs from '../Components/NavTabs';
 import HoldingsGrid from '../Components/HoldingsGrid';
-import TradesTable from '../Components/TradesTable';
+import TradesGrid from '../Components/TradesGrid';
 import CircularIndeterminate from '../Components/CircularIndeterminate';
 import Dashboard from '../Components/Dashboard';
 import AlertsGrid from '../Components/AlertsGrid';
+
+const sideBarWidth = 240;
+
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: `-${sideBarWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  }),
+);
 
 export default function Holdings(props) {
   const [tab, setTab] = useState(0);
@@ -15,11 +36,12 @@ export default function Holdings(props) {
   const [isLoadingHoldings, setIsLoadingHoldings] = useState(false)
   const [isLoadingAlerts, setIsLoadingAlerts] = useState(false)
   const [trades, setTrades] = useState([])
-  const [tasks, setTasks] = React.useState([]);
+  const [tasks, setTasks] = useState([]);
   const [totalHoldings, setTotalHoldings] = useState(null)
   const [totalPercentChange, setTotalPercentChange] = useState(null)
   const [totalChange, setTotalChange] = useState(null)
   const [selectedAlert, setSelectedAlert] = useState([]);
+
 
   const updateHoldings = useCallback(async () => {
     setIsLoadingHoldings(true);
@@ -39,13 +61,13 @@ export default function Holdings(props) {
   }, [props.selectedPortfolio])
 
   useEffect(() => {
-    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
       updateHoldings();
     }
   }, [props.selectedPortfolio, updateHoldings] )
 
   useEffect(() => {
-    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
       const fetchData = async () => {
         const response = await fetch(props.selectedPortfolio.purchases_url, {
           headers: {
@@ -83,7 +105,7 @@ export default function Holdings(props) {
   }, [props.selectedPortfolio])
 
   useEffect(() => {
-    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
       updateAlert();
     }
   }, [props.selectedPortfolio, updateAlert])
@@ -269,11 +291,13 @@ export default function Holdings(props) {
       handleEditPortfolio={handleEditPortfolio}
       handleDeletePortfolio={handleDeletePortfolio}
       handleCreatePortfolio={handleCreatePortfolio}
+      sideBarOpen={props.sideBarOpen}
+      handleSideBarClose={props.handleSideBarClose}
+      sideBarWidth={props.sideBarWidth}
       />
 
-      <Box
-      component="div"
-      sx={{ flexGrow: 1, p: 3 }}
+      <Main
+      open={props.sideBarOpen}
       >
         <NavTabs
         tab={tab}
@@ -305,7 +329,7 @@ export default function Holdings(props) {
             }
 
             { (tab === 1 && JSON.stringify(props.selectedPortfolio) !== "{}") &&
-              <TradesTable
+              <TradesGrid
               trades={trades}
               />
             }
@@ -320,7 +344,7 @@ export default function Holdings(props) {
             }
           </React.Fragment>
         }
-      </Box>
+      </Main>
     </React.Fragment>
   )
 }

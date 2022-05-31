@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -70,36 +71,38 @@ export default function AddTradeForm(props) {
         noValidate
         autoComplete="off"
       >
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            '& > :not(style)': { m: 1 },
-          }}
+        <Grid
+        container
+        direction="row"
+        spacing={2}
+        alignItems="stretch"
         >
-          <TextField
-            size='small'
-            required
-            name="ticker"
-            id="outlined-basic"
-            label="Ticker"
-            variant="outlined"
-            value={formInput.ticker}
-            onChange={handleChange}
-
-          />
-          <TextField
-            type="number"
-            size='small'
-            required
-            name="shares"
-            id="outlined-basic"
-            label="Shares"
-            variant="outlined"
-            value={formInput.shares}
-            onChange={handleChange}
-          />
-        </Box>
+          <Grid item xs>
+            <TextField
+              size='small'
+              required
+              name="ticker"
+              id="outlined-basic"
+              label="Ticker"
+              variant="outlined"
+              value={formInput.ticker}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs>
+            <TextField
+              type="number"
+              size='small'
+              required
+              name="shares"
+              id="outlined-basic"
+              label="Shares"
+              variant="outlined"
+              value={formInput.shares}
+              onChange={handleChange}
+            />
+          </Grid>
+        </Grid>
         <Box
           sx={{
             display: 'flex',

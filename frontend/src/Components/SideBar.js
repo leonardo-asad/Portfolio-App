@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { styled, useTheme } from '@mui/material/styles';
 
-
-import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
@@ -12,38 +11,50 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Collapse } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
-import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import EditPortfolioDialog from './EditPortfolioDialog';
 import DeletePortfolioDialog from './DeletePortfolioDIalog';
 import CreatePortfolioDialog from './CreatePortfolioDialog';
 import SetAlertDialog from './SetAlertDialog';
 
+const sideBarWidth = 240;
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-end',
+}));
+
 export default function SideBar(props) {
-  const [open, setOpen] = useState(false)
+  const theme = useTheme();
+  const [accordionOpen, setAccordionOpen] = useState(false)
 
   useEffect(() => {
     if (props.portfolios.length > 0) {
-      setOpen(true);
+      setAccordionOpen(true);
     } else {
-      setOpen(false);
+      setAccordionOpen(false);
     }
   }, [props.portfolios] )
 
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   useEffect(() => {
-    if (JSON.stringify(props.selectedPortfolio) !== "{}" && props.selectedPortfolio !== undefined) {
+    if (JSON.stringify(props.selectedPortfolio) !== "{}") {
       setSelectedIndex(props.selectedPortfolio.pk);
     }
   }, [props.selectedPortfolio])
 
   const portfolios = props.portfolios;
 
-  const drawerWidth = 280;
-
   const handleClick = () => {
-    setOpen(!open);
+    setAccordionOpen(!accordionOpen);
   }
 
   const handleSelectItem = (index, object, event) => {
@@ -53,28 +64,31 @@ export default function SideBar(props) {
 
   return (
     <Drawer
-      variant="permanent"
+      variant="persistent"
+      anchor="left"
+      open={props.sideBarOpen}
       sx={{
-        width: drawerWidth,
+        width: sideBarWidth,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        [`& .MuiDrawer-paper`]: { width: sideBarWidth, boxSizing: 'border-box' },
       }}
     >
 
-    <Toolbar />
-
-    <Box
-    sx={{ overflow: 'auto' }}
-    >
+    <DrawerHeader>
+      <IconButton onClick={props.handleSideBarClose}>
+        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      </IconButton>
+    </DrawerHeader>
+    <Divider />
       <List>
         <ListItem button onClick={handleClick}>
           <ListItemIcon>
             <ShowChartIcon />
           </ListItemIcon>
           <ListItemText primary="My Portfolios" />
-          {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          {accordionOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={accordionOpen} timeout="auto" unmountOnExit>
           <Divider />
           {portfolios.length > 0 &&
             <List component="div" disablePadding>
@@ -125,7 +139,6 @@ export default function SideBar(props) {
         holdings={props.holdings}
         />
       </List>
-    </Box>
 
     </Drawer>
   );

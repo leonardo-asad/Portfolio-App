@@ -19,6 +19,15 @@ function App() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [userPk, setUserPk] = useState('');
+  const [sideBarOpen, setSideBarOpen] = useState(false)
+
+  const handleSideBarOpen = () => {
+    setSideBarOpen(true);
+  };
+
+  const handleSideBarClose = () => {
+    setSideBarOpen(false);
+  };
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -63,7 +72,9 @@ function App() {
         if (response.status === 200) {
           const portfolios = await response.json();
           SetPortfolios(portfolios);
-          setSelectedPortfolio(portfolios[0]);
+          if (portfolios.length > 0) {
+            setSelectedPortfolio(portfolios[0]);
+          }
         } else {
           const json = await response.json();
           console.log(JSON.stringify(json));
@@ -127,6 +138,7 @@ function App() {
         setUsername(data.username);
         setIsLoggedIn(true);
         setDisplay('holdings');
+        setSideBarOpen(true);
       } else {
         const json = await response.json();
         console.log(JSON.stringify(json));
@@ -144,6 +156,7 @@ function App() {
     setSelectedPortfolio({});
     setIsLoggedIn(false);
     setDisplay('login');
+    setSideBarOpen(false);
   }
 
   const handleSignUp = (event) => {
@@ -177,7 +190,6 @@ function App() {
     fetchData()
   }
 
-
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -186,6 +198,8 @@ function App() {
         isLoggedIn={isLoggedIn}
         handleLogOut={handleLogOut}
         handleDisplay={handleDisplay}
+        sideBarOpen={sideBarOpen}
+        handleSideBarOpen={handleSideBarOpen}
         />
         <Toolbar />
 
@@ -213,6 +227,8 @@ function App() {
             selectedPortfolio={selectedPortfolio}
             handleSelectPortfolio={handleSelectPortfolio}
             updatePortfolioList={updatePortfolioList}
+            sideBarOpen={sideBarOpen}
+            handleSideBarClose={handleSideBarClose}
             />
           }
         </Box>

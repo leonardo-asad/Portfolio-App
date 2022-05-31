@@ -1,4 +1,5 @@
 import * as React from 'react';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import clsx from 'clsx';
@@ -74,6 +75,8 @@ function createRow(task_object) {
 }
 
 export default function AlertsGrid(props) {
+  const matches = useMediaQuery('(min-width:920px)');
+  const fontSize = matches ? 15 : 8;
 
   let rows = props.tasks.map((task) => createRow(task));
 
@@ -87,21 +90,22 @@ export default function AlertsGrid(props) {
           borderRadius: 3,
           '& .super-app-theme--header': {
             backgroundColor: "primary.main",
-            color: 'white'
+            color: 'white',
+            fontSize: fontSize
           },
           '& .super-app-theme--cell': {
             fontWeight: '700',
-            fontSize: 15,
+            fontSize: fontSize,
           },
           '& .super-app.disabled': {
             color: '#f44336',
             fontWeight: '700',
-            fontSize: 15,
+            fontSize: fontSize,
           },
           '& .super-app.enabled': {
             color: '#4caf50',
             fontWeight: '700',
-            fontSize: 15,
+            fontSize: fontSize,
           },
         }}
       >

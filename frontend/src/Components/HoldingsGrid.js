@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import clsx from 'clsx';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const columns = [
   {
@@ -123,6 +124,9 @@ function weight(holding, total) {
 }
 
 export default function HoldingsGrid(props) {
+  const matches = useMediaQuery('(min-width:920px)');
+  const fontSize = matches ? 15 : 8;
+
   let rows = props.holdings.map((holding, index) => createRow(holding, index));
 
   const totalHoldings = ccyFormat(total(rows));
@@ -150,21 +154,22 @@ export default function HoldingsGrid(props) {
         borderRadius: 3,
         '& .super-app-theme--header': {
           backgroundColor: "primary.main",
-          color: 'white'
+          color: 'white',
+          fontSize: fontSize
         },
         '& .super-app-theme--cell': {
           fontWeight: '700',
-          fontSize: 15,
+          fontSize: fontSize
         },
         '& .super-app.negative': {
           color: '#f44336',
           fontWeight: '700',
-          fontSize: 15,
+          fontSize: fontSize,
         },
         '& .super-app.positive': {
           color: '#4caf50',
           fontWeight: '700',
-          fontSize: 15,
+          fontSize: fontSize,
         },
       }}
     >
