@@ -8,7 +8,7 @@ the total worth of your assets. Additionally, you can switch to another view whe
 This application has a decoupled architecture. The backend was made using Django Rest Framework and the frontend using Reactjs. 
 
 The following features are going to be implemented in the future:
-1) Make the app 100 % responsive
+1) Use Typescript instead of Javascript
 
 To visit the App go to the following link:
 https://portfolioapp111.herokuapp.com/
