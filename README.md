@@ -6,7 +6,9 @@ shares to it. You will see a dashboard showing you the composition of your portf
 the total worth of your assets. Additionally, you can switch to another view where you can see all the transactions you have made.
 
 This application has a decoupled architecture. The backend was made using Django Rest Framework and the frontend using Reactjs. 
-The deployment set up uses a combination of uWSGI and Nginx.
 
 The following features are going to be implemented in the future:
-1) Make the app 100 % responsive
+1) Use Typescript instead of Javascript
+
+To visit the App go to the following link:
+https://portfolioapp111.herokuapp.com/
