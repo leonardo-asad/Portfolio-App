@@ -13,7 +13,6 @@ Visit the following link, create a user and start exploring the app!
 https://portfolioapp111.herokuapp.com/
 
 # Run locally
-The following steps are required to run the app locally:
 1) Clone the repo and open the folder
 ```
 git clone https://github.com/qubitron/django-react-devcontainer
