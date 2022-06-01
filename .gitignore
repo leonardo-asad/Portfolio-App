@@ -1,6 +1,8 @@
 .devcontainer/
 .env
 backup/
+images/
+staticfiles/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

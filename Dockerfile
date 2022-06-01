@@ -6,21 +6,21 @@ ADD frontend /nodebuild
 # Set environment variables from .env during node build
 # so that the app uses the production location for static files
 ADD .env /nodebuild
-RUN export $(grep -v '^#' .env | xargs) && npm install && npm install --save react-apexcharts apexcharts && npm run build
+RUN export $(grep -v '^#' .env | xargs) && npm install && npm run build
 
 FROM python:3
 
 EXPOSE 8000
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Using pip:
-COPY requirements.txt /usr/src/app
+COPY requirements.txt /app
 RUN python3 -m pip install -r requirements.txt
 
-ADD . /usr/src/app
+ADD . /app
 
-COPY --from=0 /nodebuild/build /usr/src/app/frontend/build
+COPY --from=0 /nodebuild/build /app/frontend/build
 
 # Set environment variables from .env during collect static
 # so that the app uses the production location for static files
