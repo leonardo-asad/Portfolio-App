@@ -5,14 +5,19 @@ This web app keeps track of your investments in Stocks and ETFs of the New York 
 # Demo
 -
 
-# Technology Stack of the Website
-![webstack](https://user-images.githubusercontent.com/64209661/171296628-d3dbd967-0219-496e-a0f0-11b78525e81e.png)
+# Stack
+![webstack](https://user-images.githubusercontent.com/64209661/171496008-7614b374-8c44-4421-8432-6f2328a34158.png)
 
 # Explore the app
+
 Visit the following link, create a user and start exploring the app!
 https://portfolioapp111.herokuapp.com/
 
 # Run locally
+- Prerequisites:
+    - [Docker](https://docs.docker.com/get-docker/)
+    - [Docker Compose](https://docs.docker.com/compose/install/)
+  
 1) Clone the repo and open the folder
 ```
 git clone https://github.com/leonardo-asad/Portfolio-App.git
