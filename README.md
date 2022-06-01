@@ -14,15 +14,21 @@ https://portfolioapp111.herokuapp.com/
 
 # Run locally
 The following steps are required to run the app locally:
-1) Create a .env file to store the credentials used by the different services.
-2) The app uses a third party API (Finnhub) to lookup for the prices of the stocks. Get a free API key and store it under the name API_KEY in the .env file.
-3) Store the Django secret key under the name SECRET_KEY in the .env file
-4) The app uses the Email Backend service to send alerts to the users. Change the host email in backend/settings.py and store the password under the variable EMAIL_HOST_PASSWORD in the .env file.
-5) Check backend/settings.py to connect to the postgresDB locally.
-6) Check backend/settings.py to connect Celery with Redis
-7) Install Docker and Docker Compose
-8) On the root folder run "docker compose -f "docker-compose.yml" up -d --build".
-9) The website will run on localhost:8000
+1) Clone the repo and open the folder
+```
+git clone https://github.com/qubitron/django-react-devcontainer
+cd Portfolio-App
+code .
+```
+2) Create a .env file to store the credentials used by the different services.
+3) The app uses a third party API (Finnhub) to lookup for the prices of the stocks. Get a free API key and store it under the name API_KEY in the .env file.
+4) Store the Django secret key under the name SECRET_KEY in the .env file
+5) The app uses the Email Backend service to send alerts to the users. Change the host email in backend/settings.py and store the password under the variable EMAIL_HOST_PASSWORD in the .env file.
+6) Check backend/settings.py to connect to the postgresDB locally.
+7) Check backend/settings.py to connect Celery with Redis
+8) Install Docker and Docker Compose
+9) On the root folder run "docker compose -f "docker-compose.yml" up -d --build".
+10) The website will run on localhost:8000
 
 # Future Implementations
 The following features are going to be implemented in the future:
