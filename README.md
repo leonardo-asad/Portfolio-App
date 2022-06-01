@@ -15,7 +15,7 @@ https://portfolioapp111.herokuapp.com/
 # Run locally
 1) Clone the repo and open the folder
 ```
-git clone https://github.com/qubitron/django-react-devcontainer
+git clone https://github.com/leonardo-asad/Portfolio-App.git
 cd Portfolio-App
 code .
 ```
