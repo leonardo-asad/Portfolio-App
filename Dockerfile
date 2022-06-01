@@ -1,12 +1,9 @@
-FROM node
+FROM node:17
 
 WORKDIR /nodebuild
 ADD frontend /nodebuild
 
-# Set environment variables from .env during node build
-# so that the app uses the production location for static files
-ADD .env /nodebuild
-RUN export $(grep -v '^#' .env | xargs) && npm install && npm run build
+RUN npm install && npm run build
 
 FROM python:3
 
