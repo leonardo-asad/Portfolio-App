@@ -1,9 +1,9 @@
 # Portfolio-App
 
-This web app keeps track of your investments in Stocks and ETFs of the New York Stock Market. It presents to the user a detailed description of the composition of their portfolio/s and how much weight each asset has in relation to the total worth of their portfolio. In addition, the user can set alerts in order to get notified when the price reaches certain threshold.
+This web app keeps track of your investments in Stocks and ETFs of the New York Stock Market. It presents to the user a detailed description of the composition of their portfolio/s and how much weight each asset has in relation to the total worth of their portfolio. In addition, the user can set alerts in order to get notified when the price reaches certain threshold and see historical transactions.
 
 # Demo
--
+https://user-images.githubusercontent.com/64209661/171510233-2d031d45-a0f5-4fbf-8eed-554162eb71ca.mp4
 
 # Stack
 ![webstack](https://user-images.githubusercontent.com/64209661/171496008-7614b374-8c44-4421-8432-6f2328a34158.png)
