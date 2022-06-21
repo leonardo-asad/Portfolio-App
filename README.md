@@ -58,7 +58,3 @@ CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 9) In the root folder run "docker compose -f "docker-compose.yml" up -d --build".
 10) Run migrations
 11) The website will run on localhost:8000
-
-# Future Implementations
-The following features are going to be implemented in the future:
-1) Use Typescript instead of Javascript
