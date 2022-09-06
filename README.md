@@ -32,11 +32,14 @@ SECRET_KEY="Secret Key Django"
 API_KEY="Finnhub Api Key"
 #gmail_send/settings.py
 EMAIL_HOST_PASSWORD="Email Host Password"
+#Postgres DB environment variable
+POSTGRES_PASSWORD="password"
 ```
 3) The app uses a third party API (Finnhub) to lookup for the prices of the stocks. Get a free API key and store it under the name API_KEY in the .env file.
 4) Store the Django secret key under the name SECRET_KEY in the .env file
 5) The app uses the Email Backend service to send alerts to the users. Change the host email in backend/settings.py and store the password under the variable EMAIL_HOST_PASSWORD in the .env file.
-6) Check backend/settings.py to connect to the postgresDB locally.
+6) POSTGRES_PASSWORD should be specified to start the PostgresDB Service with Docker.
+7) Check backend/settings.py to connect to the postgresDB locally.
 ```
 DATABASES = {
     'default': {
@@ -49,12 +52,12 @@ DATABASES = {
     }
 }
 ```
-7) Check backend/settings.py to connect Celery with Redis
+8) Check backend/settings.py to connect Celery with Redis
 ```
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 ```
-8) Install Docker and Docker Compose
-9) In the root folder run "docker compose -f "docker-compose.yml" up -d --build".
-10) Run migrations
-11) The website will run on localhost:8000
+9) Install Docker and Docker Compose
+10) In the root folder run "docker compose -f "docker-compose.yml" up -d --build".
+11) Run migrations
+12) The website will run on localhost:8000
