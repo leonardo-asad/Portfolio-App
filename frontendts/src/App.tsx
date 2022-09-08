@@ -1,24 +1,49 @@
 import React from 'react';
-import logo from './logo.svg';
+import UpperBar from './components/UpperBar';
+import Holdings from './containers/Holdings';
+
 import './App.css';
 
 function App() {
+  const [portfolios, SetPortfolios] = React.useState([
+    {
+      pk:1,
+      name:'usa'
+    },
+    {
+      pk:1,
+      name:'stocks2'
+    },
+    {
+      pk:1,
+      name:'asia'
+    },
+  ]);
+
+  const [sideBarOpen, setSideBarOpen] = React.useState(false);
+
+  const handleSideBarOpen: () => void = () => {
+    setSideBarOpen(true);
+  };
+
+  const handleSideBarClose = () => {
+    setSideBarOpen(false);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <UpperBar
+      sideBarOpen={sideBarOpen}
+      handleSideBarOpen={handleSideBarOpen}
+      handleSideBarClose={handleSideBarClose}
+      />
+
+      <Holdings
+      sideBarOpen={sideBarOpen}
+      handleSideBarOpen={handleSideBarOpen}
+      handleSideBarClose={handleSideBarClose}
+      portfolios={portfolios}
+      />
     </div>
   );
 }

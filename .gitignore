@@ -6,6 +6,7 @@ staticfiles/
 .buildpacks
 Procfile
 .vscode
+Makefile
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
