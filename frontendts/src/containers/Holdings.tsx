@@ -42,6 +42,7 @@ export default function Holdings(props: SideBarProps) {
       portfolios={props.portfolios}
       />
       <Main open={props.sideBarOpen}>
+        
         <HoldingsGrid />
 
       </Main>
