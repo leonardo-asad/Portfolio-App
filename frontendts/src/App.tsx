@@ -1,4 +1,7 @@
 import React from 'react';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+
 import UpperBar from './components/UpperBar';
 import Holdings from './containers/Holdings';
 
@@ -37,13 +40,17 @@ function App() {
       handleSideBarOpen={handleSideBarOpen}
       handleSideBarClose={handleSideBarClose}
       />
+      <Toolbar />
 
-      <Holdings
-      sideBarOpen={sideBarOpen}
-      handleSideBarOpen={handleSideBarOpen}
-      handleSideBarClose={handleSideBarClose}
-      portfolios={portfolios}
-      />
+      <Box sx={{ display: 'flex' }}>
+        <Holdings
+        sideBarOpen={sideBarOpen}
+        handleSideBarOpen={handleSideBarOpen}
+        handleSideBarClose={handleSideBarClose}
+        portfolios={portfolios}
+        />
+      </Box>
+
     </div>
   );
 }
