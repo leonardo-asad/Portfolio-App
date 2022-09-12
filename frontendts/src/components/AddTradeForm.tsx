@@ -57,7 +57,7 @@ export default function AddTradeForm() {
     }}
     >
       <Box>
-        <Typography sx={{ m: 1, textAlign: 'center' }} variant="h4" >
+        <Typography sx={{ m: 2, textAlign: 'center' }} variant="h4" >
           Buy / Sell Stocks
         </Typography>
       </Box>
@@ -66,6 +66,7 @@ export default function AddTradeForm() {
         component="form"
         noValidate
         autoComplete="off"
+        sx={{ mx: 4 }}
       >
         <Grid
         container
