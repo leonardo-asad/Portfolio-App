@@ -34,7 +34,7 @@ function App() {
   const handleSelectPortfolio: (portfolio: PortfolioInterface) => void = (portfolio) => {
     //setDisplay('holdings')
 
-    if (selectedPortfolio.pk !== '') {
+    if (selectedPortfolio.name !== '') {
       if (selectedPortfolio.name === portfolio.name) {
         return;
       }
@@ -53,12 +53,14 @@ function App() {
     <Box sx={{ display: 'flex' }}>
       <UpperBar
       handleSideBarToogle={handleSideBarToogle}
+      selectedPortfolio={selectedPortfolio}
       />
 
       <Holdings
       sideBarOpen={sideBarOpen}
-      handleSideBarToogle={handleSideBarToogle}
       portfolios={portfolios}
+      handleSideBarToogle={handleSideBarToogle}
+      handleSelectPortfolio={handleSelectPortfolio}
       />
     </Box>
   );

@@ -15,15 +15,11 @@ import { drawerWidth } from '../App';
 import { PortfolioInterface } from '../interfaces/interfaces'
 
 interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-
-  sideBarOpen: boolean,
-  handleSideBarToogle: () => void,
   portfolios: PortfolioInterface[],
+  sideBarOpen: boolean,
+  window?: () => Window;
+  handleSideBarToogle: () => void,
+  handleSelectPortfolio: (portfolio: PortfolioInterface) => void
 }
 
 export default function SideBar(props: Props) {
@@ -53,6 +49,12 @@ export default function SideBar(props: Props) {
             <ListItem
               button
               key={portfolio.pk}
+              onClick={(event) => {
+                props.handleSelectPortfolio({
+                  'pk': portfolio.pk,
+                  'name': portfolio.name
+                })
+              }}
             >
               <ListItemText
               primary={portfolio.name}

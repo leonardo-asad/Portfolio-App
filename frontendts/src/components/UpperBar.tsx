@@ -15,10 +15,15 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { drawerWidth } from '../App';
+import { PortfolioInterface } from '../interfaces/interfaces';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean,
-  handleSideBarToogle?: () => void,
+}
+
+interface UpperBarProps {
+  selectedPortfolio: PortfolioInterface,
+  handleSideBarToogle: () => void,
 }
 
 const AppBar = styled(MuiAppBar, {
@@ -39,10 +44,10 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 
-export default function UpperBar(props: AppBarProps) {
-  const matches = useMediaQuery('(min-width:650px)');
+export default function UpperBar(props: UpperBarProps) {
+  const matches = useMediaQuery('(min-width:700px)');
   const titleFontSize = matches ? 20 : 9;
-  const buttonsFontSize = matches ? 12 : 7;
+  const buttonsFontSize = matches ? 10 : 7;
 
   const loggedOut = (
     <Box>
@@ -128,9 +133,16 @@ export default function UpperBar(props: AppBarProps) {
               </Grid>
             </Grid >
             <Grid item>
-              <Typography sx={{fontSize: titleFontSize}} component="div">
-                Portfolio App
-              </Typography>
+              { props.selectedPortfolio.name === '' ?
+                <Typography sx={{fontSize: titleFontSize}} component="div">
+                  No Selected Portfolio
+                </Typography>
+                :
+                <Typography sx={{fontSize: titleFontSize}} component="div">
+                  { props.selectedPortfolio.name }
+                </Typography>
+              }
+
             </Grid>
             <Grid item>
               <Grid

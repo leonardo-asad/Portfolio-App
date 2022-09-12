@@ -10,8 +10,9 @@ import { PortfolioInterface } from '../interfaces/interfaces'
 
 interface Props {
   sideBarOpen: boolean,
-  handleSideBarToogle: () => void,
   portfolios: PortfolioInterface[]
+  handleSideBarToogle: () => void,
+  handleSelectPortfolio: (portfolio: PortfolioInterface) => void
 }
 
 export default function Holdings(props: Props) {
@@ -19,8 +20,9 @@ export default function Holdings(props: Props) {
     <React.Fragment>
       <SideBar
         sideBarOpen={props.sideBarOpen}
-        handleSideBarToogle={props.handleSideBarToogle}
         portfolios={props.portfolios}
+        handleSideBarToogle={props.handleSideBarToogle}
+        handleSelectPortfolio={props.handleSelectPortfolio}
       />
       <Box
         component="main"
