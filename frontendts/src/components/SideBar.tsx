@@ -1,8 +1,6 @@
 import React from 'react'
+import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import { Collapse } from '@mui/material';
@@ -12,28 +10,23 @@ import ListItemText from '@mui/material/ListItemText';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { styled, useTheme } from '@mui/material/styles';
 
-const drawerWidth = 240;
+import { drawerWidth } from '../App';
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
-}));
+interface Props {
+  /**
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
+  window?: () => Window;
 
-interface SideBarProps {
   sideBarOpen: boolean,
-  handleSideBarOpen: () => void,
-  handleSideBarClose: () => void,
+  handleSideBarToogle: () => void,
   portfolios: {pk: number, name: string}[],
 }
 
-export default function SideBar(props: SideBarProps) {
-  const theme = useTheme();
+export default function SideBar(props: Props) {
+  const { window } = props;
 
   const [accordionOpen, setAccordionOpen] = React.useState(false)
 
@@ -41,57 +34,72 @@ export default function SideBar(props: SideBarProps) {
     setAccordionOpen(!accordionOpen);
   }
 
-  return (
-    <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={props.sideBarOpen}
-      >
-        <DrawerHeader>
-          <IconButton onClick={props.handleSideBarClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
+  const drawer = (
+    <div>
+      <List>
+        <ListItem button onClick={handleAccordionOpen}>
+          <ListItemIcon>
+            <ShowChartIcon />
+          </ListItemIcon>
+          <ListItemText primary="My Portfolios" />
+          {accordionOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        </ListItem>
+        <Collapse in={accordionOpen} timeout="auto" unmountOnExit>
         <Divider />
-        <List>
-          <ListItem button onClick={handleAccordionOpen}>
-            <ListItemIcon>
-              <ShowChartIcon />
-            </ListItemIcon>
-            <ListItemText primary="My Portfolios" />
-            {accordionOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </ListItem>
-          <Collapse in={accordionOpen} timeout="auto" unmountOnExit>
-          <Divider />
-          {props.portfolios.length > 0 &&
-            <List component="div" disablePadding>
-            {props.portfolios.map((object, index) => (
-              <ListItem
-                button
-                key={object.pk}
-                >
-                  <ListItemText
-                  primary={object.name}
-                  sx={{ display: 'flex', justifyContent: 'left' }}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          }
+        {props.portfolios.length > 0 &&
+          <List component="div" disablePadding>
+          {props.portfolios.map((object, index) => (
+            <ListItem
+              button
+              key={object.pk}
+              >
+                <ListItemText
+                primary={object.name}
+                sx={{ display: 'flex', justifyContent: 'left' }}
+                />
+              </ListItem>
+            ))}
+          </List>
+        }
         </Collapse>
         <Divider />
+      </List>
+    </div>
+  )
 
-        </List>
+  const container = window !== undefined ? () => window().document.body : undefined;
 
-
+  return (
+    <Box
+    component="nav"
+    sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+    aria-label="Portfolios Menu"
+    >
+      <Drawer
+        container={container}
+        variant="temporary"
+        open={props.sideBarOpen}
+        onClose={props.handleSideBarToogle}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          display: { xs: 'block', sm: 'none' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+        }}
+      >
+        {drawer}
       </Drawer>
+      <Drawer
+        variant="permanent"
+        sx={{
+          display: { xs: 'none', sm: 'block' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+        }}
+        open
+      >
+        {drawer}
+      </Drawer>
+    </Box>
   )
 }

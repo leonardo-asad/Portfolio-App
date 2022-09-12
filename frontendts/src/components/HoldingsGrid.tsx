@@ -30,6 +30,7 @@ const HoldingsExample1: HoldingObject[]  = [
 ]
 
 // Example2 to simulate calls to the API
+// eslint-disable-next-line
 const HoldingsExample2: HoldingObject[] = [
 
 ]

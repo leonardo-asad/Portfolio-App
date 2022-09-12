@@ -1,13 +1,15 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 
 import UpperBar from './components/UpperBar';
 import Holdings from './containers/Holdings';
 
 import './App.css';
 
+export const drawerWidth = 240;
+
 function App() {
+  // eslint-disable-next-line
   const [portfolios, SetPortfolios] = React.useState([
     {
       pk:1,
@@ -25,33 +27,22 @@ function App() {
 
   const [sideBarOpen, setSideBarOpen] = React.useState(false);
 
-  const handleSideBarOpen: () => void = () => {
-    setSideBarOpen(true);
-  };
-
-  const handleSideBarClose = () => {
-    setSideBarOpen(false);
+  const handleSideBarToogle: () => void = () => {
+    setSideBarOpen(!sideBarOpen);
   };
 
   return (
-    <div className="App">
+    <Box sx={{ display: 'flex' }}>
       <UpperBar
-      sideBarOpen={sideBarOpen}
-      handleSideBarOpen={handleSideBarOpen}
-      handleSideBarClose={handleSideBarClose}
+      handleSideBarToogle={handleSideBarToogle}
       />
-      <Toolbar />
 
-      <Box sx={{ display: 'flex' }}>
-        <Holdings
-        sideBarOpen={sideBarOpen}
-        handleSideBarOpen={handleSideBarOpen}
-        handleSideBarClose={handleSideBarClose}
-        portfolios={portfolios}
-        />
-      </Box>
-
-    </div>
+      <Holdings
+      sideBarOpen={sideBarOpen}
+      handleSideBarToogle={handleSideBarToogle}
+      portfolios={portfolios}
+      />
+    </Box>
   );
 }
 
