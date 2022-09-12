@@ -120,7 +120,6 @@ export default function AddTradeForm(props) {
             Remove
           </Button>
         </Box>
-
       </Box>
     </Box>
   )
