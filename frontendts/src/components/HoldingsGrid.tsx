@@ -4,6 +4,8 @@ import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import clsx from 'clsx';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
+import { HoldingObject, Row } from '../interfaces/interfaces';
+
 // Example1 to simulate calls to the API
 const HoldingsExample1: HoldingObject[]  = [
   {
@@ -112,26 +114,7 @@ const columns: GridColDef[] = [
   },
 ];
 
-// Defines the types of the Holding Object returned by the API
-interface HoldingObject {
-  ticker: string,
-  shares: number,
-  price: number,
-  change: number,
-  change_percent: number
-}
 
-// Defines the types of the holding object used to build the Grid, representing each Row
-interface Row {
-  id: number,
-  ticker: string,
-  shares: number,
-  price: number,
-  change: number,
-  change_percent: number,
-  value: number,
-  previousValue: number
-}
 
 // Round Number to 2 decimals
 function roundNumber(num: number): number {

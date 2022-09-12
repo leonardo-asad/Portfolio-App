@@ -12,6 +12,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { drawerWidth } from '../App';
+import { PortfolioInterface } from '../interfaces/interfaces'
 
 interface Props {
   /**
@@ -22,7 +23,7 @@ interface Props {
 
   sideBarOpen: boolean,
   handleSideBarToogle: () => void,
-  portfolios: {pk: number, name: string}[],
+  portfolios: PortfolioInterface[],
 }
 
 export default function SideBar(props: Props) {
@@ -48,16 +49,16 @@ export default function SideBar(props: Props) {
         <Divider />
         {props.portfolios.length > 0 &&
           <List component="div" disablePadding>
-          {props.portfolios.map((object, index) => (
+          {props.portfolios.map((portfolio, index) => (
             <ListItem
               button
-              key={object.pk}
-              >
-                <ListItemText
-                primary={object.name}
-                sx={{ display: 'flex', justifyContent: 'left' }}
-                />
-              </ListItem>
+              key={portfolio.pk}
+            >
+              <ListItemText
+              primary={portfolio.name}
+              sx={{ display: 'flex', justifyContent: 'left' }}
+              />
+            </ListItem>
             ))}
           </List>
         }

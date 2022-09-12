@@ -6,20 +6,21 @@ import SideBar from '../components/SideBar';
 import HoldingsGrid from '../components/HoldingsGrid';
 import Dashboard from '../components/Dashboard';
 import { drawerWidth } from '../App';
+import { PortfolioInterface } from '../interfaces/interfaces'
 
-interface SideBarProps {
+interface Props {
   sideBarOpen: boolean,
   handleSideBarToogle: () => void,
-  portfolios: {pk: number, name: string}[]
+  portfolios: PortfolioInterface[]
 }
 
-export default function Holdings(props: SideBarProps) {
+export default function Holdings(props: Props) {
   return (
     <React.Fragment>
       <SideBar
-      sideBarOpen={props.sideBarOpen}
-      handleSideBarToogle={props.handleSideBarToogle}
-      portfolios={props.portfolios}
+        sideBarOpen={props.sideBarOpen}
+        handleSideBarToogle={props.handleSideBarToogle}
+        portfolios={props.portfolios}
       />
       <Box
         component="main"
