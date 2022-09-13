@@ -1,6 +1,11 @@
+import React from 'react';
+
 export interface PortfolioInterface {
-  pk: string,
-  name: string
+  "pk": string,
+  "name": string,
+  "holdings_url": string,
+  "purchases_url": string,
+  "alerts_url": string
 }
 
 // Defines the types of the Holding Object returned by the API
@@ -23,3 +28,5 @@ export interface Row {
   value: number,
   previousValue: number
 }
+
+export type Username = string;

@@ -3,32 +3,98 @@ import Box from '@mui/material/Box';
 
 import UpperBar from './components/UpperBar';
 import Holdings from './containers/Holdings';
-import { PortfolioInterface } from './interfaces/interfaces';
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
+import { PortfolioInterface, Username } from './interfaces/interfaces';
 
 import './App.css';
 
 export const drawerWidth = 240;
 
 function App() {
-  // eslint-disable-next-line
-  const [portfolios, SetPortfolios] = React.useState([
-    {
-      pk:'1',
-      name:'usa'
-    },
-    {
-      pk:'2',
-      name:'stocks2'
-    },
-    {
-      pk:'3',
-      name:'asia'
-    },
-  ]);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [username, setUsername] = React.useState<Username>('');
+
+  const handleSignIn = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const data = {username: formData.get('username'), password: formData.get('password')}
+    const fetchData = async () => {
+      // Get token from the API
+      const response = await fetch('http://localhost:8000/api/token/', {
+        method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body:  JSON.stringify(data)
+      })
+      if (response.status === 200) {
+        const json = await response.json();
+        localStorage.setItem('token', json.access);
+        setIsLoggedIn(true);
+        setDisplay('holdings');
+
+        const username: FormDataEntryValue | null = formData.get('username')
+        if (typeof username === 'string') {
+          setUsername(username);
+        }
+      } else {
+        const json = await response.json();
+        console.log(JSON.stringify(json));
+      }
+    }
+    // Call the function
+    fetchData()
+  };
+
+  const [display, setDisplay] = React.useState(() => {
+    if (!isLoggedIn) {
+      return 'login'
+    } else {
+      return 'holdings'
+    }
+  })
+
+  const handleDisplay = (display: string) => {
+    if (display === 'signup') {
+      setDisplay('signup')
+    } else if (display === 'login') {
+      setDisplay('login')
+    }
+  }
+
+  const [portfolios, SetPortfolios] = React.useState([]);
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      const fetchData = async () => {
+        const response = await fetch('http://localhost:8000/api/portfolio/', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        if (response.status === 200) {
+          const portfolios = await response.json();
+          SetPortfolios(portfolios);
+          if (portfolios.length > 0) {
+            setSelectedPortfolio(portfolios[0]);
+          }
+        } else {
+          const json = await response.json();
+          console.log(JSON.stringify(json));
+        }
+      }
+      // Call the function
+      fetchData()
+    }
+  }, [isLoggedIn] )
 
   const [selectedPortfolio, setSelectedPortfolio] = React.useState({
     pk: '',
-    name: ''
+    name: '',
+    holdings_url: '',
+    purchases_url: '',
+    alerts_url: ''
   })
 
   const handleSelectPortfolio: (portfolio: PortfolioInterface) => void = (portfolio) => {
@@ -51,17 +117,33 @@ function App() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <UpperBar
-      handleSideBarToogle={handleSideBarToogle}
-      selectedPortfolio={selectedPortfolio}
-      />
+      { display === 'holdings' &&
+        <React.Fragment>
+          <UpperBar
+          username={username}
+          selectedPortfolio={selectedPortfolio}
+          isLoggedIn={isLoggedIn}
+          handleSideBarToogle={handleSideBarToogle}
+          />
+          <Holdings
+          sideBarOpen={sideBarOpen}
+          portfolios={portfolios}
+          handleSideBarToogle={handleSideBarToogle}
+          handleSelectPortfolio={handleSelectPortfolio}
+          />
+        </React.Fragment>
+      }
 
-      <Holdings
-      sideBarOpen={sideBarOpen}
-      portfolios={portfolios}
-      handleSideBarToogle={handleSideBarToogle}
-      handleSelectPortfolio={handleSelectPortfolio}
-      />
+      { display === 'login' &&
+        <SignIn
+        handleSignIn={handleSignIn}
+        />
+      }
+
+      { display === 'signup' &&
+        <SignUp />
+      }
+
     </Box>
   );
 }

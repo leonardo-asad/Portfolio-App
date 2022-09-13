@@ -52,7 +52,10 @@ export default function SideBar(props: Props) {
               onClick={(event) => {
                 props.handleSelectPortfolio({
                   'pk': portfolio.pk,
-                  'name': portfolio.name
+                  'name': portfolio.name,
+                  "holdings_url": portfolio.holdings_url,
+                  "purchases_url": portfolio.purchases_url,
+                  "alerts_url": portfolio.alerts_url
                 })
               }}
             >

@@ -15,13 +15,15 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { drawerWidth } from '../App';
-import { PortfolioInterface } from '../interfaces/interfaces';
+import { PortfolioInterface, Username } from '../interfaces/interfaces';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean,
 }
 
 interface UpperBarProps {
+  isLoggedIn: boolean,
+  username: Username,
   selectedPortfolio: PortfolioInterface,
   handleSideBarToogle: () => void,
 }
@@ -85,7 +87,7 @@ export default function UpperBar(props: UpperBarProps) {
     noWrap component="div"
     sx={{ fontSize: buttonsFontSize }}
     >
-      Pepito
+      { props.username }
     </Typography>
   )
 
@@ -132,18 +134,21 @@ export default function UpperBar(props: UpperBarProps) {
                 </Grid>
               </Grid>
             </Grid >
-            <Grid item>
-              { props.selectedPortfolio.name === '' ?
-                <Typography sx={{fontSize: titleFontSize}} component="div">
-                  No Selected Portfolio
-                </Typography>
-                :
-                <Typography sx={{fontSize: titleFontSize}} component="div">
-                  { props.selectedPortfolio.name }
-                </Typography>
-              }
 
-            </Grid>
+            { props.isLoggedIn &&
+                <Grid item>
+                { props.selectedPortfolio.name === '' ?
+                  <Typography sx={{fontSize: titleFontSize}} component="div">
+                    No Selected Portfolio
+                  </Typography>
+                  :
+                  <Typography sx={{fontSize: titleFontSize}} component="div">
+                    { props.selectedPortfolio.name }
+                  </Typography>
+                }
+                </Grid>
+            }
+
             <Grid item>
               <Grid
               container
@@ -152,14 +157,14 @@ export default function UpperBar(props: UpperBarProps) {
               wrap='nowrap'
               >
                 <Grid item>
-                  { true &&
+                  { props.isLoggedIn &&
                     <Stack direction="row" spacing={1}>
                       <Chip icon={<FaceIcon style={{color: 'white'}} />} label={username} size= 'small' variant="outlined" style={{ color: 'white' }} />
                     </Stack>
                   }
                 </Grid>
                 <Grid item>
-                  { true ? loggedIn : loggedOut}
+                  { props.isLoggedIn ? loggedIn : loggedOut}
                 </Grid>
               </Grid>
             </Grid>
