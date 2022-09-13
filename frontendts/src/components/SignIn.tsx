@@ -11,15 +11,16 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import * as Interface from '../interfaces/interfaces';
+
 const theme = createTheme();
 
 interface Props {
-  handleSignIn: (event: React.FormEvent<HTMLFormElement>) => void
+  handleSignIn: Interface.HandleSignIn
+  handleDisplay: Interface.HandleDisplay
 }
 
 export default function SignIn(props: Props) {
-
-
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -68,8 +69,8 @@ export default function SignIn(props: Props) {
               Sign In
             </Button>
             <Grid container justifyContent="center">
-              <Grid item>
-                <Link href="#" variant="body2">
+              <Grid item onClick={(event) => props.handleDisplay(event, "signup")}>
+                <Link variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

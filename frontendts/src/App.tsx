@@ -5,15 +5,39 @@ import UpperBar from './components/UpperBar';
 import Holdings from './containers/Holdings';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
-import { PortfolioInterface, Username } from './interfaces/interfaces';
+import * as Interface from './interfaces/interfaces';
 
 import './App.css';
 
 export const drawerWidth = 240;
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [username, setUsername] = React.useState<Username>('');
+  const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
+    return localStorage.getItem('token') ? true : false
+  });
+
+  const [username, setUsername] = React.useState<Interface.Username>('');
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      const fetchData = async() => {
+        const response = await fetch('http://localhost:8000/api/user/', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        if (response.status === 200) {
+          const json = await response.json();
+          setUsername(json.username);
+        } else {
+          const json = await response.json();
+          console.log(JSON.stringify(json));
+        }
+      }
+      // Call the function
+      fetchData()
+    }
+  }, [isLoggedIn])
 
   const handleSignIn = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,6 +71,21 @@ function App() {
     fetchData()
   };
 
+  const handleLogOut:(event: React.MouseEvent<HTMLButtonElement>) => void = () => {
+    localStorage.removeItem('token');
+    setUsername('');
+    SetPortfolios([]);
+    setSelectedPortfolio({
+      pk: '',
+      name: '',
+      holdings_url: '',
+      purchases_url: '',
+      alerts_url: ''
+    });
+    setIsLoggedIn(false);
+    setDisplay('login');
+  }
+
   const [display, setDisplay] = React.useState(() => {
     if (!isLoggedIn) {
       return 'login'
@@ -55,7 +94,8 @@ function App() {
     }
   })
 
-  const handleDisplay = (display: string) => {
+  const handleDisplay: Interface.HandleDisplay = (event, display) => {
+    event.preventDefault();
     if (display === 'signup') {
       setDisplay('signup')
     } else if (display === 'login') {
@@ -97,7 +137,7 @@ function App() {
     alerts_url: ''
   })
 
-  const handleSelectPortfolio: (portfolio: PortfolioInterface) => void = (portfolio) => {
+  const handleSelectPortfolio: (portfolio: Interface.PortfolioInterface) => void = (portfolio) => {
     //setDisplay('holdings')
 
     if (selectedPortfolio.name !== '') {
@@ -124,6 +164,8 @@ function App() {
           selectedPortfolio={selectedPortfolio}
           isLoggedIn={isLoggedIn}
           handleSideBarToogle={handleSideBarToogle}
+          handleDisplay={handleDisplay}
+          handleLogOut={handleLogOut}
           />
           <Holdings
           sideBarOpen={sideBarOpen}
@@ -137,6 +179,7 @@ function App() {
       { display === 'login' &&
         <SignIn
         handleSignIn={handleSignIn}
+        handleDisplay={handleDisplay}
         />
       }
 

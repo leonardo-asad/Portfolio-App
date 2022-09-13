@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface PortfolioInterface {
   "pk": string,
   "name": string,
@@ -30,3 +28,9 @@ export interface Row {
 }
 
 export type Username = string;
+
+export type Display = string;
+
+export type HandleSignIn = (event: React.FormEvent<HTMLFormElement>) => void;
+
+export type HandleDisplay = (event: React.MouseEvent<HTMLButtonElement | HTMLDivElement>, display: Display) => void;

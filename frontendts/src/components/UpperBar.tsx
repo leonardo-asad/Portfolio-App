@@ -15,7 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { drawerWidth } from '../App';
-import { PortfolioInterface, Username } from '../interfaces/interfaces';
+import { PortfolioInterface, Username, Display } from '../interfaces/interfaces';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean,
@@ -26,7 +26,9 @@ interface UpperBarProps {
   username: Username,
   selectedPortfolio: PortfolioInterface,
   handleSideBarToogle: () => void,
-}
+  handleDisplay: (event: React.MouseEvent<HTMLButtonElement>, display: Display) => void
+  handleLogOut: (event: React.MouseEvent<HTMLButtonElement>) => void
+};
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -54,14 +56,14 @@ export default function UpperBar(props: UpperBarProps) {
   const loggedOut = (
     <Box>
       <Button
-        //onClick={(event) => props.handleDisplay(event, 'login')}
+        onClick={(event) => props.handleDisplay(event, 'login')}
         color="inherit"
         sx={{ fontSize: buttonsFontSize }}
       >
       Log In
       </Button>
       <Button
-        //onClick={(event) => props.handleDisplay(event, 'signup')}
+        onClick={(event) => props.handleDisplay(event, 'signup')}
         color="inherit"
         sx={{ fontSize: buttonsFontSize }}
       >
@@ -73,7 +75,7 @@ export default function UpperBar(props: UpperBarProps) {
   const loggedIn = (
     <Box>
       <Button
-      //onClick={props.handleLogOut}
+      onClick={props.handleLogOut}
       color="inherit"
       sx={{ fontSize: buttonsFontSize }}
       >
