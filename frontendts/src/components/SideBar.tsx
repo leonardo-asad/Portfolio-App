@@ -12,14 +12,14 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { drawerWidth } from '../App';
-import { PortfolioInterface } from '../interfaces/interfaces'
+import * as Interface from '../interfaces/interfaces'
 
 interface Props {
-  portfolios: PortfolioInterface[],
-  sideBarOpen: boolean,
-  window?: () => Window;
-  handleSideBarToogle: () => void,
-  handleSelectPortfolio: (portfolio: PortfolioInterface) => void
+  portfolios: Interface.Portfolios,
+  sideBarOpen: Interface.SideBarOpen,
+  window?: () => Window,
+  handleSideBarToogle: Interface.HandleSideBarToogle,
+  handleSelectPortfolio: Interface.HandleSelectPortfolio
 }
 
 export default function SideBar(props: Props) {

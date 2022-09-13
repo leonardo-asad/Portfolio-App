@@ -1,7 +1,7 @@
-import { HoldingObject } from "../interfaces/interfaces"
+import { Holding } from "../interfaces/interfaces"
 
 // Example1 to simulate calls to the API
-export const HoldingsExample1: HoldingObject[]  = [
+export const HoldingsExample1: Holding[]  = [
   {
       "ticker": "AAPL",
       "shares": 15,
@@ -27,6 +27,6 @@ export const HoldingsExample1: HoldingObject[]  = [
 
 // Example2 to simulate calls to the API
 // eslint-disable-next-line
-export const HoldingsExample2: HoldingObject[] = [
+export const HoldingsExample2: Holding[] = [
 
 ]

@@ -15,7 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { drawerWidth } from '../App';
-import { PortfolioInterface, Username, Display } from '../interfaces/interfaces';
+import * as Interface from '../interfaces/interfaces';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean,
@@ -23,11 +23,11 @@ interface AppBarProps extends MuiAppBarProps {
 
 interface UpperBarProps {
   isLoggedIn: boolean,
-  username: Username,
-  selectedPortfolio: PortfolioInterface,
+  username: Interface.Username,
+  selectedPortfolio: Interface.Portfolio,
   handleSideBarToogle: () => void,
-  handleDisplay: (event: React.MouseEvent<HTMLButtonElement>, display: Display) => void
-  handleLogOut: (event: React.MouseEvent<HTMLButtonElement>) => void
+  handleDisplay: Interface.HandleDisplay,
+  handleLogOut: Interface.HandleLogOut
 };
 
 const AppBar = styled(MuiAppBar, {

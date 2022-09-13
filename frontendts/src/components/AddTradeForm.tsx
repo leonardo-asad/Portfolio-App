@@ -5,14 +5,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import * as Interface from '../interfaces/interfaces'
+
 export default function AddTradeForm() {
 
-  interface Stock {
-    [ticker: string]: string
-  }
-
   const [formInput, setFormInput] = useReducer(
-    (state: Stock, newState: Stock) => ({ ...state, ...newState }),
+    (state: Interface.Stock, newState: Interface.Stock) => ({ ...state, ...newState }),
     {
       ticker: "",
       shares: ""

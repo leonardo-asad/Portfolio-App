@@ -71,6 +71,37 @@ function App() {
     fetchData()
   };
 
+  const handleSignUp = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      'username': formData.get('username'),
+      'email' : formData.get('email'),
+      'password': formData.get('password')
+    }
+    const fetchData = async () => {
+      const response = await fetch('http://localhost:8000/api/create_user/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      })
+      if (response.status === 201) {
+        const json = await response.json();
+        localStorage.setItem('token', json.token)
+        setIsLoggedIn(true);
+        setUsername(json.username);
+        setDisplay('holdings');
+      } else {
+        const json = await response.json()
+        console.log(JSON.stringify(json))
+      }
+    }
+    // Call the function
+    fetchData()
+  };
+
   const handleLogOut:(event: React.MouseEvent<HTMLButtonElement>) => void = () => {
     localStorage.removeItem('token');
     setUsername('');
@@ -137,7 +168,7 @@ function App() {
     alerts_url: ''
   })
 
-  const handleSelectPortfolio: (portfolio: Interface.PortfolioInterface) => void = (portfolio) => {
+  const handleSelectPortfolio: (portfolio: Interface.Portfolio) => void = (portfolio) => {
     //setDisplay('holdings')
 
     if (selectedPortfolio.name !== '') {
@@ -170,6 +201,7 @@ function App() {
           <Holdings
           sideBarOpen={sideBarOpen}
           portfolios={portfolios}
+          selectedPortfolio={selectedPortfolio}
           handleSideBarToogle={handleSideBarToogle}
           handleSelectPortfolio={handleSelectPortfolio}
           />
@@ -184,7 +216,10 @@ function App() {
       }
 
       { display === 'signup' &&
-        <SignUp />
+        <SignUp
+        handleSignUp={handleSignUp}
+        handleDisplay={handleDisplay}
+        />
       }
 
     </Box>

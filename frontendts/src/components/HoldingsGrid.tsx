@@ -4,10 +4,11 @@ import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import clsx from 'clsx';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { HoldingObject, Row } from '../interfaces/interfaces';
-import { HoldingsExample1, HoldingsExample2 } from '../data/data'
+import * as Interface from '../interfaces/interfaces';
 
-
+interface Props {
+  holdings: Interface.Holdings
+}
 
 // Define Columns Properties
 const columns: GridColDef[] = [
@@ -105,7 +106,7 @@ function previousValueRow(value: number, change_percent: number): number {
 }
 
 // Create and format data to required for each Row
-function createRow(holding_object: HoldingObject, index: number): Row {
+function createRow(holding_object: Interface.Holding, index: number): Interface.Row {
   const id: number = index;
   const ticker: string = holding_object.ticker;
   const shares: number = holding_object.shares;
@@ -118,7 +119,7 @@ function createRow(holding_object: HoldingObject, index: number): Row {
 }
 
 // Returns the total value of the portfolio
-function total(items: Row[]): number {
+function total(items: Interface.Row[]): number {
   return items.map(({ value }) => value).reduce((sum, i) => sum + i, 0);
 }
 
@@ -128,19 +129,19 @@ function total(items: Row[]): number {
 // }
 
 // Returns the weight of each asset
-function weight(holding: Row, total: number) {
+function weight(holding: Interface.Row, total: number) {
   const weight: number = roundNumber((holding.value / total)*100)
   return { ...holding, weight }
 }
 
-export default function HoldingsGrid() {
+export default function HoldingsGrid(props: Props) {
   const matches = useMediaQuery('(min-width:920px)');
   const fontSize = matches ? 15 : 8;
   const margin = matches ? 5 : 0;
 
-  let rows = HoldingsExample1.length > 0 ? HoldingsExample1.map((holding: HoldingObject, index: number) => createRow(holding, index)) : [];
+  let rows = props.holdings.length > 0 ? props.holdings.map((holding: Interface.Holding, index: number) => createRow(holding, index)) : [];
   const totalHoldings: number | undefined = rows.length > 0 ? total(rows): undefined;
-  rows = rows.length > 0 && typeof totalHoldings === 'number' ? rows.map((row: Row) => weight(row, totalHoldings)) : []
+  rows = rows.length > 0 && typeof totalHoldings === 'number' ? rows.map((row: Interface.Row) => weight(row, totalHoldings)) : []
 
   // Define the following constants in their respective components
   //const prevTotalHoldings: number | undefined = rows.length > 0 ? prevTotal(rows) : undefined;
