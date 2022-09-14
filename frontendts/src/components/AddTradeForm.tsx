@@ -7,7 +7,11 @@ import Typography from '@mui/material/Typography';
 
 import * as Interface from '../interfaces/interfaces'
 
-export default function AddTradeForm() {
+interface Props {
+  handleAddTrade: Interface.handleAddTrade
+}
+
+export default function AddTradeForm(props: Props) {
 
   const [formInput, setFormInput] = useReducer(
     (state: Interface.Stock, newState: Interface.Stock) => ({ ...state, ...newState }),
@@ -24,23 +28,24 @@ export default function AddTradeForm() {
     setFormInput({ [ticker]: shares });
   }
 
-  // const handleSubmit = (event, order, formInput) => {
-  //   const shares = parseInt(formInput.shares)
-  //   if (shares <= 0) {
-  //     alert("Invalid shares Input")
-  //   } else {
-  //     if (order === "buy") {
-  //       props.handleAddTrade(event, formInput);
-  //     } else {
-  //       formInput.shares = -shares
-  //       props.handleAddTrade(event, formInput);
-  //     }
-  //   }
-  //   setFormInput({
-  //     ticker: '',
-  //     shares: ""
-  //   })
-  // }
+  const handleSubmit: Interface.AddTradeForm = (event, order, formInput) => {
+    event.preventDefault();
+    const shares = parseInt(formInput.shares)
+    if (shares <= 0) {
+      alert("Invalid shares Input")
+    } else {
+      if (order === "buy") {
+        props.handleAddTrade(formInput);
+      } else {
+        formInput.shares = `${-shares}`
+        props.handleAddTrade(formInput);
+      }
+    }
+    setFormInput({
+      ticker: '',
+      shares: ''
+    })
+  }
 
   return (
     <Box
@@ -109,7 +114,7 @@ export default function AddTradeForm() {
             variant='contained'
             color='success'
             className='classes.button'
-            //onClick={(e) => handleSubmit(e, "buy", formInput)}
+            onClick={(event) => handleSubmit(event, "buy", formInput)}
           >
             Buy
           </Button>
@@ -117,7 +122,7 @@ export default function AddTradeForm() {
             variant='contained'
             color='error'
             className='classes.button'
-            //onClick={(e) => handleSubmit(e, "sell", formInput)}
+            onClick={(event) => handleSubmit(event, "sell", formInput)}
           >
             Sell
           </Button>

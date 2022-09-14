@@ -18,8 +18,9 @@ interface Props {
 }
 
 export default function Holdings(props: Props) {
-  const [isLoadingHoldings, setIsLoadingHoldings] = useState(false)
-  const [holdings, setHoldings] = useState([])
+  const [isLoadingHoldings, setIsLoadingHoldings] = useState<boolean>(false)
+  const [holdings, setHoldings] = useState<Interface.Holding[]>([])
+  const [trades, setTrades] = useState<Interface.Trade[]>([])
 
   const updateHoldings = useCallback(async () => {
     setIsLoadingHoldings(true);
@@ -44,6 +45,40 @@ export default function Holdings(props: Props) {
     }
   }, [props.selectedPortfolio, updateHoldings] )
 
+  const handleAddTrade: Interface.handleAddTrade = (formInput) => {
+    if (props.selectedPortfolio.name === "") {
+      alert("Please select a Portfolio to add a new trade")
+    } else {
+      const data = {
+        ...formInput,
+        'portfolio': props.selectedPortfolio.pk
+      }
+      const addTrade = async () => {
+        const response = await fetch('http://localhost:8000/api/portfolio/purchases/', {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        if (response.status === 201) {
+          const trade: Interface.Trade = await response.json();
+          setTrades([trade, ...trades]);
+          updateHoldings();
+        } else if (response.status === 400) {
+          const json = await response.json();
+          alert(json.detail);
+        } else {
+          const json = await response.json();
+          console.log(JSON.stringify(json));
+        }
+      }
+      // Call the function
+      addTrade()
+    }
+  }
+
   return (
     <>
       <SideBar
@@ -63,7 +98,9 @@ export default function Holdings(props: Props) {
             <>
               { props.selectedPortfolio.name !== '' &&
                 <>
-                  <Dashboard />
+                  <Dashboard
+                  handleAddTrade={handleAddTrade}
+                  />
                   <HoldingsGrid
                   holdings={holdings}
                   />

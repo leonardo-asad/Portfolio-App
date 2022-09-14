@@ -17,11 +17,23 @@ export interface Holding {
   change_percent: number
 };
 
+export interface Trade {
+  "pk": number,
+  "owner": string,
+  "ticker": string,
+  "portfolio": number,
+  "date": number,
+  "price": number,
+  "shares": number
+}
+
 export type Holdings = Holding[];
 
 export interface Stock {
   [ticker: string]: string
 }
+
+export type AddTradeForm = (event: React.MouseEvent<HTMLButtonElement>, order: string, formInput: Stock) => void;
 
 // Defines the types of the holding object used to build the Grid, representing each Row
 export interface Row {
@@ -42,6 +54,8 @@ export type Display = string;
 export type HandleSignIn = (event: React.FormEvent<HTMLFormElement>) => void;
 
 export type HandleSignUp = (event: React.FormEvent<HTMLFormElement>) => void;
+
+export type handleAddTrade = (stock: Stock) => void;
 
 export type HandleDisplay = (event: React.MouseEvent<HTMLButtonElement | HTMLDivElement>, display: Display) => void;
 

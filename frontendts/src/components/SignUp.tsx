@@ -20,8 +20,6 @@ interface Props {
 }
 
 export default function SignUp(props: Props) {
-
-
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

@@ -7,7 +7,14 @@ import AddTradeForm from './AddTradeForm';
 //import TotalHoldingsCard from '../Components/TotalHoldingsCard';
 //import PieChart from '../Components/PieChart';
 
-export default function Dashboard() {
+import * as Interface from '../interfaces/interfaces'
+
+interface Props {
+  handleAddTrade: Interface.handleAddTrade
+}
+
+
+export default function Dashboard(props: Props) {
   const matches = useMediaQuery('(min-width:920px)');
   const margin = matches ? 5 : 0;
 
@@ -21,6 +28,7 @@ export default function Dashboard() {
       >
         <Grid item xs>
           <AddTradeForm
+          handleAddTrade={props.handleAddTrade}
           />
         </Grid>
       </Grid>
