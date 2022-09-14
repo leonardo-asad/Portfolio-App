@@ -45,7 +45,7 @@ export default function Holdings(props: Props) {
   }, [props.selectedPortfolio, updateHoldings] )
 
   return (
-    <React.Fragment>
+    <>
       <SideBar
         sideBarOpen={props.sideBarOpen}
         portfolios={props.portfolios}
@@ -60,18 +60,18 @@ export default function Holdings(props: Props) {
         { isLoadingHoldings ?
             <CircularIndeterminate />
           :
-            <React.Fragment>
+            <>
               { props.selectedPortfolio.name !== '' &&
-                <React.Fragment>
+                <>
                   <Dashboard />
                   <HoldingsGrid
                   holdings={holdings}
                   />
-                </React.Fragment>
+                </>
               }
-            </React.Fragment>
+            </>
         }
       </Box>
-    </React.Fragment>
+    </>
   )
 }
