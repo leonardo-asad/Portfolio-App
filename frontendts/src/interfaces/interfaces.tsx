@@ -71,6 +71,8 @@ export type HandleCreatePortfolio = (event: React.MouseEvent<HTMLButtonElement>,
 
 export type HandleEditPortfolio = (event: React.MouseEvent<HTMLButtonElement>, pk: string, name: string) => void;
 
+export type HandleDeletePortfolio = (event: React.MouseEvent<HTMLButtonElement>, pk: string) => void;
+
 export type HandleSelectPortfolio = (portfolio: Portfolio) => void
 
 export type HandleChangeTab = (event: React.SyntheticEvent, newValue: number) => void;

@@ -119,6 +119,37 @@ export default function Holdings(props: Props) {
     editPortfolio(pk)
   }
 
+  const handleDeletePortfolio: Interface.HandleDeletePortfolio = (event, pk) => {
+    event.preventDefault();
+    const deletePortfolio = async (pk: string) => {
+      const response = await fetch(`/api/portfolio/${pk}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      if (response.status === 204) {
+        props.updatePortfolioList();
+        setHoldings([]);
+        setTrades([]);
+        props.handleSelectPortfolio({
+          pk: '',
+          name: '',
+          holdings_url: '',
+          purchases_url: '',
+          alerts_url: ''
+        })
+        //setTotalHoldings(null);
+        //setTotalPercentChange(null);
+      } else {
+        const json = await response.json();
+        console.log(JSON.stringify(json));
+      }
+    }
+    deletePortfolio(pk)
+  }
+
   const handleAddTrade: Interface.handleAddTrade = (formInput) => {
     if (props.selectedPortfolio.name === "") {
       alert("Please select a Portfolio to add a new trade")
@@ -161,6 +192,7 @@ export default function Holdings(props: Props) {
         handleSideBarToogle={props.handleSideBarToogle}
         handleCreatePortfolio={handleCreatePortfolio}
         handleEditPortfolio={handleEditPortfolio}
+        handleDeletePortfolio={handleDeletePortfolio}
         handleSelectPortfolio={props.handleSelectPortfolio}
       />
       <Box
