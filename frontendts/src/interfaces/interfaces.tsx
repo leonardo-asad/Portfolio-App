@@ -17,17 +17,19 @@ export interface Holding {
   change_percent: number
 };
 
+export type Holdings = Holding[];
+
 export interface Trade {
   "pk": number,
   "owner": string,
   "ticker": string,
   "portfolio": number,
-  "date": number,
+  "date": string,
   "price": number,
   "shares": number
-}
+};
 
-export type Holdings = Holding[];
+export type Trades = Trade[];
 
 export interface Stock {
   [ticker: string]: string

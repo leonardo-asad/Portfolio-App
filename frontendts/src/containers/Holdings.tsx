@@ -7,6 +7,7 @@ import HoldingsGrid from '../components/HoldingsGrid';
 import Dashboard from '../components/Dashboard';
 import CircularIndeterminate from '../components/CircularIndeterminate';
 import NavTabs from '../components/NavTabs';
+import TradesGrid from '../components/TradesGrid';
 import { drawerWidth } from '../App';
 import * as Interface from '../interfaces/interfaces'
 
@@ -26,8 +27,8 @@ export default function Holdings(props: Props) {
   };
 
   const [isLoadingHoldings, setIsLoadingHoldings] = useState<boolean>(false)
-  const [holdings, setHoldings] = useState<Interface.Holding[]>([])
-  const [trades, setTrades] = useState<Interface.Trade[]>([])
+  const [holdings, setHoldings] = useState<Interface.Holdings>([])
+  const [trades, setTrades] = useState<Interface.Trades>([])
 
   const updateHoldings = useCallback(async () => {
     setIsLoadingHoldings(true);
@@ -51,6 +52,27 @@ export default function Holdings(props: Props) {
       updateHoldings();
     }
   }, [props.selectedPortfolio, updateHoldings] )
+
+  useEffect(() => {
+    if (props.selectedPortfolio.name !== "") {
+      const fetchData = async () => {
+        const response = await fetch(props.selectedPortfolio.purchases_url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        if (response.status === 200) {
+          const trades = await response.json();
+          setTrades(trades);
+        } else {
+          const json = await response.json();
+          console.log(json);
+        }
+      }
+      // Call the function
+      fetchData()
+    }
+  }, [props.selectedPortfolio] )
 
   const handleAddTrade: Interface.handleAddTrade = (formInput) => {
     if (props.selectedPortfolio.name === "") {
@@ -109,7 +131,7 @@ export default function Holdings(props: Props) {
             <CircularIndeterminate />
           :
             <>
-              { props.selectedPortfolio.name !== '' &&
+              { tab === 0 && props.selectedPortfolio.name !== '' &&
                 <>
                   <Dashboard
                   handleAddTrade={handleAddTrade}
@@ -118,6 +140,11 @@ export default function Holdings(props: Props) {
                   holdings={holdings}
                   />
                 </>
+              }
+              { tab === 1 && props.selectedPortfolio.name !== '' &&
+                <TradesGrid
+                trades={trades}
+                />
               }
             </>
         }
