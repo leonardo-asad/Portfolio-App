@@ -160,6 +160,21 @@ function App() {
     }
   }, [isLoggedIn] )
 
+  const updatePortfolioList: Interface.UpdatePortfolioList = async () => {
+    const response = await fetch('/api/portfolio/', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    if (response.status === 200) {
+      const portfolios = await response.json();
+      SetPortfolios(portfolios);
+    } else {
+      const json = await response.json();
+      console.log(JSON.stringify(json));
+    }
+  }
+
   const [selectedPortfolio, setSelectedPortfolio] = React.useState<Interface.Portfolio>({
     pk: '',
     name: '',
@@ -204,6 +219,7 @@ function App() {
           sideBarOpen={sideBarOpen}
           portfolios={portfolios}
           selectedPortfolio={selectedPortfolio}
+          updatePortfolioList={updatePortfolioList}
           handleSideBarToogle={handleSideBarToogle}
           handleSelectPortfolio={handleSelectPortfolio}
           />

@@ -8,6 +8,8 @@ export interface Portfolio {
 
 export type Portfolios = Portfolio[];
 
+export type UpdatePortfolioList = () => void;
+
 // Defines the types of the Holding Object returned by the API
 export interface Holding {
   ticker: string,
@@ -64,6 +66,8 @@ export type HandleDisplay = (event: React.MouseEvent<HTMLButtonElement | HTMLDiv
 export type HandleLogOut = (event: React.MouseEvent<HTMLButtonElement>) => void;
 
 export type HandleSideBarToogle = () => void;
+
+export type HandleCreatePortfolio = (event: React.MouseEvent<HTMLButtonElement>, name: string) => void;
 
 export type HandleSelectPortfolio = (portfolio: Portfolio) => void
 

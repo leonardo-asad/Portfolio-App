@@ -15,6 +15,7 @@ interface Props {
   sideBarOpen: Interface.SideBarOpen,
   portfolios: Interface.Portfolios,
   selectedPortfolio: Interface.Portfolio,
+  updatePortfolioList: Interface.UpdatePortfolioList,
   handleSideBarToogle: Interface.HandleSideBarToogle,
   handleSelectPortfolio: Interface.HandleSelectPortfolio
 }
@@ -74,6 +75,29 @@ export default function Holdings(props: Props) {
     }
   }, [props.selectedPortfolio] )
 
+  const handleCreatePortfolio: Interface.HandleCreatePortfolio = (event, name) => {
+    event.preventDefault();
+    const createPortfolio = async (name: string) => {
+      const response = await fetch('/api/portfolio/', {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'name': name})
+      })
+      if (response.status === 201) {
+        const portfolio = await response.json();
+        props.updatePortfolioList();
+        props.handleSelectPortfolio(portfolio);
+      } else {
+        const json = await response.json();
+        console.log(JSON.stringify(json));
+      }
+    }
+    createPortfolio(name)
+  }
+
   const handleAddTrade: Interface.handleAddTrade = (formInput) => {
     if (props.selectedPortfolio.name === "") {
       alert("Please select a Portfolio to add a new trade")
@@ -114,6 +138,7 @@ export default function Holdings(props: Props) {
         sideBarOpen={props.sideBarOpen}
         portfolios={props.portfolios}
         handleSideBarToogle={props.handleSideBarToogle}
+        handleCreatePortfolio={handleCreatePortfolio}
         handleSelectPortfolio={props.handleSelectPortfolio}
       />
       <Box
