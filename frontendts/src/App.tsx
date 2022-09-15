@@ -12,7 +12,7 @@ import './App.css';
 export const drawerWidth = 240;
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
+  const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(() => {
     return localStorage.getItem('token') ? true : false
   });
 
@@ -39,7 +39,7 @@ function App() {
     }
   }, [isLoggedIn])
 
-  const handleSignIn = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignIn: Interface.HandleSignIn = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = {username: formData.get('username'), password: formData.get('password')}
@@ -71,7 +71,7 @@ function App() {
     fetchData()
   };
 
-  const handleSignUp = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignUp: Interface.HandleSignUp = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = {
@@ -117,7 +117,7 @@ function App() {
     setDisplay('login');
   }
 
-  const [display, setDisplay] = React.useState(() => {
+  const [display, setDisplay] = React.useState<Interface.Display>(() => {
     if (!isLoggedIn) {
       return 'login'
     } else {
@@ -134,7 +134,7 @@ function App() {
     }
   }
 
-  const [portfolios, SetPortfolios] = React.useState([]);
+  const [portfolios, SetPortfolios] = React.useState<Interface.Portfolios>([]);
 
   React.useEffect(() => {
     if (isLoggedIn) {
@@ -160,7 +160,7 @@ function App() {
     }
   }, [isLoggedIn] )
 
-  const [selectedPortfolio, setSelectedPortfolio] = React.useState({
+  const [selectedPortfolio, setSelectedPortfolio] = React.useState<Interface.Portfolio>({
     pk: '',
     name: '',
     holdings_url: '',
@@ -168,8 +168,10 @@ function App() {
     alerts_url: ''
   })
 
-  const handleSelectPortfolio: (portfolio: Interface.Portfolio) => void = (portfolio) => {
-    //setDisplay('holdings')
+  const handleSelectPortfolio: Interface.HandleSelectPortfolio = (portfolio) => {
+    if (display !== 'holdings') {
+      setDisplay('holdings')
+    }
 
     if (selectedPortfolio.name !== '') {
       if (selectedPortfolio.name === portfolio.name) {
@@ -180,9 +182,9 @@ function App() {
     setSelectedPortfolio(portfolio);
   }
 
-  const [sideBarOpen, setSideBarOpen] = React.useState(false);
+  const [sideBarOpen, setSideBarOpen] = React.useState<Interface.SideBarOpen>(false);
 
-  const handleSideBarToogle: () => void = () => {
+  const handleSideBarToogle: Interface.HandleSideBarToogle = () => {
     setSideBarOpen(!sideBarOpen);
   };
 

@@ -6,6 +6,7 @@ import SideBar from '../components/SideBar';
 import HoldingsGrid from '../components/HoldingsGrid';
 import Dashboard from '../components/Dashboard';
 import CircularIndeterminate from '../components/CircularIndeterminate';
+import NavTabs from '../components/NavTabs';
 import { drawerWidth } from '../App';
 import * as Interface from '../interfaces/interfaces'
 
@@ -18,6 +19,12 @@ interface Props {
 }
 
 export default function Holdings(props: Props) {
+  const [tab, setTab] = useState<number>(0);
+
+  const handleChangeTab: Interface.HandleChangeTab = (event, newTab) => {
+    setTab(newTab);
+  };
+
   const [isLoadingHoldings, setIsLoadingHoldings] = useState<boolean>(false)
   const [holdings, setHoldings] = useState<Interface.Holding[]>([])
   const [trades, setTrades] = useState<Interface.Trade[]>([])
@@ -92,6 +99,12 @@ export default function Holdings(props: Props) {
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Toolbar />
+
+        <NavTabs
+        tab={tab}
+        handleChangeTab={handleChangeTab}
+        />
+
         { isLoadingHoldings ?
             <CircularIndeterminate />
           :

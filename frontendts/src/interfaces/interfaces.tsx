@@ -65,4 +65,6 @@ export type HandleSideBarToogle = () => void;
 
 export type HandleSelectPortfolio = (portfolio: Portfolio) => void
 
+export type HandleChangeTab = (event: React.SyntheticEvent, newValue: number) => void;
+
 export type SideBarOpen = boolean;

@@ -13,7 +13,6 @@ interface Props {
   handleAddTrade: Interface.handleAddTrade
 }
 
-
 export default function Dashboard(props: Props) {
   const matches = useMediaQuery('(min-width:920px)');
   const margin = matches ? 5 : 0;
