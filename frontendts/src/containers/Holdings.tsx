@@ -98,6 +98,27 @@ export default function Holdings(props: Props) {
     createPortfolio(name)
   }
 
+  const handleEditPortfolio: Interface.HandleEditPortfolio = (event, pk, name) => {
+    event.preventDefault();
+    const editPortfolio = async (pk: string) => {
+      const response = await fetch(`/api/portfolio/${pk}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'name': name})
+      })
+      if (response.status === 200) {
+        props.updatePortfolioList()
+      } else {
+        const json = await response.json();
+        console.log(JSON.stringify(json));
+      }
+    }
+    editPortfolio(pk)
+  }
+
   const handleAddTrade: Interface.handleAddTrade = (formInput) => {
     if (props.selectedPortfolio.name === "") {
       alert("Please select a Portfolio to add a new trade")
@@ -139,6 +160,7 @@ export default function Holdings(props: Props) {
         portfolios={props.portfolios}
         handleSideBarToogle={props.handleSideBarToogle}
         handleCreatePortfolio={handleCreatePortfolio}
+        handleEditPortfolio={handleEditPortfolio}
         handleSelectPortfolio={props.handleSelectPortfolio}
       />
       <Box

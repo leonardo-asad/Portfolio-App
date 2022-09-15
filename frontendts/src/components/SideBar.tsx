@@ -11,6 +11,7 @@ import ShowChartIcon from '@mui/icons-material/ShowChart';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CreatePortfolioDialog from './CreatePortfolioDialog';
+import EditPortfolioDialog from './EditPortfolioDialog';
 
 import { drawerWidth } from '../App';
 import * as Interface from '../interfaces/interfaces'
@@ -21,6 +22,7 @@ interface Props {
   window?: () => Window,
   handleSideBarToogle: Interface.HandleSideBarToogle,
   handleCreatePortfolio: Interface.HandleCreatePortfolio,
+  handleEditPortfolio: Interface.HandleEditPortfolio,
   handleSelectPortfolio: Interface.HandleSelectPortfolio
 }
 
@@ -64,6 +66,10 @@ export default function SideBar(props: Props) {
               <ListItemText
               primary={portfolio.name}
               sx={{ display: 'flex', justifyContent: 'left' }}
+              />
+              <EditPortfolioDialog
+              selectedPortfolio={portfolio}
+              handleEditPortfolio={props.handleEditPortfolio}
               />
             </ListItem>
             ))}
