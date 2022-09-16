@@ -21,6 +21,14 @@ export interface Holding {
 
 export type Holdings = Holding[];
 
+export interface Return {
+  totalHoldings: number | undefined,
+  totalChange: number | undefined,
+  totalPercentChange: number | undefined
+}
+
+export type UpdatePortfolioReturn = (totalHoldings: number | undefined, totalChange: number | undefined, totalPercentChange: number | undefined) => void;
+
 export interface Trade {
   "pk": number,
   "owner": string,

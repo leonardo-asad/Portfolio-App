@@ -30,6 +30,11 @@ export default function Holdings(props: Props) {
   const [isLoadingHoldings, setIsLoadingHoldings] = useState<boolean>(false)
   const [holdings, setHoldings] = useState<Interface.Holdings>([])
   const [trades, setTrades] = useState<Interface.Trades>([])
+  const [portfolioReturn, setPortfolioReturn] = useState<Interface.Return>({
+    'totalHoldings': undefined,
+    'totalChange': undefined,
+    'totalPercentChange': undefined
+  });
 
   const updateHoldings = useCallback(async () => {
     setIsLoadingHoldings(true);
@@ -47,6 +52,14 @@ export default function Holdings(props: Props) {
     }
     setIsLoadingHoldings(false);
   }, [props.selectedPortfolio])
+
+  const updatePortfolioReturn: Interface.UpdatePortfolioReturn = (totalHoldings, totalChange, totalPercentChange) => {
+    setPortfolioReturn({
+      'totalHoldings': totalHoldings,
+      'totalChange': totalChange,
+      'totalPercentChange': totalPercentChange
+    })
+  }
 
   useEffect(() => {
     if (props.selectedPortfolio.name !== "") {
@@ -213,10 +226,14 @@ export default function Holdings(props: Props) {
               { tab === 0 && props.selectedPortfolio.name !== '' &&
                 <>
                   <Dashboard
+                  selectedPortfolio={props.selectedPortfolio}
+                  portfolioReturn={portfolioReturn}
                   handleAddTrade={handleAddTrade}
+                  holdings={holdings}
                   />
                   <HoldingsGrid
                   holdings={holdings}
+                  updatePortfolioReturn={updatePortfolioReturn}
                   />
                 </>
               }

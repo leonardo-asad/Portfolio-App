@@ -8,6 +8,7 @@ import * as Interface from '../interfaces/interfaces';
 
 interface Props {
   holdings: Interface.Holdings
+  updatePortfolioReturn: Interface.UpdatePortfolioReturn
 }
 
 // Define Columns Properties
@@ -124,9 +125,9 @@ function total(items: Interface.Row[]): number {
 }
 
 // Returns the total value of the portfolio on the previous day
-// function prevTotal(items: Row[]): number {
-//   return items.map(({ previousValue }) => previousValue).reduce((sum, i) => sum + i, 0);
-// }
+function prevTotal(items: Interface.Row[]): number {
+  return items.map(({ previousValue }) => previousValue).reduce((sum, i) => sum + i, 0);
+}
 
 // Returns the weight of each asset
 function weight(holding: Interface.Row, total: number) {
@@ -144,9 +145,13 @@ export default function HoldingsGrid(props: Props) {
   rows = rows.length > 0 && typeof totalHoldings === 'number' ? rows.map((row: Interface.Row) => weight(row, totalHoldings)) : []
 
   // Define the following constants in their respective components
-  //const prevTotalHoldings: number | undefined = rows.length > 0 ? prevTotal(rows) : undefined;
-  //const totalPercentChange: number | undefined = typeof totalHoldings === 'number' && typeof prevTotalHoldings === 'number' ? (1 - prevTotalHoldings / totalHoldings) * 100 : undefined;
-  //const totalChange: number | undefined = typeof totalHoldings === 'number' && typeof prevTotalHoldings === 'number' ? totalHoldings - prevTotalHoldings : undefined;
+  const prevTotalHoldings: number | undefined = rows.length > 0 ? prevTotal(rows) : undefined;
+  const totalPercentChange: number | undefined = typeof totalHoldings === 'number' && typeof prevTotalHoldings === 'number' ? (1 - prevTotalHoldings / totalHoldings) * 100 : undefined;
+  const totalChange: number | undefined = typeof totalHoldings === 'number' && typeof prevTotalHoldings === 'number' ? totalHoldings - prevTotalHoldings : undefined;
+
+  React.useEffect(() => {
+    props.updatePortfolioReturn(totalHoldings, totalChange, totalPercentChange);
+  })
 
   return (
     <Box

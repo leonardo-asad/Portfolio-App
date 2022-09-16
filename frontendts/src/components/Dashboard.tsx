@@ -4,13 +4,16 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
 import AddTradeForm from './AddTradeForm';
-//import TotalHoldingsCard from '../Components/TotalHoldingsCard';
+import TotalHoldingsCard from './TotalHoldingsCard';
 //import PieChart from '../Components/PieChart';
 
 import * as Interface from '../interfaces/interfaces'
 
 interface Props {
+  selectedPortfolio: Interface.Portfolio
+  portfolioReturn: Interface.Return
   handleAddTrade: Interface.handleAddTrade
+  holdings: Interface.Holdings
 }
 
 export default function Dashboard(props: Props) {
@@ -30,6 +33,16 @@ export default function Dashboard(props: Props) {
           handleAddTrade={props.handleAddTrade}
           />
         </Grid>
+        { props.holdings.length > 0 &&
+          <>
+            <Grid item xs>
+              <TotalHoldingsCard
+              selectedPortfolio={props.selectedPortfolio}
+              portfolioReturn={props.portfolioReturn}
+              />
+            </Grid>
+          </>
+        }
       </Grid>
     </Box>
   )
