@@ -23,7 +23,7 @@ const columns: GridColDef[] = [
   {
     field: 'price',
     headerClassName: 'super-app-theme--header',
-    headerName: 'Price',
+    headerName: 'Price USD',
     flex: 1,
     type: 'number',
     cellClassName: 'super-app-theme--cell',
@@ -31,7 +31,7 @@ const columns: GridColDef[] = [
   {
     field: 'change',
     headerClassName: 'super-app-theme--header',
-    headerName: 'Change',
+    headerName: 'Change USD',
     flex: 1,
     type: 'number',
     cellClassName: (params: GridCellParams<number>) => {
@@ -149,9 +149,11 @@ export default function HoldingsGrid(props: Props) {
   const totalPercentChange: number | undefined = typeof totalHoldings === 'number' && typeof prevTotalHoldings === 'number' ? (1 - prevTotalHoldings / totalHoldings) * 100 : undefined;
   const totalChange: number | undefined = typeof totalHoldings === 'number' && typeof prevTotalHoldings === 'number' ? totalHoldings - prevTotalHoldings : undefined;
 
+  const updatePortfolioReturn = props.updatePortfolioReturn
+
   React.useEffect(() => {
-    props.updatePortfolioReturn(totalHoldings, totalChange, totalPercentChange);
-  })
+    updatePortfolioReturn(totalHoldings, totalChange, totalPercentChange);
+  }, [totalHoldings, totalChange, totalPercentChange, updatePortfolioReturn])
 
   return (
     <Box

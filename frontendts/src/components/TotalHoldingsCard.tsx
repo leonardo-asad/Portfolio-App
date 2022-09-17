@@ -19,7 +19,7 @@ export default function TotalHoldingsCard(props: Props) {
   const card = (
     <>
     {
-      (typeof props.portfolioReturn.totalHoldings !== 'undefined' || typeof props.portfolioReturn.totalChange !== 'undefined' || typeof props.portfolioReturn.totalPercentChange !== 'undefined') &&
+      (typeof props.portfolioReturn.totalHoldings !== 'undefined' || typeof props.portfolioReturn.totalChange !== 'undefined' || typeof props.portfolioReturn.totalPercentChange !== 'undefined') ?
         <>
           <Box>
             <Typography sx={{ mt: 2 }} variant="h4" align='center'>
@@ -39,6 +39,29 @@ export default function TotalHoldingsCard(props: Props) {
           <Box>
             <Typography sx={{ mb: 2, fontSize: 16, color: {color} }} align='center'>
               {props.portfolioReturn.totalPercentChange?.toFixed(2)} % ({props.portfolioReturn.totalChange?.toFixed(2)})
+            </Typography>
+          </Box>
+        </>
+        :
+        <>
+          <Box>
+            <Typography sx={{ mt: 2 }} variant="h4" align='center'>
+              {props.selectedPortfolio.name}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" align='center'>
+              Total Worth
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h4" component="div" align='center'>
+              Undefined
+            </Typography>
+          </Box>
+          <Box>
+            <Typography sx={{ mb: 2, fontSize: 16, color: {color} }} align='center'>
+              Undefined
             </Typography>
           </Box>
         </>

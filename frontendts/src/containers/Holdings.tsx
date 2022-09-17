@@ -53,13 +53,13 @@ export default function Holdings(props: Props) {
     setIsLoadingHoldings(false);
   }, [props.selectedPortfolio])
 
-  const updatePortfolioReturn: Interface.UpdatePortfolioReturn = (totalHoldings, totalChange, totalPercentChange) => {
+  const updatePortfolioReturn: Interface.UpdatePortfolioReturn = useCallback((totalHoldings, totalChange, totalPercentChange) => {
     setPortfolioReturn({
       'totalHoldings': totalHoldings,
       'totalChange': totalChange,
       'totalPercentChange': totalPercentChange
     })
-  }
+  }, [])
 
   useEffect(() => {
     if (props.selectedPortfolio.name !== "") {
