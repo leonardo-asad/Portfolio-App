@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 
 import AddTradeForm from './AddTradeForm';
 import TotalHoldingsCard from './TotalHoldingsCard';
-//import PieChart from '../Components/PieChart';
+import PieChart from './PieChart';
 
 import * as Interface from '../interfaces/interfaces'
 
@@ -39,6 +39,11 @@ export default function Dashboard(props: Props) {
               <TotalHoldingsCard
               selectedPortfolio={props.selectedPortfolio}
               portfolioReturn={props.portfolioReturn}
+              />
+            </Grid>
+            <Grid item xs>
+              <PieChart
+              holdings={props.holdings}
               />
             </Grid>
           </>
