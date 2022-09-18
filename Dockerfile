@@ -3,7 +3,8 @@ FROM node:17
 WORKDIR /nodebuild
 ADD frontend /nodebuild
 
-RUN npm install && npm run build
+#RUN npm install && npm run build
+RUN npm install --save typescript @types/node @types/react @types/react-dom @types/jest && npm run build
 
 FROM python:3
 
