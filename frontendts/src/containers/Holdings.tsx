@@ -8,6 +8,7 @@ import Dashboard from '../components/Dashboard';
 import CircularIndeterminate from '../components/CircularIndeterminate';
 import NavTabs from '../components/NavTabs';
 import TradesGrid from '../components/TradesGrid';
+import AlertNoPortfolioSelected from '../components/AlertNoPortfolioSelected';
 import { drawerWidth } from '../App';
 import * as Interface from '../interfaces/interfaces'
 
@@ -241,6 +242,9 @@ export default function Holdings(props: Props) {
                 <TradesGrid
                 trades={trades}
                 />
+              }
+              { props.selectedPortfolio.name === '' &&
+                <AlertNoPortfolioSelected />
               }
             </>
         }

@@ -9,6 +9,9 @@ import * as Interface from './interfaces/interfaces';
 
 import './App.css';
 
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from './theme'
+
 export const drawerWidth = 240;
 
 function App() {
@@ -204,43 +207,44 @@ function App() {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      { display === 'holdings' &&
-        <React.Fragment>
-          <UpperBar
-          username={username}
-          selectedPortfolio={selectedPortfolio}
-          isLoggedIn={isLoggedIn}
-          handleSideBarToogle={handleSideBarToogle}
+    <ThemeProvider theme={theme}>
+      <Box sx={{ display: 'flex' }}>
+        { display === 'holdings' &&
+          <React.Fragment>
+            <UpperBar
+            username={username}
+            selectedPortfolio={selectedPortfolio}
+            isLoggedIn={isLoggedIn}
+            handleSideBarToogle={handleSideBarToogle}
+            handleDisplay={handleDisplay}
+            handleLogOut={handleLogOut}
+            />
+            <Holdings
+            sideBarOpen={sideBarOpen}
+            portfolios={portfolios}
+            selectedPortfolio={selectedPortfolio}
+            updatePortfolioList={updatePortfolioList}
+            handleSideBarToogle={handleSideBarToogle}
+            handleSelectPortfolio={handleSelectPortfolio}
+            />
+          </React.Fragment>
+        }
+
+        { display === 'login' &&
+          <SignIn
+          handleSignIn={handleSignIn}
           handleDisplay={handleDisplay}
-          handleLogOut={handleLogOut}
           />
-          <Holdings
-          sideBarOpen={sideBarOpen}
-          portfolios={portfolios}
-          selectedPortfolio={selectedPortfolio}
-          updatePortfolioList={updatePortfolioList}
-          handleSideBarToogle={handleSideBarToogle}
-          handleSelectPortfolio={handleSelectPortfolio}
+        }
+
+        { display === 'signup' &&
+          <SignUp
+          handleSignUp={handleSignUp}
+          handleDisplay={handleDisplay}
           />
-        </React.Fragment>
-      }
-
-      { display === 'login' &&
-        <SignIn
-        handleSignIn={handleSignIn}
-        handleDisplay={handleDisplay}
-        />
-      }
-
-      { display === 'signup' &&
-        <SignUp
-        handleSignUp={handleSignUp}
-        handleDisplay={handleDisplay}
-        />
-      }
-
-    </Box>
+        }
+      </Box>
+    </ThemeProvider>
   );
 }
 

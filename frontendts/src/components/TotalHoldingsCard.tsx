@@ -27,18 +27,18 @@ export default function TotalHoldingsCard(props: Props) {
             </Typography>
           </Box>
           <Box>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" align='center'>
+            <Typography sx={{ fontSize: 18 }} color="text.secondary" align='center'>
               Total Worth
             </Typography>
           </Box>
           <Box>
             <Typography variant="h4" component="div" align='center'>
-              $ {props.portfolioReturn.totalHoldings?.toFixed(2)}
+              {props.portfolioReturn.totalHoldings?.toFixed(2)} USD
             </Typography>
           </Box>
           <Box>
             <Typography sx={{ mb: 2, fontSize: 16, color: {color} }} align='center'>
-              {props.portfolioReturn.totalPercentChange?.toFixed(2)} % ({props.portfolioReturn.totalChange?.toFixed(2)})
+              {props.portfolioReturn.totalPercentChange?.toFixed(2)}% ({props.portfolioReturn.totalChange?.toFixed(2)} USD)
             </Typography>
           </Box>
         </>

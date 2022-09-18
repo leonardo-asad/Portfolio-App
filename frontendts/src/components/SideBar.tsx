@@ -33,6 +33,14 @@ export default function SideBar(props: Props) {
 
   const [accordionOpen, setAccordionOpen] = React.useState(false)
 
+  React.useEffect(() => {
+    if (props.portfolios.length > 0) {
+      setAccordionOpen(true);
+    } else {
+      setAccordionOpen(false);
+    }
+  }, [props.portfolios] )
+
   const handleAccordionOpen: () => void = () => {
     setAccordionOpen(!accordionOpen);
   }
