@@ -102,19 +102,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-<<<<<<< HEAD
-#         'NAME': 'portfolioapp',
-#         'USER': 'portfolioapp',
-#         'PASSWORD': 'postgres',
-#         'HOST': 'localhost',
-#         'PORT': '',
-=======
 #         'NAME': 'postgres',
 #         'USER': 'postgres',
 #         'PASSWORD': 'postgres',
 #         'HOST': 'pgdb',
 #         'PORT': 5432,
->>>>>>> 5dd7ce9a1e77277392a0b7bc5b380ee8c60816c3
 #     }
 # }
 
@@ -122,10 +114,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default':  dj_database_url.config(conn_max_age=600, ssl_require=True)
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 5dd7ce9a1e77277392a0b7bc5b380ee8c60816c3
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
