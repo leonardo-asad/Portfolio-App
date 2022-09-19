@@ -99,21 +99,22 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # }
 
 # Uncomment for local development
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'portfolioapp',
-        'USER': 'portfolioapp',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'portfolioapp',
+#         'USER': 'portfolioapp',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 # Connect lo Heroku Postgres DB
-# DATABASES = {
-#     'default':  dj_database_url.config(conn_max_age=600, ssl_require=True)
-# }
+DATABASES = {
+    'default':  dj_database_url.config(conn_max_age=600, ssl_require=True)
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
