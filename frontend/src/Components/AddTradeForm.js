@@ -1,6 +1,5 @@
 import React, { useReducer } from 'react';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -64,38 +63,34 @@ export default function AddTradeForm(props) {
         noValidate
         autoComplete="off"
       >
-        <Grid
-        container
-        direction="row"
-        spacing={2}
-        alignItems="stretch"
+        <Box
+        display="flex"
+        flexDirection="row"
+        gap={3}
+        justifyContent="center"
         >
-          <Grid item xs>
-            <TextField
-              size='small'
-              required
-              name="ticker"
-              id="outlined-basic"
-              label="Ticker"
-              variant="outlined"
-              value={formInput.ticker}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs>
-            <TextField
-              type="number"
-              size='small'
-              required
-              name="shares"
-              id="outlined-basic"
-              label="Shares"
-              variant="outlined"
-              value={formInput.shares}
-              onChange={handleChange}
-            />
-          </Grid>
-        </Grid>
+          <TextField
+            size='small'
+            required
+            name="ticker"
+            id="outlined-basic"
+            label="Ticker"
+            variant="outlined"
+            value={formInput.ticker}
+            onChange={handleChange}
+          />
+          <TextField
+            type="number"
+            size='small'
+            required
+            name="shares"
+            id="outlined-basic"
+            label="Shares"
+            variant="outlined"
+            value={formInput.shares}
+            onChange={handleChange}
+          />
+        </Box>
         <Box
           sx={{
             display: 'flex',
