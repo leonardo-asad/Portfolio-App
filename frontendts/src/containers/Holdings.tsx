@@ -173,7 +173,7 @@ export default function Holdings(props: Props) {
         'portfolio': props.selectedPortfolio.pk
       }
       const addTrade = async () => {
-        const response = await fetch('http://localhost:8000/api/portfolio/purchases/', {
+        const response = await fetch('/api/portfolio/purchases/', {
           method: "POST",
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,

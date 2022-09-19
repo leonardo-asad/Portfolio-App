@@ -24,7 +24,7 @@ function App() {
   React.useEffect(() => {
     if (isLoggedIn) {
       const fetchData = async() => {
-        const response = await fetch('http://localhost:8000/api/user/', {
+        const response = await fetch('/api/user/', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -48,7 +48,7 @@ function App() {
     const data = {username: formData.get('username'), password: formData.get('password')}
     const fetchData = async () => {
       // Get token from the API
-      const response = await fetch('http://localhost:8000/api/token/', {
+      const response = await fetch('/api/token/', {
         method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ function App() {
       'password': formData.get('password')
     }
     const fetchData = async () => {
-      const response = await fetch('http://localhost:8000/api/create_user/', {
+      const response = await fetch('/api/create_user/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -142,7 +142,7 @@ function App() {
   React.useEffect(() => {
     if (isLoggedIn) {
       const fetchData = async () => {
-        const response = await fetch('http://localhost:8000/api/portfolio/', {
+        const response = await fetch('/api/portfolio/', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
