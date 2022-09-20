@@ -82,38 +82,39 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+## DATABASE CONFIGURATION
+## To use Postgres in localhost, define the variable as "localhost"
+## To use Postgres with Docker Compose, define the variable as "compose"
+## To use Heroku Postrgres, define the variable as "heroku". To use Heroku Postgres you need to define the env variable DATABASE_URL
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+database_connect = 'localhost'
 
-# Uncomment for local development using Docker Compose
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': 'postgres',
-#         'HOST': 'pgdb',
-#         'PORT': 5432,
-#     }
-# }
-
-# Uncomment for local development
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': 'postgres',
-#         'HOST': 'pgdb',
-#         'PORT': 5432,
-#     }
-# }
-
-# Connect lo Heroku Postgres DB
-DATABASES = {
-    'default':  dj_database_url.config(conn_max_age=600, ssl_require=True)
-}
+if database_connect == 'localhost':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'portfolioapp',
+            'USER': 'portfolioapp',
+            'PASSWORD': 'postgres',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+elif (database_connect == 'compose'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'pgdb',
+            'PORT': 5432,
+        }
+    }
+elif (database_connect == 'heroku'):
+    DATABASES = {
+        'default':  dj_database_url.config(conn_max_age=600, ssl_require=True)
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
