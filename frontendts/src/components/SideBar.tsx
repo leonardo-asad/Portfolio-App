@@ -14,7 +14,7 @@ import CreatePortfolioDialog from './CreatePortfolioDialog';
 import EditPortfolioDialog from './EditPortfolioDialog';
 import DeletePortfolioDialog from './DeletePortfolioDIalog';
 
-import { drawerWidth } from '../App';
+import { drawerWidth } from '../app/App';
 import * as Interface from '../interfaces/interfaces'
 
 interface Props {

@@ -9,7 +9,7 @@ import CircularIndeterminate from '../components/CircularIndeterminate';
 import NavTabs from '../components/NavTabs';
 import TradesGrid from '../components/TradesGrid';
 import AlertNoPortfolioSelected from '../components/AlertNoPortfolioSelected';
-import { drawerWidth } from '../App';
+import { drawerWidth } from '../app/App';
 import * as Interface from '../interfaces/interfaces'
 
 interface Props {

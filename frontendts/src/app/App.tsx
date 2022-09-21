@@ -1,16 +1,16 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import UpperBar from './components/UpperBar';
-import Holdings from './containers/Holdings';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
-import * as Interface from './interfaces/interfaces';
+import UpperBar from '../components/UpperBar';
+import Holdings from '../containers/Holdings';
+import SignIn from '../components/SignIn';
+import SignUp from '../components/SignUp';
+import * as Interface from '../interfaces/interfaces';
 
-import './App.css';
+import '../App.css';
 
 import { ThemeProvider } from '@mui/material/styles';
-import { theme } from './theme'
+import { theme } from '../theme'
 
 export const drawerWidth = 240;
 

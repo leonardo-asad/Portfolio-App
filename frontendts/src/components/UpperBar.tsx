@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { drawerWidth } from '../App';
+import { drawerWidth } from '../app/App';
 import * as Interface from '../interfaces/interfaces';
 
 interface AppBarProps extends MuiAppBarProps {
