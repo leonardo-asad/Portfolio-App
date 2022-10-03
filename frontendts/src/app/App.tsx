@@ -1,6 +1,12 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUsername ,selectIsLoggedIn } from '../features/authenticate/userSlice';
+import { loadUser, authenticateUser, removeUser } from '../features/authenticate/userSlice';
+import { changeDisplay, selectDisplay } from '../features/display/displaySlice';
+import { AppDispatch } from './store';
+
 import UpperBar from '../components/UpperBar';
 import Holdings from '../containers/Holdings';
 import SignIn from '../components/SignIn';
@@ -15,127 +21,85 @@ import { theme } from '../theme'
 export const drawerWidth = 240;
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(() => {
-    return localStorage.getItem('token') ? true : false
-  });
-
-  const [username, setUsername] = React.useState<Interface.Username>('');
+  const dispatch = useDispatch<AppDispatch>();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const username = useSelector(selectUsername);
+  const display = useSelector(selectDisplay)
 
   React.useEffect(() => {
     if (isLoggedIn) {
-      const fetchData = async() => {
-        const response = await fetch('/api/user/', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        if (response.status === 200) {
-          const json = await response.json();
-          setUsername(json.username);
-        } else {
-          const json = await response.json();
-          console.log(JSON.stringify(json));
-        }
-      }
-      // Call the function
-      fetchData()
-    }
-  }, [isLoggedIn])
-
-  const handleSignIn: Interface.HandleSignIn = (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const data = {username: formData.get('username'), password: formData.get('password')}
-    const fetchData = async () => {
-      // Get token from the API
-      const response = await fetch('/api/token/', {
-        method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body:  JSON.stringify(data)
-      })
-      if (response.status === 200) {
-        const json = await response.json();
-        localStorage.setItem('token', json.access);
-        setIsLoggedIn(true);
-        setDisplay('holdings');
-
-        const username: FormDataEntryValue | null = formData.get('username')
-        if (typeof username === 'string') {
-          setUsername(username);
-        }
-      } else {
-        const json = await response.json();
-        console.log(JSON.stringify(json));
-      }
-    }
-    // Call the function
-    fetchData()
-  };
-
-  const handleSignUp: Interface.HandleSignUp = (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const data = {
-      'username': formData.get('username'),
-      'email' : formData.get('email'),
-      'password': formData.get('password')
-    }
-    const fetchData = async () => {
-      const response = await fetch('/api/create_user/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data),
-      })
-      if (response.status === 201) {
-        const json = await response.json();
-        localStorage.setItem('token', json.token)
-        setIsLoggedIn(true);
-        setUsername(json.username);
-        setDisplay('holdings');
-      } else {
-        const json = await response.json()
-        console.log(JSON.stringify(json))
-      }
-    }
-    // Call the function
-    fetchData()
-  };
-
-  const handleLogOut:(event: React.MouseEvent<HTMLButtonElement>) => void = () => {
-    localStorage.removeItem('token');
-    setUsername('');
-    SetPortfolios([]);
-    setSelectedPortfolio({
-      pk: '',
-      name: '',
-      holdings_url: '',
-      purchases_url: '',
-      alerts_url: ''
-    });
-    setIsLoggedIn(false);
-    setDisplay('login');
-  }
-
-  const [display, setDisplay] = React.useState<Interface.Display>(() => {
-    if (!isLoggedIn) {
-      return 'login'
+      dispatch(loadUser())
+      dispatch(changeDisplay('holdings'))
     } else {
-      return 'holdings'
+      dispatch(changeDisplay('login'))
+      SetPortfolios([]);
+      setSelectedPortfolio({
+        pk: '',
+        name: '',
+        holdings_url: '',
+        purchases_url: '',
+        alerts_url: ''
+      });
     }
-  })
+  }, [isLoggedIn, dispatch])
 
   const handleDisplay: Interface.HandleDisplay = (event, display) => {
     event.preventDefault();
     if (display === 'signup') {
-      setDisplay('signup')
+      dispatch(changeDisplay('signup'))
     } else if (display === 'login') {
-      setDisplay('login')
+      dispatch(changeDisplay('login'))
     }
   }
+
+  const handleSignIn: Interface.HandleSignIn = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const username = formData.get('username')
+    const password = formData.get('password')
+
+    if (typeof username === 'string' && typeof password === 'string') {
+      dispatch(authenticateUser({
+        username: username,
+        password: password
+      }))
+    }
+  };
+
+  const handleLogOut:(event: React.MouseEvent<HTMLButtonElement>) => void = () => {
+    dispatch({type: 'user/removeUser'});
+  }
+
+  const handleSignUp: Interface.HandleSignUp = (event) => {
+    // event.preventDefault();
+    // const formData = new FormData(event.currentTarget);
+    // const data = {
+    //   'username': formData.get('username'),
+    //   'email' : formData.get('email'),
+    //   'password': formData.get('password')
+    // }
+    // const fetchData = async () => {
+    //   const response = await fetch('/api/create_user/', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(data),
+    //   })
+    //   if (response.status === 201) {
+    //     const json = await response.json();
+    //     localStorage.setItem('token', json.token)
+    //     setIsLoggedIn(true);
+    //     setUsername(json.username);
+    //     setDisplay('holdings');
+    //   } else {
+    //     const json = await response.json()
+    //     console.log(JSON.stringify(json))
+    //   }
+    // }
+    // // Call the function
+    // fetchData()
+  };
 
   const [portfolios, SetPortfolios] = React.useState<Interface.Portfolios>([]);
 
@@ -188,7 +152,7 @@ function App() {
 
   const handleSelectPortfolio: Interface.HandleSelectPortfolio = (portfolio) => {
     if (display !== 'holdings') {
-      setDisplay('holdings')
+      dispatch(changeDisplay('holdings'))
     }
 
     if (selectedPortfolio.name !== '') {
