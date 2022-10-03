@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUsername ,selectIsLoggedIn } from '../features/authenticate/userSlice';
-import { loadUser, authenticateUser, removeUser } from '../features/authenticate/userSlice';
+import { loadUser, authenticateUser, createUser } from '../features/authenticate/userSlice';
 import { changeDisplay, selectDisplay } from '../features/display/displaySlice';
 import { AppDispatch } from './store';
 
@@ -71,34 +71,23 @@ function App() {
   }
 
   const handleSignUp: Interface.HandleSignUp = (event) => {
-    // event.preventDefault();
-    // const formData = new FormData(event.currentTarget);
-    // const data = {
-    //   'username': formData.get('username'),
-    //   'email' : formData.get('email'),
-    //   'password': formData.get('password')
-    // }
-    // const fetchData = async () => {
-    //   const response = await fetch('/api/create_user/', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(data),
-    //   })
-    //   if (response.status === 201) {
-    //     const json = await response.json();
-    //     localStorage.setItem('token', json.token)
-    //     setIsLoggedIn(true);
-    //     setUsername(json.username);
-    //     setDisplay('holdings');
-    //   } else {
-    //     const json = await response.json()
-    //     console.log(JSON.stringify(json))
-    //   }
-    // }
-    // // Call the function
-    // fetchData()
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const username = formData.get('username');
+    const password = formData.get('password');
+    const email = formData.get('email');
+
+    if (
+      typeof username === 'string' &&
+      typeof password === 'string' &&
+      (typeof email === 'string' || typeof email === 'undefined')
+      ) {
+        dispatch(createUser({
+          username: username,
+          email: email,
+          password: password
+        }))
+      }
   };
 
   const [portfolios, SetPortfolios] = React.useState<Interface.Portfolios>([]);
