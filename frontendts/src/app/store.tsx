@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from '../features/authenticate/userSlice'
 import displayReducer from '../features/display/displaySlice'
+import portfolioReducer from '../features/portfolio/portfolioSlice'
 
 const store = configureStore({
   reducer: {
     user: userReducer,
-    display: displayReducer
+    display: displayReducer,
+    portfolio: portfolioReducer
   }
 })
 

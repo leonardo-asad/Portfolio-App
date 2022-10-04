@@ -12,16 +12,20 @@ import AlertNoPortfolioSelected from '../components/AlertNoPortfolioSelected';
 import { drawerWidth } from '../app/App';
 import * as Interface from '../interfaces/interfaces'
 
+import { fetchPortfolios } from '../features/portfolio/portfolioSlice'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../app/store'
+
 interface Props {
   sideBarOpen: Interface.SideBarOpen,
   portfolios: Interface.Portfolios,
   selectedPortfolio: Interface.Portfolio,
-  updatePortfolioList: Interface.UpdatePortfolioList,
   handleSideBarToogle: Interface.HandleSideBarToogle,
   handleSelectPortfolio: Interface.HandleSelectPortfolio
 }
 
 export default function Holdings(props: Props) {
+  const dispatch = useDispatch<AppDispatch>();
   const [tab, setTab] = useState<number>(0);
 
   const handleChangeTab: Interface.HandleChangeTab = (event, newTab) => {
@@ -102,7 +106,7 @@ export default function Holdings(props: Props) {
       })
       if (response.status === 201) {
         const portfolio = await response.json();
-        props.updatePortfolioList();
+        dispatch(fetchPortfolios);
         props.handleSelectPortfolio(portfolio);
       } else {
         const json = await response.json();
@@ -124,7 +128,7 @@ export default function Holdings(props: Props) {
         body: JSON.stringify({'name': name})
       })
       if (response.status === 200) {
-        props.updatePortfolioList()
+        dispatch(fetchPortfolios);
       } else {
         const json = await response.json();
         console.log(JSON.stringify(json));
@@ -144,7 +148,7 @@ export default function Holdings(props: Props) {
         }
       })
       if (response.status === 204) {
-        props.updatePortfolioList();
+        dispatch(fetchPortfolios)
         setHoldings([]);
         setTrades([]);
         props.handleSelectPortfolio({

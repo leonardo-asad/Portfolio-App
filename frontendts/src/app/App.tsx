@@ -2,9 +2,10 @@ import React from 'react';
 import Box from '@mui/material/Box';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUsername ,selectIsLoggedIn } from '../features/authenticate/userSlice';
+import { selectIsLoggedIn } from '../features/authenticate/userSlice';
 import { loadUser, authenticateUser, createUser } from '../features/authenticate/userSlice';
 import { changeDisplay, selectDisplay } from '../features/display/displaySlice';
+import { selectPortfolios, selectSelectedPortfolio, addPortfolios, selectPortfolio, fetchPortfolios } from '../features/portfolio/portfolioSlice';
 import { AppDispatch } from './store';
 
 import UpperBar from '../components/UpperBar';
@@ -23,23 +24,25 @@ export const drawerWidth = 240;
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   const isLoggedIn = useSelector(selectIsLoggedIn);
-  const username = useSelector(selectUsername);
-  const display = useSelector(selectDisplay)
+  const display = useSelector(selectDisplay);
+  const portfolios = useSelector(selectPortfolios);
+  const selectedPortfolio = useSelector(selectSelectedPortfolio);
 
   React.useEffect(() => {
     if (isLoggedIn) {
       dispatch(loadUser())
       dispatch(changeDisplay('holdings'))
+      dispatch(fetchPortfolios())
     } else {
       dispatch(changeDisplay('login'))
-      SetPortfolios([]);
-      setSelectedPortfolio({
+      dispatch(addPortfolios([]));
+      dispatch(selectPortfolio({
         pk: '',
         name: '',
         holdings_url: '',
         purchases_url: '',
         alerts_url: ''
-      });
+      }));
     }
   }, [isLoggedIn, dispatch])
 
@@ -66,10 +69,6 @@ function App() {
     }
   };
 
-  const handleLogOut:(event: React.MouseEvent<HTMLButtonElement>) => void = () => {
-    dispatch({type: 'user/removeUser'});
-  }
-
   const handleSignUp: Interface.HandleSignUp = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -90,55 +89,6 @@ function App() {
       }
   };
 
-  const [portfolios, SetPortfolios] = React.useState<Interface.Portfolios>([]);
-
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      const fetchData = async () => {
-        const response = await fetch('/api/portfolio/', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        if (response.status === 200) {
-          const portfolios = await response.json();
-          SetPortfolios(portfolios);
-          if (portfolios.length > 0) {
-            setSelectedPortfolio(portfolios[0]);
-          }
-        } else {
-          const json = await response.json();
-          console.log(JSON.stringify(json));
-        }
-      }
-      // Call the function
-      fetchData()
-    }
-  }, [isLoggedIn] )
-
-  const updatePortfolioList: Interface.UpdatePortfolioList = async () => {
-    const response = await fetch('/api/portfolio/', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    if (response.status === 200) {
-      const portfolios = await response.json();
-      SetPortfolios(portfolios);
-    } else {
-      const json = await response.json();
-      console.log(JSON.stringify(json));
-    }
-  }
-
-  const [selectedPortfolio, setSelectedPortfolio] = React.useState<Interface.Portfolio>({
-    pk: '',
-    name: '',
-    holdings_url: '',
-    purchases_url: '',
-    alerts_url: ''
-  })
-
   const handleSelectPortfolio: Interface.HandleSelectPortfolio = (portfolio) => {
     if (display !== 'holdings') {
       dispatch(changeDisplay('holdings'))
@@ -149,8 +99,7 @@ function App() {
         return;
       }
     }
-
-    setSelectedPortfolio(portfolio);
+    dispatch(selectPortfolio(portfolio));
   }
 
   const [sideBarOpen, setSideBarOpen] = React.useState<Interface.SideBarOpen>(false);
@@ -165,18 +114,12 @@ function App() {
         { display === 'holdings' &&
           <React.Fragment>
             <UpperBar
-            username={username}
-            selectedPortfolio={selectedPortfolio}
-            isLoggedIn={isLoggedIn}
             handleSideBarToogle={handleSideBarToogle}
-            handleDisplay={handleDisplay}
-            handleLogOut={handleLogOut}
             />
             <Holdings
             sideBarOpen={sideBarOpen}
             portfolios={portfolios}
             selectedPortfolio={selectedPortfolio}
-            updatePortfolioList={updatePortfolioList}
             handleSideBarToogle={handleSideBarToogle}
             handleSelectPortfolio={handleSelectPortfolio}
             />
