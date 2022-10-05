@@ -6,9 +6,12 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import * as Interface from '../interfaces/interfaces';
 
+import { setPortfolioReturn } from '../features/portfolio/portfolioSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../app/store'
+
 interface Props {
   holdings: Interface.Holdings
-  updatePortfolioReturn: Interface.UpdatePortfolioReturn
 }
 
 // Define Columns Properties
@@ -136,6 +139,8 @@ function weight(holding: Interface.Row, total: number) {
 }
 
 export default function HoldingsGrid(props: Props) {
+  const dispatch = useDispatch<AppDispatch>();
+
   const matches = useMediaQuery('(min-width:920px)');
   const fontSize = matches ? 15 : 8;
   const margin = matches ? 5 : 0;
@@ -149,11 +154,13 @@ export default function HoldingsGrid(props: Props) {
   const totalPercentChange: number | undefined = typeof totalHoldings === 'number' && typeof prevTotalHoldings === 'number' ? (1 - prevTotalHoldings / totalHoldings) * 100 : undefined;
   const totalChange: number | undefined = typeof totalHoldings === 'number' && typeof prevTotalHoldings === 'number' ? totalHoldings - prevTotalHoldings : undefined;
 
-  const updatePortfolioReturn = props.updatePortfolioReturn
-
   React.useEffect(() => {
-    updatePortfolioReturn(totalHoldings, totalChange, totalPercentChange);
-  }, [totalHoldings, totalChange, totalPercentChange, updatePortfolioReturn])
+    dispatch(setPortfolioReturn({
+      totalHoldings: totalHoldings,
+      totalChange: totalChange,
+      totalPercentChange: totalPercentChange
+    }))
+  }, [totalHoldings, totalChange, totalPercentChange, dispatch])
 
   return (
     <Box

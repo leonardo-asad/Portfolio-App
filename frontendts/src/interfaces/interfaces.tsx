@@ -1,3 +1,31 @@
+export interface PortfolioInitialState {
+  portfolios: any[],
+  selectedPortfolio: {
+    selectedPortfolio: {
+      pk: string,
+      name: string,
+      holdings_url: string,
+      purchases_url: string,
+      alerts_url: string
+    },
+    holdings: any[],
+    trades: any[],
+    portfolioReturn: {
+      totalHoldings: undefined,
+      totalChange: undefined,
+      totalPercentChange: undefined
+    },
+  },
+  isLoadingPortfolios: boolean,
+  failedToLoadPortfolios: boolean,
+  isLoadingHoldings: boolean,
+  failedToLoadHoldings: boolean,
+  isLoadingTrades: boolean,
+  failedToLoadTrades: boolean,
+  isAddingPortfolio: boolean,
+  failedToAddPortfolio: boolean
+}
+
 export interface User {
   username: string,
   password: string,

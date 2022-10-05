@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 
@@ -12,108 +12,85 @@ import AlertNoPortfolioSelected from '../components/AlertNoPortfolioSelected';
 import { drawerWidth } from '../app/App';
 import * as Interface from '../interfaces/interfaces'
 
-import { fetchPortfolios } from '../features/portfolio/portfolioSlice'
-import { useDispatch } from 'react-redux'
+import {
+  loadPortfolios,
+  addPortfolio,
+  selectSelectedPortfolio,
+  selectPortfolios,
+  selectPortfolio,
+  selectHoldings,
+  selectIsLoadingHoldings,
+  loadHoldings,
+  setHoldings,
+  loadTrades,
+  setTrades,
+  selectIsLoadingTrades,
+  selectTrades,
+  selectPortfolioReturn,
+  createPortfolio
+} from '../features/portfolio/portfolioSlice'
+import { changeDisplay, selectDisplay } from '../features/display/displaySlice';
+import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../app/store'
 
 interface Props {
   sideBarOpen: Interface.SideBarOpen,
-  portfolios: Interface.Portfolios,
-  selectedPortfolio: Interface.Portfolio,
   handleSideBarToogle: Interface.HandleSideBarToogle,
-  handleSelectPortfolio: Interface.HandleSelectPortfolio
 }
 
 export default function Holdings(props: Props) {
   const dispatch = useDispatch<AppDispatch>();
+  const display = useSelector(selectDisplay);
+  const selectedPortfolio = useSelector(selectSelectedPortfolio);
+  const portfolios = useSelector(selectPortfolios);
+  const isLoadingHoldings = useSelector(selectIsLoadingHoldings);
+  const holdings = useSelector(selectHoldings);
+  const trades = useSelector(selectTrades);
+  const isLoadingTrades = useSelector(selectIsLoadingTrades);
+  const portfolioReturn = useSelector(selectPortfolioReturn);
+
   const [tab, setTab] = useState<number>(0);
+
+  useEffect(() => {
+    if (selectedPortfolio.name !== "") {
+      dispatch(loadHoldings(selectedPortfolio.holdings_url))
+    }
+  }, [selectedPortfolio, dispatch])
+
+  useEffect(() => {
+    if (selectedPortfolio.name !== "") {
+      dispatch(loadTrades(selectedPortfolio.purchases_url))
+    }
+  }, [selectedPortfolio, dispatch] )
 
   const handleChangeTab: Interface.HandleChangeTab = (event, newTab) => {
     setTab(newTab);
   };
 
-  const [isLoadingHoldings, setIsLoadingHoldings] = useState<boolean>(false)
-  const [holdings, setHoldings] = useState<Interface.Holdings>([])
-  const [trades, setTrades] = useState<Interface.Trades>([])
-  const [portfolioReturn, setPortfolioReturn] = useState<Interface.Return>({
-    'totalHoldings': undefined,
-    'totalChange': undefined,
-    'totalPercentChange': undefined
-  });
+  const handleSelectPortfolio: Interface.HandleSelectPortfolio = (portfolio) => {
+    if (display !== 'holdings') {
+      dispatch(changeDisplay('holdings'))
+    }
 
-  const updateHoldings = useCallback(async () => {
-    setIsLoadingHoldings(true);
-    const response = await fetch(props.selectedPortfolio.holdings_url, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+    if (selectedPortfolio.name !== '') {
+      if (selectedPortfolio.name === portfolio.name) {
+        return;
       }
-    })
-    if (response.status === 200) {
-      const holdings = await response.json();
-      setHoldings(holdings);
-    } else {
-      const json = await response.json();
-      console.log(json);
     }
-    setIsLoadingHoldings(false);
-  }, [props.selectedPortfolio])
+    dispatch(selectPortfolio(portfolio));
+  }
 
-  const updatePortfolioReturn: Interface.UpdatePortfolioReturn = useCallback((totalHoldings, totalChange, totalPercentChange) => {
-    setPortfolioReturn({
-      'totalHoldings': totalHoldings,
-      'totalChange': totalChange,
-      'totalPercentChange': totalPercentChange
-    })
-  }, [])
-
-  useEffect(() => {
-    if (props.selectedPortfolio.name !== "") {
-      updateHoldings();
-    }
-  }, [props.selectedPortfolio, updateHoldings] )
-
-  useEffect(() => {
-    if (props.selectedPortfolio.name !== "") {
-      const fetchData = async () => {
-        const response = await fetch(props.selectedPortfolio.purchases_url, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        if (response.status === 200) {
-          const trades = await response.json();
-          setTrades(trades);
-        } else {
-          const json = await response.json();
-          console.log(json);
-        }
-      }
-      // Call the function
-      fetchData()
-    }
-  }, [props.selectedPortfolio] )
-
-  const handleCreatePortfolio: Interface.HandleCreatePortfolio = (event, name) => {
+  const handleCreatePortfolio: Interface.HandleCreatePortfolio = async (event, name) => {
     event.preventDefault();
-    const createPortfolio = async (name: string) => {
-      const response = await fetch('/api/portfolio/', {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({'name': name})
-      })
-      if (response.status === 201) {
-        const portfolio = await response.json();
-        dispatch(fetchPortfolios);
-        props.handleSelectPortfolio(portfolio);
-      } else {
-        const json = await response.json();
-        console.log(JSON.stringify(json));
-      }
+    try {
+      const newPortfolio = await dispatch(createPortfolio(name)).unwrap();
+      // If action is fulfilled
+      dispatch(addPortfolio(newPortfolio));
+      handleSelectPortfolio(newPortfolio);
+    } catch (rejectedValue) {
+      // If action is rejected
+      console.log(rejectedValue);
     }
-    createPortfolio(name)
   }
 
   const handleEditPortfolio: Interface.HandleEditPortfolio = (event, pk, name) => {
@@ -128,7 +105,7 @@ export default function Holdings(props: Props) {
         body: JSON.stringify({'name': name})
       })
       if (response.status === 200) {
-        dispatch(fetchPortfolios);
+        dispatch(loadPortfolios);
       } else {
         const json = await response.json();
         console.log(JSON.stringify(json));
@@ -148,10 +125,10 @@ export default function Holdings(props: Props) {
         }
       })
       if (response.status === 204) {
-        dispatch(fetchPortfolios)
-        setHoldings([]);
+        dispatch(loadPortfolios())
+        dispatch(setHoldings([]));
         setTrades([]);
-        props.handleSelectPortfolio({
+        handleSelectPortfolio({
           pk: '',
           name: '',
           holdings_url: '',
@@ -169,12 +146,12 @@ export default function Holdings(props: Props) {
   }
 
   const handleAddTrade: Interface.handleAddTrade = (formInput) => {
-    if (props.selectedPortfolio.name === "") {
+    if (selectedPortfolio.name === "") {
       alert("Please select a Portfolio to add a new trade")
     } else {
       const data = {
         ...formInput,
-        'portfolio': props.selectedPortfolio.pk
+        'portfolio': selectedPortfolio.pk
       }
       const addTrade = async () => {
         const response = await fetch('/api/portfolio/purchases/', {
@@ -188,7 +165,7 @@ export default function Holdings(props: Props) {
         if (response.status === 201) {
           const trade: Interface.Trade = await response.json();
           setTrades([trade, ...trades]);
-          updateHoldings();
+          dispatch(loadHoldings(selectedPortfolio.holdings_url));
         } else if (response.status === 400) {
           const json = await response.json();
           alert(json.detail);
@@ -206,12 +183,12 @@ export default function Holdings(props: Props) {
     <>
       <SideBar
         sideBarOpen={props.sideBarOpen}
-        portfolios={props.portfolios}
+        portfolios={portfolios}
         handleSideBarToogle={props.handleSideBarToogle}
         handleCreatePortfolio={handleCreatePortfolio}
         handleEditPortfolio={handleEditPortfolio}
         handleDeletePortfolio={handleDeletePortfolio}
-        handleSelectPortfolio={props.handleSelectPortfolio}
+        handleSelectPortfolio={handleSelectPortfolio}
       />
       <Box
         component="main"
@@ -224,34 +201,41 @@ export default function Holdings(props: Props) {
         handleChangeTab={handleChangeTab}
         />
 
-        { isLoadingHoldings ?
-            <CircularIndeterminate />
-          :
-            <>
-              { tab === 0 && props.selectedPortfolio.name !== '' &&
+          <>
+            { tab === 0 && selectedPortfolio.name !== '' &&
+              <>
+              { isLoadingHoldings ?
+                <CircularIndeterminate />
+                :
                 <>
                   <Dashboard
-                  selectedPortfolio={props.selectedPortfolio}
+                  selectedPortfolio={selectedPortfolio}
                   portfolioReturn={portfolioReturn}
                   handleAddTrade={handleAddTrade}
                   holdings={holdings}
                   />
                   <HoldingsGrid
                   holdings={holdings}
-                  updatePortfolioReturn={updatePortfolioReturn}
                   />
                 </>
               }
-              { tab === 1 && props.selectedPortfolio.name !== '' &&
+              </>
+            }
+            { tab === 1 && selectedPortfolio.name !== '' &&
+              <>
+              { isLoadingTrades ?
+                <CircularIndeterminate />
+                :
                 <TradesGrid
                 trades={trades}
                 />
               }
-              { props.selectedPortfolio.name === '' &&
-                <AlertNoPortfolioSelected />
-              }
-            </>
-        }
+              </>
+            }
+            { selectedPortfolio.name === '' &&
+              <AlertNoPortfolioSelected />
+            }
+          </>
       </Box>
     </>
   )

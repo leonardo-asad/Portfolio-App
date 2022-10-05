@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectIsLoggedIn } from '../features/authenticate/userSlice';
 import { loadUser, authenticateUser, createUser } from '../features/authenticate/userSlice';
 import { changeDisplay, selectDisplay } from '../features/display/displaySlice';
-import { selectPortfolios, selectSelectedPortfolio, addPortfolios, selectPortfolio, fetchPortfolios } from '../features/portfolio/portfolioSlice';
+import { setPortfolios, selectPortfolio, loadPortfolios } from '../features/portfolio/portfolioSlice';
 import { AppDispatch } from './store';
 
 import UpperBar from '../components/UpperBar';
@@ -25,17 +25,15 @@ function App() {
   const dispatch = useDispatch<AppDispatch>();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const display = useSelector(selectDisplay);
-  const portfolios = useSelector(selectPortfolios);
-  const selectedPortfolio = useSelector(selectSelectedPortfolio);
 
   React.useEffect(() => {
     if (isLoggedIn) {
       dispatch(loadUser())
       dispatch(changeDisplay('holdings'))
-      dispatch(fetchPortfolios())
+      dispatch(loadPortfolios())
     } else {
       dispatch(changeDisplay('login'))
-      dispatch(addPortfolios([]));
+      dispatch(setPortfolios([]));
       dispatch(selectPortfolio({
         pk: '',
         name: '',
@@ -89,19 +87,6 @@ function App() {
       }
   };
 
-  const handleSelectPortfolio: Interface.HandleSelectPortfolio = (portfolio) => {
-    if (display !== 'holdings') {
-      dispatch(changeDisplay('holdings'))
-    }
-
-    if (selectedPortfolio.name !== '') {
-      if (selectedPortfolio.name === portfolio.name) {
-        return;
-      }
-    }
-    dispatch(selectPortfolio(portfolio));
-  }
-
   const [sideBarOpen, setSideBarOpen] = React.useState<Interface.SideBarOpen>(false);
 
   const handleSideBarToogle: Interface.HandleSideBarToogle = () => {
@@ -118,10 +103,7 @@ function App() {
             />
             <Holdings
             sideBarOpen={sideBarOpen}
-            portfolios={portfolios}
-            selectedPortfolio={selectedPortfolio}
             handleSideBarToogle={handleSideBarToogle}
-            handleSelectPortfolio={handleSelectPortfolio}
             />
           </React.Fragment>
         }
