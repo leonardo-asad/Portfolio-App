@@ -23,7 +23,9 @@ export interface PortfolioInitialState {
   isLoadingTrades: boolean,
   failedToLoadTrades: boolean,
   isAddingPortfolio: boolean,
-  failedToAddPortfolio: boolean
+  failedToAddPortfolio: boolean,
+  isEditingPortfolio: boolean,
+  failedToEditPortfolio: boolean
 }
 
 export interface User {

@@ -14,7 +14,6 @@ import * as Interface from '../interfaces/interfaces'
 
 import {
   loadPortfolios,
-  addPortfolio,
   selectSelectedPortfolio,
   selectPortfolios,
   selectPortfolio,
@@ -27,7 +26,8 @@ import {
   selectIsLoadingTrades,
   selectTrades,
   selectPortfolioReturn,
-  createPortfolio
+  createPortfolio,
+  editPortfolio
 } from '../features/portfolio/portfolioSlice'
 import { changeDisplay, selectDisplay } from '../features/display/displaySlice';
 import { useDispatch, useSelector } from 'react-redux'
@@ -82,36 +82,15 @@ export default function Holdings(props: Props) {
 
   const handleCreatePortfolio: Interface.HandleCreatePortfolio = async (event, name) => {
     event.preventDefault();
-    try {
-      const newPortfolio = await dispatch(createPortfolio(name)).unwrap();
-      // If action is fulfilled
-      dispatch(addPortfolio(newPortfolio));
-      handleSelectPortfolio(newPortfolio);
-    } catch (rejectedValue) {
-      // If action is rejected
-      console.log(rejectedValue);
-    }
+    dispatch(createPortfolio(name));
   }
 
   const handleEditPortfolio: Interface.HandleEditPortfolio = (event, pk, name) => {
     event.preventDefault();
-    const editPortfolio = async (pk: string) => {
-      const response = await fetch(`/api/portfolio/${pk}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({'name': name})
-      })
-      if (response.status === 200) {
-        dispatch(loadPortfolios);
-      } else {
-        const json = await response.json();
-        console.log(JSON.stringify(json));
-      }
-    }
-    editPortfolio(pk)
+    dispatch(editPortfolio({
+      pk: pk,
+      name: name
+    }))
   }
 
   const handleDeletePortfolio: Interface.HandleDeletePortfolio = (event, pk) => {

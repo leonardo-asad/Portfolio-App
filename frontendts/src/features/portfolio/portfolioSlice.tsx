@@ -27,7 +27,9 @@ const initialState: Interface.PortfolioInitialState = {
   isLoadingTrades: true,
   failedToLoadTrades: false,
   isAddingPortfolio: false,
-  failedToAddPortfolio: false
+  failedToAddPortfolio: false,
+  isEditingPortfolio: false,
+  failedToEditPortfolio: false
 }
 
 export const loadPortfolios = createAsyncThunk(
@@ -48,7 +50,7 @@ export const loadPortfolios = createAsyncThunk(
 )
 
 export const createPortfolio = createAsyncThunk(
-  'portfolio/addPortfolio',
+  'portfolio/createPortfolio',
   async (name: string, { rejectWithValue }) => {
     const response = await fetch('/api/portfolio/', {
       method: "POST",
@@ -63,6 +65,26 @@ export const createPortfolio = createAsyncThunk(
       return rejectWithValue(json);
     }
     const json = await response.json();
+    return json;
+  }
+)
+
+export const editPortfolio = createAsyncThunk(
+  'portfolio/requestEditPortfolio',
+  async (portfolioToEdit: {pk: string, name: string}, { rejectWithValue }) => {
+    const response = await fetch(`/api/portfolio/${portfolioToEdit.pk}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({'name': portfolioToEdit.name})
+    })
+    if (response.status !== 200) {
+      const json = await response.json();
+      return rejectWithValue(json);
+    }
+    const json = response.json();
     return json;
   }
 )
@@ -107,9 +129,6 @@ const portfolioSlice = createSlice({
   reducers: {
     setPortfolios(state, action) {
       state.portfolios = action.payload;
-    },
-    addPortfolio(state, action) {
-      state.portfolios.push(action.payload)
     },
     selectPortfolio(state, action) {
       state.selectedPortfolio.selectedPortfolio = action.payload;
@@ -176,7 +195,26 @@ const portfolioSlice = createSlice({
       .addCase(createPortfolio.fulfilled, (state, action) => {
         state.isAddingPortfolio = false;
         state.failedToAddPortfolio = false;
+        state.portfolios.push(action.payload);
 
+      })
+      .addCase(editPortfolio.pending, (state, action) => {
+        state.isEditingPortfolio = true;
+        state.failedToEditPortfolio = false;
+      })
+      .addCase(editPortfolio.rejected, (state, action) => {
+        state.isEditingPortfolio = false;
+        state.failedToEditPortfolio = true;
+      })
+      .addCase(editPortfolio.fulfilled, (state, action) => {
+        state.isEditingPortfolio = false;
+        state.failedToEditPortfolio = false;
+        state.portfolios = state.portfolios.map(portfolio => {
+          if (portfolio.pk === action.payload.pk) {
+            return {...portfolio, name: action.payload.name};
+          }
+          return portfolio;
+        })
       })
   }
 })
@@ -189,5 +227,5 @@ export const selectTrades = (state: RootState) => state.portfolio.selectedPortfo
 export const selectIsLoadingTrades = (state: RootState) => state.portfolio.isLoadingTrades;
 export const selectPortfolioReturn = (state: RootState) => state.portfolio.selectedPortfolio.portfolioReturn;
 
-export const { setPortfolios, addPortfolio, selectPortfolio, setHoldings, setTrades, setPortfolioReturn } = portfolioSlice.actions;
+export const { setPortfolios, selectPortfolio, setHoldings, setTrades, setPortfolioReturn } = portfolioSlice.actions;
 export default portfolioSlice.reducer;
