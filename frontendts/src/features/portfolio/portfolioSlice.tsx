@@ -29,7 +29,9 @@ const initialState: Interface.PortfolioInitialState = {
   isAddingPortfolio: false,
   failedToAddPortfolio: false,
   isEditingPortfolio: false,
-  failedToEditPortfolio: false
+  failedToEditPortfolio: false,
+  isDeletingPortfolio: false,
+  failedToDeletePortfolio: false
 }
 
 export const loadPortfolios = createAsyncThunk(
@@ -70,7 +72,7 @@ export const createPortfolio = createAsyncThunk(
 )
 
 export const editPortfolio = createAsyncThunk(
-  'portfolio/requestEditPortfolio',
+  'portfolio/EditPortfolio',
   async (portfolioToEdit: {pk: string, name: string}, { rejectWithValue }) => {
     const response = await fetch(`/api/portfolio/${portfolioToEdit.pk}`, {
       method: "PUT",
@@ -85,6 +87,26 @@ export const editPortfolio = createAsyncThunk(
       return rejectWithValue(json);
     }
     const json = response.json();
+    return json;
+  }
+)
+
+export const deletePortfolio = createAsyncThunk(
+  'portfolio/deletePortfolio',
+  async (pk: string, { rejectWithValue }) => {
+    const response = await fetch(`/api/portfolio/${pk}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if (response.status !== 204) {
+      const json = await response.json();
+      return rejectWithValue(json);
+    }
+    const json = await response.json();
+    json['pk'] = pk;
     return json;
   }
 )
@@ -215,6 +237,20 @@ const portfolioSlice = createSlice({
           }
           return portfolio;
         })
+      })
+      .addCase(deletePortfolio.pending, (state, action) => {
+        state.isDeletingPortfolio = true;
+        state.failedToDeletePortfolio = false;
+      })
+      .addCase(deletePortfolio.rejected, (state, action) => {
+        state.isDeletingPortfolio = false;
+        state.failedToDeletePortfolio = true;
+      })
+      .addCase(deletePortfolio.fulfilled, (state, action) => {
+        state.isDeletingPortfolio = false;
+        state.failedToDeletePortfolio = false;
+        state.portfolios = state.portfolios.filter(portfolio => portfolio.pk !== action.payload.pk);
+        state.selectedPortfolio = initialState.selectedPortfolio;
       })
   }
 })

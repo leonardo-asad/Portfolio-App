@@ -27,7 +27,8 @@ import {
   selectTrades,
   selectPortfolioReturn,
   createPortfolio,
-  editPortfolio
+  editPortfolio,
+  deletePortfolio
 } from '../features/portfolio/portfolioSlice'
 import { changeDisplay, selectDisplay } from '../features/display/displaySlice';
 import { useDispatch, useSelector } from 'react-redux'
@@ -95,33 +96,7 @@ export default function Holdings(props: Props) {
 
   const handleDeletePortfolio: Interface.HandleDeletePortfolio = (event, pk) => {
     event.preventDefault();
-    const deletePortfolio = async (pk: string) => {
-      const response = await fetch(`/api/portfolio/${pk}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      if (response.status === 204) {
-        dispatch(loadPortfolios())
-        dispatch(setHoldings([]));
-        setTrades([]);
-        handleSelectPortfolio({
-          pk: '',
-          name: '',
-          holdings_url: '',
-          purchases_url: '',
-          alerts_url: ''
-        })
-        //setTotalHoldings(null);
-        //setTotalPercentChange(null);
-      } else {
-        const json = await response.json();
-        console.log(JSON.stringify(json));
-      }
-    }
-    deletePortfolio(pk)
+    dispatch(deletePortfolio(pk));
   }
 
   const handleAddTrade: Interface.handleAddTrade = (formInput) => {

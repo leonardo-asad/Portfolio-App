@@ -25,7 +25,9 @@ export interface PortfolioInitialState {
   isAddingPortfolio: boolean,
   failedToAddPortfolio: boolean,
   isEditingPortfolio: boolean,
-  failedToEditPortfolio: boolean
+  failedToEditPortfolio: boolean,
+  isDeletingPortfolio: boolean,
+  failedToDeletePortfolio: boolean,
 }
 
 export interface User {
