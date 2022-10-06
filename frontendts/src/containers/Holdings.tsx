@@ -13,22 +13,20 @@ import { drawerWidth } from '../app/App';
 import * as Interface from '../interfaces/interfaces'
 
 import {
-  loadPortfolios,
   selectSelectedPortfolio,
   selectPortfolios,
   selectPortfolio,
   selectHoldings,
   selectIsLoadingHoldings,
   loadHoldings,
-  setHoldings,
   loadTrades,
-  setTrades,
   selectIsLoadingTrades,
   selectTrades,
   selectPortfolioReturn,
   createPortfolio,
   editPortfolio,
-  deletePortfolio
+  deletePortfolio,
+  addTrade
 } from '../features/portfolio/portfolioSlice'
 import { changeDisplay, selectDisplay } from '../features/display/displaySlice';
 import { useDispatch, useSelector } from 'react-redux'
@@ -55,14 +53,9 @@ export default function Holdings(props: Props) {
   useEffect(() => {
     if (selectedPortfolio.name !== "") {
       dispatch(loadHoldings(selectedPortfolio.holdings_url))
-    }
-  }, [selectedPortfolio, dispatch])
-
-  useEffect(() => {
-    if (selectedPortfolio.name !== "") {
       dispatch(loadTrades(selectedPortfolio.purchases_url))
     }
-  }, [selectedPortfolio, dispatch] )
+  }, [selectedPortfolio, dispatch])
 
   const handleChangeTab: Interface.HandleChangeTab = (event, newTab) => {
     setTab(newTab);
@@ -103,33 +96,19 @@ export default function Holdings(props: Props) {
     if (selectedPortfolio.name === "") {
       alert("Please select a Portfolio to add a new trade")
     } else {
-      const data = {
-        ...formInput,
-        'portfolio': selectedPortfolio.pk
+      const newTrade = {
+        portfolio: selectedPortfolio.pk,
+        shares: formInput.shares,
+        ticker: formInput.ticker
       }
-      const addTrade = async () => {
-        const response = await fetch('/api/portfolio/purchases/', {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        })
-        if (response.status === 201) {
-          const trade: Interface.Trade = await response.json();
-          setTrades([trade, ...trades]);
+      dispatch(addTrade(newTrade))
+        .unwrap()
+        .then(() => {
           dispatch(loadHoldings(selectedPortfolio.holdings_url));
-        } else if (response.status === 400) {
-          const json = await response.json();
-          alert(json.detail);
-        } else {
-          const json = await response.json();
-          console.log(JSON.stringify(json));
-        }
-      }
-      // Call the function
-      addTrade()
+        })
+        .catch((rejectedValueOrSerializedError) => {
+          console.log(rejectedValueOrSerializedError)
+        })
     }
   }
 

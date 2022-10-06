@@ -28,6 +28,8 @@ export interface PortfolioInitialState {
   failedToEditPortfolio: boolean,
   isDeletingPortfolio: boolean,
   failedToDeletePortfolio: boolean,
+  isAddingTrade: boolean,
+  failedToAddTrade: boolean,
 }
 
 export interface User {

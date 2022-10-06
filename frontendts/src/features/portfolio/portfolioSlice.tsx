@@ -31,7 +31,9 @@ const initialState: Interface.PortfolioInitialState = {
   isEditingPortfolio: false,
   failedToEditPortfolio: false,
   isDeletingPortfolio: false,
-  failedToDeletePortfolio: false
+  failedToDeletePortfolio: false,
+  isAddingTrade: false,
+  failedToAddTrade: false
 }
 
 export const loadPortfolios = createAsyncThunk(
@@ -105,9 +107,8 @@ export const deletePortfolio = createAsyncThunk(
       const json = await response.json();
       return rejectWithValue(json);
     }
-    const json = await response.json();
-    json['pk'] = pk;
-    return json;
+    //const json = await response.json();
+    return {pk: pk};
   }
 )
 
@@ -139,6 +140,31 @@ export const loadTrades = createAsyncThunk(
     if (response.status !== 200) {
       const json = await response.json();
       return rejectWithValue(json)
+    }
+    const json = await response.json();
+    return json;
+  }
+)
+
+export const addTrade = createAsyncThunk(
+  'portfolio/addTrade',
+  async (trade: {portfolio: string, shares: string, ticker: string}, { rejectWithValue }) => {
+    const response = await fetch('/api/portfolio/purchases/', {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(trade)
+    })
+    if (response.status === 400) {
+      const json = await response.json();
+      alert(json.detail);
+      return rejectWithValue(json);
+    }
+    if (response.status !== 201) {
+      const json = await response.json();
+      return rejectWithValue(json);
     }
     const json = await response.json();
     return json;
@@ -251,6 +277,19 @@ const portfolioSlice = createSlice({
         state.failedToDeletePortfolio = false;
         state.portfolios = state.portfolios.filter(portfolio => portfolio.pk !== action.payload.pk);
         state.selectedPortfolio = initialState.selectedPortfolio;
+      })
+      .addCase(addTrade.pending, (state, action) => {
+        state.isAddingTrade = true;
+        state.failedToAddTrade = false;
+      })
+      .addCase(addTrade.rejected, (state, action) => {
+        state.isAddingTrade = false;
+        state.failedToAddTrade = true;
+      })
+      .addCase(addTrade.fulfilled, (state, action) => {
+        state.isAddingTrade = false;
+        state.failedToAddTrade = false;
+        state.selectedPortfolio.trades.push(action.payload);
       })
   }
 })
