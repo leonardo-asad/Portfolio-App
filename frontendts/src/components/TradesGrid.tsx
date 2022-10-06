@@ -6,9 +6,8 @@ import clsx from 'clsx';
 
 import * as Interface from '../interfaces/interfaces'
 
-interface Props {
-  trades: Interface.Trades
-}
+import { useSelector } from 'react-redux';
+import { selectTrades } from '../features/portfolio/portfolioSlice';
 
 const columns: GridColDef[] = [
   {
@@ -60,12 +59,12 @@ function createRow(trade_object: Interface.Trade, index: number) {
   return { id, ticker, date, price, shares };
 }
 
-export default function TradesGrid(props: Props) {
+export default function TradesGrid() {
   const matches = useMediaQuery('(min-width:920px)');
   const fontSize = matches ? 15 : 8;
   const margin = matches ? 5 : 0;
-
-  let rows = props.trades.map((trade_object, index) => createRow(trade_object, index));
+  const trades = useSelector(selectTrades);
+  let rows = trades.map((trade_object, index) => createRow(trade_object, index));
 
   return (
     <Box

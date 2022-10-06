@@ -18,7 +18,6 @@ interface Props {
 
 export default function EditPortfolioDialog(props: Props) {
   const [open, setOpen] = React.useState(false);
-
   const [name, setName] = useState(props.selectedPortfolio.name)
 
   const handleClickOpen = () => {

@@ -14,20 +14,18 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { drawerWidth } from '../App';
-import * as Interface from '../interfaces/interfaces';
+import { drawerWidth } from '../app/App';
+
+import { selectUsername } from '../features/authenticate/userSlice'
+import { useSelector, useDispatch } from 'react-redux';
+import { AppDispatch } from '../app/store'
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean,
 }
 
 interface UpperBarProps {
-  isLoggedIn: boolean,
-  username: Interface.Username,
-  selectedPortfolio: Interface.Portfolio,
   handleSideBarToogle: () => void,
-  handleDisplay: Interface.HandleDisplay,
-  handleLogOut: Interface.HandleLogOut
 };
 
 const AppBar = styled(MuiAppBar, {
@@ -49,47 +47,23 @@ const AppBar = styled(MuiAppBar, {
 
 
 export default function UpperBar(props: UpperBarProps) {
-  const matches = useMediaQuery('(min-width:700px)');
-  const titleFontSize = matches ? 20 : 9;
+  const dispatch = useDispatch<AppDispatch>();
+  const username = useSelector(selectUsername);
+
+  const handleLogOut:(event: React.MouseEvent<HTMLButtonElement>) => void = () => {
+    dispatch({type: 'user/removeUser'});
+  }
+
+  const matches = useMediaQuery('(min-width:800px)');
+  const titleFontSize = matches ? 20 : 12;
   const buttonsFontSize = matches ? 10 : 7;
 
-  const loggedOut = (
-    <Box>
-      <Button
-        onClick={(event) => props.handleDisplay(event, 'login')}
-        color="inherit"
-        sx={{ fontSize: buttonsFontSize }}
-      >
-      Log In
-      </Button>
-      <Button
-        onClick={(event) => props.handleDisplay(event, 'signup')}
-        color="inherit"
-        sx={{ fontSize: buttonsFontSize }}
-      >
-      Sign Up
-      </Button>
-    </Box>
-  )
-
-  const loggedIn = (
-    <Box>
-      <Button
-      onClick={props.handleLogOut}
-      color="inherit"
-      sx={{ fontSize: buttonsFontSize }}
-      >
-      Log Out
-      </Button>
-    </Box>
-  )
-
-  const username = (
+  const usernameComponent = (
     <Typography
     noWrap component="div"
     sx={{ fontSize: buttonsFontSize }}
     >
-      { props.username }
+      { username }
     </Typography>
   )
 
@@ -130,27 +104,37 @@ export default function UpperBar(props: UpperBarProps) {
                   </IconButton>
                 </Grid>
                 <Grid item>
-                  <Typography sx={{fontSize: titleFontSize}} component="div">
-                    Portfolio App
-                  </Typography>
+                  <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  >
+                    <Box
+                    component="img"
+                    sx={{
+                    height: 36,
+                    mr: 2
+                    }}
+                    alt="App Logo"
+                    src={"iconMarket.png"}
+                    />
+                    <Typography
+                      sx={{
+                        mr: 2,
+                        fontSize: titleFontSize,
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.3rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      SMART INVESTMENTS
+                    </Typography>
+                  </Box>
                 </Grid>
               </Grid>
             </Grid >
-
-            { props.isLoggedIn &&
-                <Grid item>
-                { props.selectedPortfolio.name === '' ?
-                  <Typography sx={{fontSize: titleFontSize}} component="div">
-                    No Selected Portfolio
-                  </Typography>
-                  :
-                  <Typography sx={{fontSize: titleFontSize}} component="div">
-                    { props.selectedPortfolio.name }
-                  </Typography>
-                }
-                </Grid>
-            }
-
             <Grid item>
               <Grid
               container
@@ -159,14 +143,20 @@ export default function UpperBar(props: UpperBarProps) {
               wrap='nowrap'
               >
                 <Grid item>
-                  { props.isLoggedIn &&
-                    <Stack direction="row" spacing={1}>
-                      <Chip icon={<FaceIcon style={{color: 'white'}} />} label={username} size= 'small' variant="outlined" style={{ color: 'white' }} />
-                    </Stack>
-                  }
+                  <Stack direction="row" spacing={1}>
+                    <Chip icon={<FaceIcon style={{color: 'white'}} />} label={usernameComponent} size= 'small' variant="outlined" style={{ color: 'white' }} />
+                  </Stack>
                 </Grid>
                 <Grid item>
-                  { props.isLoggedIn ? loggedIn : loggedOut}
+                <Box>
+                  <Button
+                  onClick={handleLogOut}
+                  color="inherit"
+                  sx={{ fontSize: buttonsFontSize }}
+                  >
+                  Log Out
+                  </Button>
+                </Box>
                 </Grid>
               </Grid>
             </Grid>

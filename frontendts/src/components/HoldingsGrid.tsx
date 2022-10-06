@@ -6,10 +6,10 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import * as Interface from '../interfaces/interfaces';
 
-interface Props {
-  holdings: Interface.Holdings
-  updatePortfolioReturn: Interface.UpdatePortfolioReturn
-}
+import { setPortfolioReturn } from '../features/portfolio/portfolioSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../app/store'
+import { selectHoldings } from '../features/portfolio/portfolioSlice';
 
 // Define Columns Properties
 const columns: GridColDef[] = [
@@ -135,12 +135,15 @@ function weight(holding: Interface.Row, total: number) {
   return { ...holding, weight }
 }
 
-export default function HoldingsGrid(props: Props) {
+export default function HoldingsGrid() {
+  const dispatch = useDispatch<AppDispatch>();
+  const holdings = useSelector(selectHoldings);
+
   const matches = useMediaQuery('(min-width:920px)');
   const fontSize = matches ? 15 : 8;
   const margin = matches ? 5 : 0;
 
-  let rows = props.holdings.length > 0 ? props.holdings.map((holding: Interface.Holding, index: number) => createRow(holding, index)) : [];
+  let rows = holdings.length > 0 ? holdings.map((holding: Interface.Holding, index: number) => createRow(holding, index)) : [];
   const totalHoldings: number | undefined = rows.length > 0 ? total(rows): undefined;
   rows = rows.length > 0 && typeof totalHoldings === 'number' ? rows.map((row: Interface.Row) => weight(row, totalHoldings)) : []
 
@@ -149,11 +152,13 @@ export default function HoldingsGrid(props: Props) {
   const totalPercentChange: number | undefined = typeof totalHoldings === 'number' && typeof prevTotalHoldings === 'number' ? (1 - prevTotalHoldings / totalHoldings) * 100 : undefined;
   const totalChange: number | undefined = typeof totalHoldings === 'number' && typeof prevTotalHoldings === 'number' ? totalHoldings - prevTotalHoldings : undefined;
 
-  const updatePortfolioReturn = props.updatePortfolioReturn
-
   React.useEffect(() => {
-    updatePortfolioReturn(totalHoldings, totalChange, totalPercentChange);
-  }, [totalHoldings, totalChange, totalPercentChange, updatePortfolioReturn])
+    dispatch(setPortfolioReturn({
+      totalHoldings: totalHoldings,
+      totalChange: totalChange,
+      totalPercentChange: totalPercentChange
+    }))
+  }, [totalHoldings, totalChange, totalPercentChange, dispatch])
 
   return (
     <Box

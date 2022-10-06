@@ -9,16 +9,43 @@ import PieChart from './PieChart';
 
 import * as Interface from '../interfaces/interfaces'
 
-interface Props {
-  selectedPortfolio: Interface.Portfolio
-  portfolioReturn: Interface.Return
-  handleAddTrade: Interface.handleAddTrade
-  holdings: Interface.Holdings
-}
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  selectSelectedPortfolio,
+  selectHoldings,
+  selectPortfolioReturn,
+  loadHoldings,
+  addTrade
+} from '../features/portfolio/portfolioSlice';
+import { AppDispatch } from '../app/store';
 
-export default function Dashboard(props: Props) {
+export default function Dashboard() {
   const matches = useMediaQuery('(min-width:920px)');
   const margin = matches ? 5 : 0;
+  const dispatch = useDispatch<AppDispatch>();
+  const selectedPortfolio = useSelector(selectSelectedPortfolio);
+  const holdings = useSelector(selectHoldings);
+  const portfolioReturn = useSelector(selectPortfolioReturn);
+
+  const handleAddTrade: Interface.handleAddTrade = (formInput) => {
+    if (selectedPortfolio.name === "") {
+      alert("Please select a Portfolio to add a new trade")
+    } else {
+      const newTrade = {
+        portfolio: selectedPortfolio.pk,
+        shares: formInput.shares,
+        ticker: formInput.ticker
+      }
+      dispatch(addTrade(newTrade))
+        .unwrap()
+        .then(() => {
+          dispatch(loadHoldings(selectedPortfolio.holdings_url));
+        })
+        .catch((rejectedValueOrSerializedError) => {
+          console.log(rejectedValueOrSerializedError)
+        })
+    }
+  }
 
   return (
     <Box sx={{ flexGrow: 1, m: margin, my: 5 }}>
@@ -30,20 +57,20 @@ export default function Dashboard(props: Props) {
       >
         <Grid item xs>
           <AddTradeForm
-          handleAddTrade={props.handleAddTrade}
+          handleAddTrade={handleAddTrade}
           />
         </Grid>
-        { props.holdings.length > 0 &&
+        { holdings.length > 0 &&
           <>
             <Grid item xs>
               <TotalHoldingsCard
-              selectedPortfolio={props.selectedPortfolio}
-              portfolioReturn={props.portfolioReturn}
+              selectedPortfolio={selectedPortfolio}
+              portfolioReturn={portfolioReturn}
               />
             </Grid>
             <Grid item xs>
               <PieChart
-              holdings={props.holdings}
+              holdings={holdings}
               />
             </Grid>
           </>
