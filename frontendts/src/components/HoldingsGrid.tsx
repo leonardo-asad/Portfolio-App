@@ -7,12 +7,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import * as Interface from '../interfaces/interfaces';
 
 import { setPortfolioReturn } from '../features/portfolio/portfolioSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../app/store'
-
-interface Props {
-  holdings: Interface.Holdings
-}
+import { selectHoldings } from '../features/portfolio/portfolioSlice';
 
 // Define Columns Properties
 const columns: GridColDef[] = [
@@ -138,14 +135,15 @@ function weight(holding: Interface.Row, total: number) {
   return { ...holding, weight }
 }
 
-export default function HoldingsGrid(props: Props) {
+export default function HoldingsGrid() {
   const dispatch = useDispatch<AppDispatch>();
+  const holdings = useSelector(selectHoldings);
 
   const matches = useMediaQuery('(min-width:920px)');
   const fontSize = matches ? 15 : 8;
   const margin = matches ? 5 : 0;
 
-  let rows = props.holdings.length > 0 ? props.holdings.map((holding: Interface.Holding, index: number) => createRow(holding, index)) : [];
+  let rows = holdings.length > 0 ? holdings.map((holding: Interface.Holding, index: number) => createRow(holding, index)) : [];
   const totalHoldings: number | undefined = rows.length > 0 ? total(rows): undefined;
   rows = rows.length > 0 && typeof totalHoldings === 'number' ? rows.map((row: Interface.Row) => weight(row, totalHoldings)) : []
 

@@ -17,7 +17,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { drawerWidth } from '../app/App';
 
 import { selectUsername } from '../features/authenticate/userSlice'
-import { selectSelectedPortfolio } from '../features/portfolio/portfolioSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch } from '../app/store'
 
@@ -50,14 +49,13 @@ const AppBar = styled(MuiAppBar, {
 export default function UpperBar(props: UpperBarProps) {
   const dispatch = useDispatch<AppDispatch>();
   const username = useSelector(selectUsername);
-  const selectedPortfolio = useSelector(selectSelectedPortfolio);
 
   const handleLogOut:(event: React.MouseEvent<HTMLButtonElement>) => void = () => {
     dispatch({type: 'user/removeUser'});
   }
 
-  const matches = useMediaQuery('(min-width:700px)');
-  const titleFontSize = matches ? 20 : 9;
+  const matches = useMediaQuery('(min-width:800px)');
+  const titleFontSize = matches ? 20 : 12;
   const buttonsFontSize = matches ? 10 : 7;
 
   const usernameComponent = (
@@ -106,23 +104,37 @@ export default function UpperBar(props: UpperBarProps) {
                   </IconButton>
                 </Grid>
                 <Grid item>
-                  <Typography sx={{fontSize: titleFontSize}} component="div">
-                    Portfolio App
-                  </Typography>
+                  <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  >
+                    <Box
+                    component="img"
+                    sx={{
+                    height: 36,
+                    mr: 2
+                    }}
+                    alt="App Logo"
+                    src={"iconMarket.png"}
+                    />
+                    <Typography
+                      sx={{
+                        mr: 2,
+                        fontSize: titleFontSize,
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.3rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      SMART INVESTMENTS
+                    </Typography>
+                  </Box>
                 </Grid>
               </Grid>
             </Grid >
-            <Grid item>
-            { selectedPortfolio.name === '' ?
-              <Typography sx={{fontSize: titleFontSize}} component="div">
-                No Selected Portfolio
-              </Typography>
-              :
-              <Typography sx={{fontSize: titleFontSize}} component="div">
-                { selectedPortfolio.name }
-              </Typography>
-            }
-            </Grid>
             <Grid item>
               <Grid
               container

@@ -17,32 +17,74 @@ import DeletePortfolioDialog from './DeletePortfolioDIalog';
 import { drawerWidth } from '../app/App';
 import * as Interface from '../interfaces/interfaces'
 
+import { AppDispatch } from '../app/store';
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  selectPortfolios,
+  selectSelectedPortfolio,
+  selectPortfolio,
+  editPortfolio,
+  deletePortfolio,
+  createPortfolio,
+} from '../features/portfolio/portfolioSlice'
+import { selectDisplay, changeDisplay } from '../features/display/displaySlice'
+
 interface Props {
-  portfolios: Interface.Portfolios,
   sideBarOpen: Interface.SideBarOpen,
   window?: () => Window,
   handleSideBarToogle: Interface.HandleSideBarToogle,
-  handleCreatePortfolio: Interface.HandleCreatePortfolio,
-  handleEditPortfolio: Interface.HandleEditPortfolio,
-  handleSelectPortfolio: Interface.HandleSelectPortfolio,
-  handleDeletePortfolio: Interface.HandleDeletePortfolio
 }
 
 export default function SideBar(props: Props) {
+  const dispatch = useDispatch<AppDispatch>();
   const { window } = props;
+  const [accordionOpen, setAccordionOpen] = React.useState(false);
+  const portfolios = useSelector(selectPortfolios);
+  const selectedPortfolio = useSelector(selectSelectedPortfolio);
+  const display = useSelector(selectDisplay);
 
-  const [accordionOpen, setAccordionOpen] = React.useState(false)
 
   React.useEffect(() => {
-    if (props.portfolios.length > 0) {
+    if (portfolios.length > 0) {
       setAccordionOpen(true);
     } else {
       setAccordionOpen(false);
     }
-  }, [props.portfolios] )
+  }, [portfolios] )
 
   const handleAccordionOpen: () => void = () => {
     setAccordionOpen(!accordionOpen);
+  }
+
+  const handleSelectPortfolio: Interface.HandleSelectPortfolio = (portfolio) => {
+    if (display !== 'holdings') {
+      dispatch(changeDisplay('holdings'))
+    }
+
+    if (selectedPortfolio.name !== '') {
+      if (selectedPortfolio.name === portfolio.name) {
+        return;
+      }
+    }
+    dispatch(selectPortfolio(portfolio));
+  }
+
+  const handleEditPortfolio: Interface.HandleEditPortfolio = (event, pk, name) => {
+    event.preventDefault();
+    dispatch(editPortfolio({
+      pk: pk,
+      name: name
+    }))
+  }
+
+  const handleDeletePortfolio: Interface.HandleDeletePortfolio = (event, pk) => {
+    event.preventDefault();
+    dispatch(deletePortfolio(pk));
+  }
+
+  const handleCreatePortfolio: Interface.HandleCreatePortfolio = async (event, name) => {
+    event.preventDefault();
+    dispatch(createPortfolio(name));
   }
 
   const drawer = (
@@ -57,14 +99,14 @@ export default function SideBar(props: Props) {
         </ListItem>
         <Collapse in={accordionOpen} timeout="auto" unmountOnExit>
         <Divider />
-        {props.portfolios.length > 0 &&
+        {portfolios.length > 0 &&
           <List component="div" disablePadding>
-          {props.portfolios.map((portfolio, index) => (
+          {portfolios.map((portfolio, index) => (
             <ListItem
               button
               key={portfolio.pk}
               onClick={(event) => {
-                props.handleSelectPortfolio({
+                handleSelectPortfolio({
                   'pk': portfolio.pk,
                   'name': portfolio.name,
                   "holdings_url": portfolio.holdings_url,
@@ -79,11 +121,11 @@ export default function SideBar(props: Props) {
               />
               <EditPortfolioDialog
               selectedPortfolio={portfolio}
-              handleEditPortfolio={props.handleEditPortfolio}
+              handleEditPortfolio={handleEditPortfolio}
               />
               <DeletePortfolioDialog
               selectedPortfolio={portfolio}
-              handleDeletePortfolio={props.handleDeletePortfolio}
+              handleDeletePortfolio={handleDeletePortfolio}
               />
             </ListItem>
             ))}
@@ -92,7 +134,7 @@ export default function SideBar(props: Props) {
         </Collapse>
         <Divider />
         <CreatePortfolioDialog
-        handleCreatePortfolio={props.handleCreatePortfolio}
+        handleCreatePortfolio={handleCreatePortfolio}
         />
       </List>
     </div>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-
 import SideBar from '../components/SideBar';
 import HoldingsGrid from '../components/HoldingsGrid';
 import Dashboard from '../components/Dashboard';
@@ -9,28 +8,17 @@ import CircularIndeterminate from '../components/CircularIndeterminate';
 import NavTabs from '../components/NavTabs';
 import TradesGrid from '../components/TradesGrid';
 import AlertNoPortfolioSelected from '../components/AlertNoPortfolioSelected';
-import { drawerWidth } from '../app/App';
-import * as Interface from '../interfaces/interfaces'
-
 import {
   selectSelectedPortfolio,
-  selectPortfolios,
-  selectPortfolio,
-  selectHoldings,
-  selectIsLoadingHoldings,
   loadHoldings,
   loadTrades,
+  selectIsLoadingHoldings,
   selectIsLoadingTrades,
-  selectTrades,
-  selectPortfolioReturn,
-  createPortfolio,
-  editPortfolio,
-  deletePortfolio,
-  addTrade
 } from '../features/portfolio/portfolioSlice'
-import { changeDisplay, selectDisplay } from '../features/display/displaySlice';
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../app/store'
+import { drawerWidth } from '../app/App';
+import * as Interface from '../interfaces/interfaces'
 
 interface Props {
   sideBarOpen: Interface.SideBarOpen,
@@ -39,15 +27,9 @@ interface Props {
 
 export default function Holdings(props: Props) {
   const dispatch = useDispatch<AppDispatch>();
-  const display = useSelector(selectDisplay);
   const selectedPortfolio = useSelector(selectSelectedPortfolio);
-  const portfolios = useSelector(selectPortfolios);
   const isLoadingHoldings = useSelector(selectIsLoadingHoldings);
-  const holdings = useSelector(selectHoldings);
-  const trades = useSelector(selectTrades);
   const isLoadingTrades = useSelector(selectIsLoadingTrades);
-  const portfolioReturn = useSelector(selectPortfolioReturn);
-
   const [tab, setTab] = useState<number>(0);
 
   useEffect(() => {
@@ -61,67 +43,11 @@ export default function Holdings(props: Props) {
     setTab(newTab);
   };
 
-  const handleSelectPortfolio: Interface.HandleSelectPortfolio = (portfolio) => {
-    if (display !== 'holdings') {
-      dispatch(changeDisplay('holdings'))
-    }
-
-    if (selectedPortfolio.name !== '') {
-      if (selectedPortfolio.name === portfolio.name) {
-        return;
-      }
-    }
-    dispatch(selectPortfolio(portfolio));
-  }
-
-  const handleCreatePortfolio: Interface.HandleCreatePortfolio = async (event, name) => {
-    event.preventDefault();
-    dispatch(createPortfolio(name));
-  }
-
-  const handleEditPortfolio: Interface.HandleEditPortfolio = (event, pk, name) => {
-    event.preventDefault();
-    dispatch(editPortfolio({
-      pk: pk,
-      name: name
-    }))
-  }
-
-  const handleDeletePortfolio: Interface.HandleDeletePortfolio = (event, pk) => {
-    event.preventDefault();
-    dispatch(deletePortfolio(pk));
-  }
-
-  const handleAddTrade: Interface.handleAddTrade = (formInput) => {
-    if (selectedPortfolio.name === "") {
-      alert("Please select a Portfolio to add a new trade")
-    } else {
-      const newTrade = {
-        portfolio: selectedPortfolio.pk,
-        shares: formInput.shares,
-        ticker: formInput.ticker
-      }
-      dispatch(addTrade(newTrade))
-        .unwrap()
-        .then(() => {
-          dispatch(loadHoldings(selectedPortfolio.holdings_url));
-        })
-        .catch((rejectedValueOrSerializedError) => {
-          console.log(rejectedValueOrSerializedError)
-        })
-    }
-  }
-
   return (
     <>
       <SideBar
         sideBarOpen={props.sideBarOpen}
-        portfolios={portfolios}
         handleSideBarToogle={props.handleSideBarToogle}
-        handleCreatePortfolio={handleCreatePortfolio}
-        handleEditPortfolio={handleEditPortfolio}
-        handleDeletePortfolio={handleDeletePortfolio}
-        handleSelectPortfolio={handleSelectPortfolio}
       />
       <Box
         component="main"
@@ -141,15 +67,8 @@ export default function Holdings(props: Props) {
                 <CircularIndeterminate />
                 :
                 <>
-                  <Dashboard
-                  selectedPortfolio={selectedPortfolio}
-                  portfolioReturn={portfolioReturn}
-                  handleAddTrade={handleAddTrade}
-                  holdings={holdings}
-                  />
-                  <HoldingsGrid
-                  holdings={holdings}
-                  />
+                  <Dashboard />
+                  <HoldingsGrid />
                 </>
               }
               </>
@@ -159,9 +78,7 @@ export default function Holdings(props: Props) {
               { isLoadingTrades ?
                 <CircularIndeterminate />
                 :
-                <TradesGrid
-                trades={trades}
-                />
+                <TradesGrid />
               }
               </>
             }

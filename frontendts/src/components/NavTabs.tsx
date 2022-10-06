@@ -30,7 +30,12 @@ interface Props {
 export default function NavTabs(props: Props) {
   return (
     <Box sx={{ width: '100%' }}>
-      <Tabs value={props.tab} onChange={props.handleChangeTab} aria-label="nav tabs example">
+      <Tabs
+      value={props.tab}
+      onChange={props.handleChangeTab}
+      aria-label="nav tabs"
+      variant="fullWidth"
+      >
         <LinkTab label="Dashboard" />
         <LinkTab label="Historical Trades" />
       </Tabs>
