@@ -3,13 +3,13 @@ import Box from '@mui/material/Box';
 import Chart from "react-apexcharts";
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import * as Interface from '../interfaces/interfaces'
+import * as Types from '../types/types'
 
 interface Props {
-  holdings: Interface.Holdings
+  holdings: Types.Holdings
 }
 
-function getValue(holding_object: Interface.Holding) {
+function getValue(holding_object: Types.Holding) {
   const shares = holding_object.shares
   const price = holding_object.price
   const value = shares * price

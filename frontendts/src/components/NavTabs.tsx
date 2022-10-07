@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
-import * as Interface from '../interfaces/interfaces'
+import * as Types from '../types/types'
 
 interface LinkTabProps {
   label?: string;
@@ -24,7 +24,7 @@ function LinkTab(props: LinkTabProps) {
 
 interface Props {
   tab: number
-  handleChangeTab: Interface.HandleChangeTab
+  handleChangeTab: Types.HandleChangeTab
 }
 
 export default function NavTabs(props: Props) {

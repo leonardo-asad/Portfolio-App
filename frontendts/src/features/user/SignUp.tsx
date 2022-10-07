@@ -1,4 +1,4 @@
-import * as Interface from '../../interfaces/interfaces'
+import * as Types from '../../types/types'
 import { AppDispatch } from '../../app/store';
 import { useDispatch } from 'react-redux';
 import { changeDisplay } from '../display/displaySlice';
@@ -8,7 +8,7 @@ import SignUpForm from '../../components/SignUpForm';
 export default function SignUp() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleDisplay: Interface.HandleDisplay = (event, display) => {
+  const handleDisplay: Types.HandleDisplay = (event, display) => {
     event.preventDefault();
     if (display === 'signup') {
       dispatch(changeDisplay('signup'))
@@ -17,7 +17,7 @@ export default function SignUp() {
     }
   }
 
-  const handleSignUp: Interface.HandleSignUp = (event) => {
+  const handleSignUp: Types.HandleSignUp = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const username = formData.get('username');

@@ -18,7 +18,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../app/store'
 import { drawerWidth } from '../app/App';
-import * as Interface from '../interfaces/interfaces'
+import * as Interface from '../types/types'
 
 interface Props {
   sideBarOpen: Interface.SideBarOpen,

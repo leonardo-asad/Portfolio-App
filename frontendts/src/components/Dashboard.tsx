@@ -1,14 +1,10 @@
-import React from 'react';
+import * as Types from '../types/types'
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-
 import AddTradeForm from './AddTradeForm';
 import TotalHoldingsCard from './TotalHoldingsCard';
 import PieChart from './PieChart';
-
-import * as Interface from '../interfaces/interfaces'
-
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectSelectedPortfolio,
@@ -27,7 +23,7 @@ export default function Dashboard() {
   const holdings = useSelector(selectHoldings);
   const portfolioReturn = useSelector(selectPortfolioReturn);
 
-  const handleAddTrade: Interface.handleAddTrade = (formInput) => {
+  const handleAddTrade: Types.handleAddTrade = (formInput) => {
     if (selectedPortfolio.name === "") {
       alert("Please select a Portfolio to add a new trade")
     } else {

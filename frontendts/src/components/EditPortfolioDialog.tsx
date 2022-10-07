@@ -9,11 +9,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import EditIcon from '@mui/icons-material/Edit';
-import * as Interface from '../interfaces/interfaces'
+import * as Types from '../types/types'
 
 interface Props {
-  selectedPortfolio: Interface.Portfolio,
-  handleEditPortfolio: Interface.HandleEditPortfolio
+  selectedPortfolio: Types.Portfolio,
+  handleEditPortfolio: Types.HandleEditPortfolio
 }
 
 export default function EditPortfolioDialog(props: Props) {

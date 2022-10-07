@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import clsx from 'clsx';
 
-import * as Interface from '../interfaces/interfaces'
+import * as Types from '../types/types'
 
 import { useSelector } from 'react-redux';
 import { selectTrades } from '../features/portfolio/portfolioSlice';
@@ -49,7 +49,7 @@ const columns: GridColDef[] = [
   },
 ];
 
-function createRow(trade_object: Interface.Trade, index: number) {
+function createRow(trade_object: Types.Trade, index: number) {
   const id = index;
   const ticker = trade_object.ticker;
   const date = trade_object.date;

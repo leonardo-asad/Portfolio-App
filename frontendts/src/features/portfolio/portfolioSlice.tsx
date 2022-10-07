@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import * as Interface from '../../interfaces/interfaces'
+import * as Types from '../../types/types'
 
-const initialState: Interface.PortfolioInitialState = {
+const initialState: Types.PortfolioInitialState = {
   portfolios: [],
   selectedPortfolio: {
     selectedPortfolio: {

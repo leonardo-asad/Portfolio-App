@@ -12,7 +12,7 @@ import UpperBar from '../components/UpperBar';
 import Holdings from '../containers/Holdings';
 import LogIn from '../features/user/LogIn';
 import SignUp from '../features/user/SignUp';
-import * as Interface from '../interfaces/interfaces';
+import * as Interface from '../types/types';
 
 import '../App.css';
 

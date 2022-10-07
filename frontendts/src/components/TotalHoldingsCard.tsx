@@ -2,11 +2,11 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import * as Interface from '../interfaces/interfaces'
+import * as Types from '../types/types'
 
 interface Props {
-  selectedPortfolio: Interface.Portfolio
-  portfolioReturn: Interface.Return
+  selectedPortfolio: Types.Portfolio
+  portfolioReturn: Types.Return
 }
 
 export default function TotalHoldingsCard(props: Props) {

@@ -4,7 +4,7 @@ import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import clsx from 'clsx';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import * as Interface from '../interfaces/interfaces';
+import * as Types from '../types/types';
 
 import { setPortfolioReturn } from '../features/portfolio/portfolioSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -107,7 +107,7 @@ function previousValueRow(value: number, change_percent: number): number {
 }
 
 // Create and format data to required for each Row
-function createRow(holding_object: Interface.Holding, index: number): Interface.Row {
+function createRow(holding_object: Types.Holding, index: number): Types.Row {
   const id: number = index;
   const ticker: string = holding_object.ticker;
   const shares: number = holding_object.shares;
@@ -120,17 +120,17 @@ function createRow(holding_object: Interface.Holding, index: number): Interface.
 }
 
 // Returns the total value of the portfolio
-function total(items: Interface.Row[]): number {
+function total(items: Types.Row[]): number {
   return items.map(({ value }) => value).reduce((sum, i) => sum + i, 0);
 }
 
 // Returns the total value of the portfolio on the previous day
-function prevTotal(items: Interface.Row[]): number {
+function prevTotal(items: Types.Row[]): number {
   return items.map(({ previousValue }) => previousValue).reduce((sum, i) => sum + i, 0);
 }
 
 // Returns the weight of each asset
-function weight(holding: Interface.Row, total: number) {
+function weight(holding: Types.Row, total: number) {
   const weight: number = roundNumber((holding.value / total)*100)
   return { ...holding, weight }
 }
@@ -143,9 +143,9 @@ export default function HoldingsGrid() {
   const fontSize = matches ? 15 : 8;
   const margin = matches ? 5 : 0;
 
-  let rows = holdings.length > 0 ? holdings.map((holding: Interface.Holding, index: number) => createRow(holding, index)) : [];
+  let rows = holdings.length > 0 ? holdings.map((holding: Types.Holding, index: number) => createRow(holding, index)) : [];
   const totalHoldings: number | undefined = rows.length > 0 ? total(rows): undefined;
-  rows = rows.length > 0 && typeof totalHoldings === 'number' ? rows.map((row: Interface.Row) => weight(row, totalHoldings)) : []
+  rows = rows.length > 0 && typeof totalHoldings === 'number' ? rows.map((row: Types.Row) => weight(row, totalHoldings)) : []
 
   // Define the following constants in their respective components
   const prevTotalHoldings: number | undefined = rows.length > 0 ? prevTotal(rows) : undefined;

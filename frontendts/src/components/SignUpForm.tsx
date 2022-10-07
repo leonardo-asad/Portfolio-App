@@ -10,13 +10,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import * as Interface from '../interfaces/interfaces'
+import * as Types from '../types/types'
 
 const theme = createTheme();
 
 interface Props {
-  handleSignUp: Interface.HandleSignUp
-  handleDisplay: Interface.HandleDisplay
+  handleSignUp: Types.HandleSignUp
+  handleDisplay: Types.HandleDisplay
 }
 
 export default function SignUpForm(props: Props) {

@@ -10,11 +10,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import * as Interface from '../interfaces/interfaces'
+import * as Types from '../types/types'
 
 
 interface Props {
-  handleCreatePortfolio: Interface.HandleCreatePortfolio
+  handleCreatePortfolio: Types.HandleCreatePortfolio
 }
 
 export default function CreatePortfolioDialog(props: Props) {

@@ -7,11 +7,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
-import * as Interface from '../interfaces/interfaces'
+import * as Types from '../types/types'
 
 interface Props {
-  selectedPortfolio: Interface.Portfolio,
-  handleDeletePortfolio: Interface.HandleDeletePortfolio
+  selectedPortfolio: Types.Portfolio,
+  handleDeletePortfolio: Types.HandleDeletePortfolio
 }
 
 export default function DeletePortfolioDialog(props: Props) {

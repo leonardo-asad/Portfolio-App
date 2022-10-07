@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { User } from '../../interfaces/interfaces'
+import { User } from '../../types/types'
 
 const initialState = {
   username: '',

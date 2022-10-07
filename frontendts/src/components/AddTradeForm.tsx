@@ -5,16 +5,16 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-import * as Interface from '../interfaces/interfaces'
+import * as Types from '../types/types'
 
 interface Props {
-  handleAddTrade: Interface.handleAddTrade
+  handleAddTrade: Types.handleAddTrade
 }
 
 export default function AddTradeForm(props: Props) {
 
   const [formInput, setFormInput] = useReducer(
-    (state: Interface.Stock, newState: Interface.Stock) => ({ ...state, ...newState }),
+    (state: Types.Stock, newState: Types.Stock) => ({ ...state, ...newState }),
     {
       ticker: "",
       shares: ""
@@ -28,7 +28,7 @@ export default function AddTradeForm(props: Props) {
     setFormInput({ [ticker]: shares });
   }
 
-  const handleSubmit: Interface.AddTradeForm = (event, order, formInput) => {
+  const handleSubmit: Types.AddTradeForm = (event, order, formInput) => {
     event.preventDefault();
     const shares = parseInt(formInput.shares)
     if (shares <= 0) {

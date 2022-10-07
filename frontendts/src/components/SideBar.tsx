@@ -15,7 +15,7 @@ import EditPortfolioDialog from './EditPortfolioDialog';
 import DeletePortfolioDialog from './DeletePortfolioDIalog';
 
 import { drawerWidth } from '../app/App';
-import * as Interface from '../interfaces/interfaces'
+import * as Types from '../types/types'
 
 import { AppDispatch } from '../app/store';
 import { useSelector, useDispatch } from 'react-redux'
@@ -30,9 +30,9 @@ import {
 import { selectDisplay, changeDisplay } from '../features/display/displaySlice'
 
 interface Props {
-  sideBarOpen: Interface.SideBarOpen,
+  sideBarOpen: Types.SideBarOpen,
   window?: () => Window,
-  handleSideBarToogle: Interface.HandleSideBarToogle,
+  handleSideBarToogle: Types.HandleSideBarToogle,
 }
 
 export default function SideBar(props: Props) {
@@ -56,7 +56,7 @@ export default function SideBar(props: Props) {
     setAccordionOpen(!accordionOpen);
   }
 
-  const handleSelectPortfolio: Interface.HandleSelectPortfolio = (portfolio) => {
+  const handleSelectPortfolio: Types.HandleSelectPortfolio = (portfolio) => {
     if (display !== 'holdings') {
       dispatch(changeDisplay('holdings'))
     }
@@ -69,7 +69,7 @@ export default function SideBar(props: Props) {
     dispatch(selectPortfolio(portfolio));
   }
 
-  const handleEditPortfolio: Interface.HandleEditPortfolio = (event, pk, name) => {
+  const handleEditPortfolio: Types.HandleEditPortfolio = (event, pk, name) => {
     event.preventDefault();
     dispatch(editPortfolio({
       pk: pk,
@@ -77,12 +77,12 @@ export default function SideBar(props: Props) {
     }))
   }
 
-  const handleDeletePortfolio: Interface.HandleDeletePortfolio = (event, pk) => {
+  const handleDeletePortfolio: Types.HandleDeletePortfolio = (event, pk) => {
     event.preventDefault();
     dispatch(deletePortfolio(pk));
   }
 
-  const handleCreatePortfolio: Interface.HandleCreatePortfolio = async (event, name) => {
+  const handleCreatePortfolio: Types.HandleCreatePortfolio = async (event, name) => {
     event.preventDefault();
     dispatch(createPortfolio(name));
   }

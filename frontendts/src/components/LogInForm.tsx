@@ -11,13 +11,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import * as Interface from '../interfaces/interfaces';
+import * as Types from '../types/types';
 
 const theme = createTheme();
 
 interface Props {
-  handleSignIn: Interface.HandleSignIn
-  handleDisplay: Interface.HandleDisplay
+  handleSignIn: Types.HandleSignIn
+  handleDisplay: Types.HandleDisplay
 }
 
 export default function LogInForm(props: Props) {
