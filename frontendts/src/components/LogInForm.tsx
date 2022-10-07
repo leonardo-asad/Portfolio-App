@@ -20,7 +20,7 @@ interface Props {
   handleDisplay: Interface.HandleDisplay
 }
 
-export default function SignIn(props: Props) {
+export default function LogInForm(props: Props) {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

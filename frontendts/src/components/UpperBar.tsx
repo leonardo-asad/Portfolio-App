@@ -16,7 +16,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import { drawerWidth } from '../app/App';
 
-import { selectUsername } from '../features/authenticate/userSlice'
+import { selectUsername } from '../features/user/userSlice'
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch } from '../app/store'
 

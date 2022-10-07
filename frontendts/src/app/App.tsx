@@ -2,16 +2,16 @@ import React from 'react';
 import Box from '@mui/material/Box';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectIsLoggedIn } from '../features/authenticate/userSlice';
-import { loadUser, authenticateUser, createUser } from '../features/authenticate/userSlice';
+import { selectIsLoggedIn } from '../features/user/userSlice';
+import { loadUser } from '../features/user/userSlice';
 import { changeDisplay, selectDisplay } from '../features/display/displaySlice';
 import { setPortfolios, selectPortfolio, loadPortfolios } from '../features/portfolio/portfolioSlice';
 import { AppDispatch } from './store';
 
 import UpperBar from '../components/UpperBar';
 import Holdings from '../containers/Holdings';
-import SignIn from '../components/SignIn';
-import SignUp from '../components/SignUp';
+import LogIn from '../features/user/LogIn';
+import SignUp from '../features/user/SignUp';
 import * as Interface from '../interfaces/interfaces';
 
 import '../App.css';
@@ -25,6 +25,7 @@ function App() {
   const dispatch = useDispatch<AppDispatch>();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const display = useSelector(selectDisplay);
+  const [sideBarOpen, setSideBarOpen] = React.useState<Interface.SideBarOpen>(false);
 
   React.useEffect(() => {
     if (isLoggedIn) {
@@ -43,51 +44,6 @@ function App() {
       }));
     }
   }, [isLoggedIn, dispatch])
-
-  const handleDisplay: Interface.HandleDisplay = (event, display) => {
-    event.preventDefault();
-    if (display === 'signup') {
-      dispatch(changeDisplay('signup'))
-    } else if (display === 'login') {
-      dispatch(changeDisplay('login'))
-    }
-  }
-
-  const handleSignIn: Interface.HandleSignIn = (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const username = formData.get('username')
-    const password = formData.get('password')
-
-    if (typeof username === 'string' && typeof password === 'string') {
-      dispatch(authenticateUser({
-        username: username,
-        password: password
-      }))
-    }
-  };
-
-  const handleSignUp: Interface.HandleSignUp = (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const username = formData.get('username');
-    const password = formData.get('password');
-    const email = formData.get('email');
-
-    if (
-      typeof username === 'string' &&
-      typeof password === 'string' &&
-      (typeof email === 'string' || typeof email === 'undefined')
-      ) {
-        dispatch(createUser({
-          username: username,
-          email: email,
-          password: password
-        }))
-      }
-  };
-
-  const [sideBarOpen, setSideBarOpen] = React.useState<Interface.SideBarOpen>(false);
 
   const handleSideBarToogle: Interface.HandleSideBarToogle = () => {
     setSideBarOpen(!sideBarOpen);
@@ -109,17 +65,11 @@ function App() {
         }
 
         { display === 'login' &&
-          <SignIn
-          handleSignIn={handleSignIn}
-          handleDisplay={handleDisplay}
-          />
+          <LogIn />
         }
 
         { display === 'signup' &&
-          <SignUp
-          handleSignUp={handleSignUp}
-          handleDisplay={handleDisplay}
-          />
+          <SignUp />
         }
       </Box>
     </ThemeProvider>
