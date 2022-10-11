@@ -39,10 +39,14 @@ export default function EditPortfolioDialog(props: Props) {
   }
 
   return (
-    <div>
+    <>
       <Tooltip title="Edit">
-        <IconButton onClick={handleClickOpen}>
-          <EditIcon color='primary'/>
+        <IconButton
+        edge="end"
+        aria-label="edit"
+        onClick={handleClickOpen}
+        >
+          <EditIcon />
         </IconButton>
       </Tooltip>
 
@@ -68,6 +72,6 @@ export default function EditPortfolioDialog(props: Props) {
           <Button onClick={handleSubmit}>Edit</Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }

@@ -30,7 +30,7 @@ export default function LogInForm(props: Props) {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 2,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -40,7 +40,7 @@ export default function LogInForm(props: Props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Log In
           </Typography>
           <Box component="form" onSubmit={props.handleSignIn} noValidate sx={{ mt: 1 }}>
             <TextField

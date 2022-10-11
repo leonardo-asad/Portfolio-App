@@ -187,7 +187,7 @@ export default function UpperBar(props: UpperBarProps) {
                       onClick={() => navigate("login")}
                       sx={{ fontSize: buttonFontSize }}
                       >
-                        Login
+                        Log In
                       </Button>
                     </Grid>
                     <Grid item>
@@ -196,7 +196,7 @@ export default function UpperBar(props: UpperBarProps) {
                       onClick={() => navigate("signup")}
                       sx={{ fontSize: buttonFontSize }}
                       >
-                        Signup
+                        Sign Up
                       </Button>
                     </Grid>
                   </Grid>

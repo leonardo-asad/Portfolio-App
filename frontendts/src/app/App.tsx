@@ -18,6 +18,7 @@ import {
 import Box from '@mui/material/Box';
 import { HomeLayout } from "../layouts/HomeLayout";
 import { ProtectedLayout } from "../layouts/ProtectedLayout";
+import { AuthenticateLayout } from '../layouts/AuthenticateLayout'
 import LogIn from "../features/user/LogIn";
 import SignUp from "../features/user/SignUp";
 import Holdings from "../features/portfolio/holdings";
@@ -87,6 +88,10 @@ function App() {
             <Routes>
               <Route element={<HomeLayout />}>
                 <Route path="/" element={<div>Home Page</div>}/>
+                <Route path="/quote" element={<div>Make a Quote</div>}/>
+              </Route>
+
+              <Route element={<AuthenticateLayout />}>
                 <Route path="/login" element={<LogIn />}/>
                 <Route path="/signup" element={<SignUp />}/>
               </Route>

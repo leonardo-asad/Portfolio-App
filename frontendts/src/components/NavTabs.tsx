@@ -31,7 +31,12 @@ export default function NavTabs() {
   const currentTab = routeMatch?.pattern?.path;
 
   return (
-    <Tabs value={currentTab}>
+    <Tabs
+    value={currentTab}
+    variant="fullWidth"
+    indicatorColor="primary"
+    textColor="inherit"
+    >
       <Tab label="Holdings" value="/portfolio/holdings" to="/portfolio/holdings" component={Link} />
       <Tab label="Trades" value="/portfolio/trades" to="/portfolio/trades" component={Link} />
     </Tabs>

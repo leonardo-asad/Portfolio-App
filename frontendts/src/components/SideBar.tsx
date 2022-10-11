@@ -112,33 +112,38 @@ export default function SideBar(props: Props) {
       {portfolios.length > 0 &&
       <List component="div" disablePadding>
         {portfolios.map((portfolio, index) => (
-        <ListItem
-          button
-          key={portfolio.pk}
-          selected={styleSelectedItem(selectedPortfolio, portfolio)}
-          onClick={(event) => {
-            handleSelectPortfolio({
-              'pk': portfolio.pk,
-              'name': portfolio.name,
-              "holdings_url": portfolio.holdings_url,
-              "purchases_url": portfolio.purchases_url,
-              "alerts_url": portfolio.alerts_url
-            })
-          }}
-        >
-          <ListItemText
-          primary={portfolio.name}
-          sx={{ display: 'flex', justifyContent: 'left' }}
-          />
-          <EditPortfolioDialog
-          selectedPortfolio={portfolio}
-          handleEditPortfolio={handleEditPortfolio}
-          />
-          <DeletePortfolioDialog
-          selectedPortfolio={portfolio}
-          handleDeletePortfolio={handleDeletePortfolio}
-          />
-        </ListItem>
+          <ListItem
+            button
+            key={portfolio.pk}
+            secondaryAction={
+              <>
+                <EditPortfolioDialog
+                selectedPortfolio={portfolio}
+                handleEditPortfolio={handleEditPortfolio}
+                />
+                <DeletePortfolioDialog
+                selectedPortfolio={portfolio}
+                handleDeletePortfolio={handleDeletePortfolio}
+                />
+              </>
+
+            }
+            selected={styleSelectedItem(selectedPortfolio, portfolio)}
+            onClick={(event) => {
+              handleSelectPortfolio({
+                'pk': portfolio.pk,
+                'name': portfolio.name,
+                "holdings_url": portfolio.holdings_url,
+                "purchases_url": portfolio.purchases_url,
+                "alerts_url": portfolio.alerts_url
+              })
+            }}
+          >
+            <ListItemText
+            primary={portfolio.name}
+            sx={{ display: 'flex', justifyContent: 'left' }}
+            />
+          </ListItem>
         ))}
       </List>
       }
@@ -163,7 +168,9 @@ export default function SideBar(props: Props) {
 
   const drawerNotLoggedIn = (
     <>
-      <ListItem>
+      <ListItem
+      onClick={() => navigate("/quote")}
+      >
         <ListItemIcon>
           <SearchIcon />
         </ListItemIcon>
@@ -172,7 +179,9 @@ export default function SideBar(props: Props) {
         sx={{ display: 'flex', justifyContent: 'left' }}
         />
       </ListItem>
-      <ListItem>
+      <ListItem
+      onClick={() => navigate("/")}
+      >
         <ListItemIcon>
           <InfoIcon />
         </ListItemIcon>

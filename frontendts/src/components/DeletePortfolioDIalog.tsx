@@ -32,10 +32,14 @@ export default function DeletePortfolioDialog(props: Props) {
   }
 
   return (
-    <div>
+    <>
       <Tooltip title="Delete">
-        <IconButton onClick={handleClickOpen}>
-          <DeleteIcon color='primary'/>
+        <IconButton
+        onClick={handleClickOpen}
+        edge="end"
+        aria-label="delete"
+        >
+          <DeleteIcon />
         </IconButton>
       </Tooltip>
 
@@ -50,6 +54,6 @@ export default function DeletePortfolioDialog(props: Props) {
           <Button onClick={handleSubmit}>Delete</Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }
