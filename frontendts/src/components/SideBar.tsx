@@ -3,13 +3,15 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
-import { Collapse } from '@mui/material';
+import { Collapse, Toolbar } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import SearchIcon from '@mui/icons-material/Search';
+import InfoIcon from '@mui/icons-material/Info';
 import CreatePortfolioDialog from './CreatePortfolioDialog';
 import EditPortfolioDialog from './EditPortfolioDialog';
 import DeletePortfolioDialog from './DeletePortfolioDIalog';
@@ -27,6 +29,7 @@ import {
   deletePortfolio,
   createPortfolio,
 } from '../features/portfolio/portfolioSlice'
+import { selectIsLoggedIn } from '../features/user/userSlice';
 
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -41,6 +44,7 @@ export default function SideBar(props: Props) {
   const navigate = useNavigate();
   const { window } = props;
   const [accordionOpen, setAccordionOpen] = React.useState(false);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   const portfolios = useSelector(selectPortfolios);
   const selectedPortfolio = useSelector(selectSelectedPortfolio);
   const { pathname } = useLocation();
@@ -94,58 +98,90 @@ export default function SideBar(props: Props) {
     return selectedPortfolio.pk === portfolio.pk;
   }
 
-  const drawer = (
-    <div>
-      <List>
-        <ListItem button onClick={handleAccordionOpen}>
-          <ListItemIcon>
-            <ShowChartIcon />
-          </ListItemIcon>
-          <ListItemText primary="My Portfolios" />
-          {accordionOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+  const portfolioList = (
+    <>
+      <ListItem button onClick={handleAccordionOpen}>
+        <ListItemIcon>
+          <ShowChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="My Portfolios" />
+        {accordionOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      </ListItem>
+      <Collapse in={accordionOpen} timeout="auto" unmountOnExit>
+      <Divider />
+      {portfolios.length > 0 &&
+      <List component="div" disablePadding>
+        {portfolios.map((portfolio, index) => (
+        <ListItem
+          button
+          key={portfolio.pk}
+          selected={styleSelectedItem(selectedPortfolio, portfolio)}
+          onClick={(event) => {
+            handleSelectPortfolio({
+              'pk': portfolio.pk,
+              'name': portfolio.name,
+              "holdings_url": portfolio.holdings_url,
+              "purchases_url": portfolio.purchases_url,
+              "alerts_url": portfolio.alerts_url
+            })
+          }}
+        >
+          <ListItemText
+          primary={portfolio.name}
+          sx={{ display: 'flex', justifyContent: 'left' }}
+          />
+          <EditPortfolioDialog
+          selectedPortfolio={portfolio}
+          handleEditPortfolio={handleEditPortfolio}
+          />
+          <DeletePortfolioDialog
+          selectedPortfolio={portfolio}
+          handleDeletePortfolio={handleDeletePortfolio}
+          />
         </ListItem>
-        <Collapse in={accordionOpen} timeout="auto" unmountOnExit>
-        <Divider />
-        {portfolios.length > 0 &&
-          <List component="div" disablePadding>
-          {portfolios.map((portfolio, index) => (
-            <ListItem
-              button
-              key={portfolio.pk}
-              selected={styleSelectedItem(selectedPortfolio, portfolio)}
-              onClick={(event) => {
-                handleSelectPortfolio({
-                  'pk': portfolio.pk,
-                  'name': portfolio.name,
-                  "holdings_url": portfolio.holdings_url,
-                  "purchases_url": portfolio.purchases_url,
-                  "alerts_url": portfolio.alerts_url
-                })
-              }}
-            >
-              <ListItemText
-              primary={portfolio.name}
-              sx={{ display: 'flex', justifyContent: 'left' }}
-              />
-              <EditPortfolioDialog
-              selectedPortfolio={portfolio}
-              handleEditPortfolio={handleEditPortfolio}
-              />
-              <DeletePortfolioDialog
-              selectedPortfolio={portfolio}
-              handleDeletePortfolio={handleDeletePortfolio}
-              />
-            </ListItem>
-            ))}
-          </List>
-        }
-        </Collapse>
-        <Divider />
-        <CreatePortfolioDialog
-        handleCreatePortfolio={handleCreatePortfolio}
-        />
+        ))}
       </List>
-    </div>
+      }
+      </Collapse>
+      <Divider />
+    </>
+  )
+
+  const drawerLoggedIn = (
+    <>
+     {
+      portfolios.length > 0 &&
+      <>
+        {portfolioList}
+      </>
+     }
+      <CreatePortfolioDialog
+      handleCreatePortfolio={handleCreatePortfolio}
+      />
+    </>
+  )
+
+  const drawerNotLoggedIn = (
+    <>
+      <ListItem>
+        <ListItemIcon>
+          <SearchIcon />
+        </ListItemIcon>
+        <ListItemText
+        primary="Make a Quote"
+        sx={{ display: 'flex', justifyContent: 'left' }}
+        />
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <InfoIcon />
+        </ListItemIcon>
+        <ListItemText
+        primary="About"
+        sx={{ display: 'flex', justifyContent: 'left' }}
+        />
+      </ListItem>
+    </>
   )
 
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -169,7 +205,17 @@ export default function SideBar(props: Props) {
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
         }}
       >
-        {drawer}
+        <Toolbar />
+        <Divider />
+        <List>
+          {
+            isLoggedIn &&
+            <>
+              {drawerLoggedIn}
+            </>
+          }
+          {drawerNotLoggedIn}
+        </List>
       </Drawer>
       <Drawer
         variant="permanent"
@@ -179,7 +225,17 @@ export default function SideBar(props: Props) {
         }}
         open
       >
-        {drawer}
+        <Toolbar />
+        <Divider />
+        <List>
+          {
+            isLoggedIn &&
+            <>
+              {drawerLoggedIn}
+            </>
+          }
+          {drawerNotLoggedIn}
+        </List>
       </Drawer>
     </Box>
   )

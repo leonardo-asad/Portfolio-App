@@ -5,19 +5,20 @@ import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
-import FaceIcon from '@mui/icons-material/Face';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import Button from '@mui/material/Button';
 
 import { drawerWidth } from '../app/App';
 
-import { selectUsername } from '../features/user/userSlice'
+import { selectIsLoggedIn } from '../features/user/userSlice'
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import { AppDispatch } from '../app/store'
 
 interface AppBarProps extends MuiAppBarProps {
@@ -47,25 +48,27 @@ const AppBar = styled(MuiAppBar, {
 
 
 export default function UpperBar(props: UpperBarProps) {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const dispatch = useDispatch<AppDispatch>();
-  const username = useSelector(selectUsername);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const navigate = useNavigate();
 
-  const handleLogOut:(event: React.MouseEvent<HTMLButtonElement>) => void = () => {
+  const matches = useMediaQuery('(min-width:800px)');
+  const titleFontSize = matches ? 20 : 10;
+  const buttonFontSize = matches ? 15 : 10;
+
+  const handleLogOut:(event: React.MouseEvent<HTMLElement>) => void = () => {
+    setAnchorEl(null);
     dispatch({type: 'user/removeUser'});
   }
 
-  const matches = useMediaQuery('(min-width:800px)');
-  const titleFontSize = matches ? 20 : 12;
-  const buttonsFontSize = matches ? 10 : 7;
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  const usernameComponent = (
-    <Typography
-    noWrap component="div"
-    sx={{ fontSize: buttonsFontSize }}
-    >
-      { username }
-    </Typography>
-  )
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <React.Fragment>
@@ -109,7 +112,7 @@ export default function UpperBar(props: UpperBarProps) {
                   flexDirection="row"
                   alignItems="center"
                   >
-                    {/* <Box
+                    <Box
                     component="img"
                     sx={{
                     height: 36,
@@ -117,7 +120,7 @@ export default function UpperBar(props: UpperBarProps) {
                     }}
                     alt="Logo"
                     src={"iconMarket.png"}
-                    /> */}
+                    />
                     <Typography
                       sx={{
                         mr: 2,
@@ -136,29 +139,69 @@ export default function UpperBar(props: UpperBarProps) {
               </Grid>
             </Grid >
             <Grid item>
-              <Grid
-              container
-              direction="row"
-              alignItems="center"
-              wrap='nowrap'
-              >
-                <Grid item>
-                  <Stack direction="row" spacing={1}>
-                    <Chip icon={<FaceIcon style={{color: 'white'}} />} label={usernameComponent} size= 'small' variant="outlined" style={{ color: 'white' }} />
-                  </Stack>
-                </Grid>
-                <Grid item>
-                <Box>
-                  <Button
-                  onClick={handleLogOut}
+              {
+                isLoggedIn
+                ?
+                <>
+                  <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
                   color="inherit"
-                  sx={{ fontSize: buttonsFontSize }}
                   >
-                  Log Out
-                  </Button>
-                </Box>
-                </Grid>
-              </Grid>
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                  </Menu>
+                </>
+                :
+                <>
+                  <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  wrap='nowrap'
+                  >
+                    <Grid item>
+                      <Button
+                      color="inherit"
+                      onClick={() => navigate("login")}
+                      sx={{ fontSize: buttonFontSize }}
+                      >
+                        Login
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                      color="inherit"
+                      onClick={() => navigate("signup")}
+                      sx={{ fontSize: buttonFontSize }}
+                      >
+                        Signup
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </>
+              }
             </Grid>
           </Grid>
         </Toolbar>

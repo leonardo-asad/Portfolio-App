@@ -8,8 +8,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import AddIcon from '@mui/icons-material/Add';
 import ListItemText from '@mui/material/ListItemText';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import * as Types from '../types/types'
 
 
@@ -49,7 +49,7 @@ export default function CreatePortfolioDialog(props: Props) {
         onClick={handleClickOpen}
       >
         <ListItemIcon>
-          <AddCircleOutlineIcon />
+          <AddIcon />
         </ListItemIcon>
         <ListItemText primary="Create Portfolio" />
       </ListItem>
