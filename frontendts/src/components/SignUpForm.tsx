@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as Types from '../types/types'
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
@@ -20,6 +21,8 @@ interface Props {
 }
 
 export default function SignUpForm(props: Props) {
+  const navigate = useNavigate();
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -82,8 +85,8 @@ export default function SignUpForm(props: Props) {
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
-              <Grid item onClick={(event) => props.handleDisplay(event, "login")}>
-                <Link href="#" variant="body2">
+              <Grid item onClick={() => navigate("/login")}>
+                <Link variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

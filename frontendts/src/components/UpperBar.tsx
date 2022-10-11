@@ -109,15 +109,15 @@ export default function UpperBar(props: UpperBarProps) {
                   flexDirection="row"
                   alignItems="center"
                   >
-                    <Box
+                    {/* <Box
                     component="img"
                     sx={{
                     height: 36,
                     mr: 2
                     }}
-                    alt="App Logo"
+                    alt="Logo"
                     src={"iconMarket.png"}
-                    />
+                    /> */}
                     <Typography
                       sx={{
                         mr: 2,

@@ -27,7 +27,8 @@ import {
   deletePortfolio,
   createPortfolio,
 } from '../features/portfolio/portfolioSlice'
-import { selectDisplay, changeDisplay } from '../features/display/displaySlice'
+
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface Props {
   sideBarOpen: Types.SideBarOpen,
@@ -37,11 +38,12 @@ interface Props {
 
 export default function SideBar(props: Props) {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { window } = props;
   const [accordionOpen, setAccordionOpen] = React.useState(false);
   const portfolios = useSelector(selectPortfolios);
   const selectedPortfolio = useSelector(selectSelectedPortfolio);
-  const display = useSelector(selectDisplay);
+  const { pathname } = useLocation();
 
 
   React.useEffect(() => {
@@ -57,8 +59,9 @@ export default function SideBar(props: Props) {
   }
 
   const handleSelectPortfolio: Types.HandleSelectPortfolio = (portfolio) => {
-    if (display !== 'holdings') {
-      dispatch(changeDisplay('holdings'))
+
+    if (pathname !== '/portfolio/holdings') {
+      navigate("/portfolio/holdings")
     }
 
     if (selectedPortfolio.name !== '') {
