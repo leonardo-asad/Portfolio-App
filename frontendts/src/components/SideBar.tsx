@@ -90,6 +90,10 @@ export default function SideBar(props: Props) {
     dispatch(createPortfolio(name));
   }
 
+  const styleSelectedItem = (selectedPortfolio: Types.Portfolio, portfolio: Types.Portfolio) => {
+    return selectedPortfolio.pk === portfolio.pk;
+  }
+
   const drawer = (
     <div>
       <List>
@@ -108,6 +112,7 @@ export default function SideBar(props: Props) {
             <ListItem
               button
               key={portfolio.pk}
+              selected={styleSelectedItem(selectedPortfolio, portfolio)}
               onClick={(event) => {
                 handleSelectPortfolio({
                   'pk': portfolio.pk,
