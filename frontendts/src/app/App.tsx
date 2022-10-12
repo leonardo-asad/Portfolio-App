@@ -19,6 +19,7 @@ import Box from '@mui/material/Box';
 import { HomeLayout } from "../layouts/HomeLayout";
 import { ProtectedLayout } from "../layouts/ProtectedLayout";
 import { AuthenticateLayout } from '../layouts/AuthenticateLayout'
+import Home from '../components/Home';
 import LogIn from "../features/user/LogIn";
 import SignUp from "../features/user/SignUp";
 import Holdings from "../features/portfolio/holdings";
@@ -36,7 +37,6 @@ import { AppDispatch } from './store';
 export const drawerWidth = 240;
 
 function App() {
-
   const [sideBarOpen, setSideBarOpen] = React.useState<Types.SideBarOpen>(false);
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const selectedPortfolio = useSelector(selectSelectedPortfolio);
@@ -87,7 +87,7 @@ function App() {
             <Toolbar />
             <Routes>
               <Route element={<HomeLayout />}>
-                <Route path="/" element={<div>Home Page</div>}/>
+                <Route path="/" element={<Home />}/>
                 <Route path="/quote" element={<div>Make a Quote</div>}/>
               </Route>
 

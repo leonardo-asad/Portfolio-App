@@ -11,7 +11,7 @@ import ShowChartIcon from '@mui/icons-material/ShowChart';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
-import InfoIcon from '@mui/icons-material/Info';
+import HomeIcon from '@mui/icons-material/Home';
 import CreatePortfolioDialog from './CreatePortfolioDialog';
 import EditPortfolioDialog from './EditPortfolioDialog';
 import DeletePortfolioDialog from './DeletePortfolioDIalog';
@@ -169,6 +169,17 @@ export default function SideBar(props: Props) {
   const drawerNotLoggedIn = (
     <>
       <ListItem
+      onClick={() => navigate("/")}
+      >
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText
+        primary="Home"
+        sx={{ display: 'flex', justifyContent: 'left' }}
+        />
+      </ListItem>
+      <ListItem
       onClick={() => navigate("/quote")}
       >
         <ListItemIcon>
@@ -176,17 +187,6 @@ export default function SideBar(props: Props) {
         </ListItemIcon>
         <ListItemText
         primary="Make a Quote"
-        sx={{ display: 'flex', justifyContent: 'left' }}
-        />
-      </ListItem>
-      <ListItem
-      onClick={() => navigate("/")}
-      >
-        <ListItemIcon>
-          <InfoIcon />
-        </ListItemIcon>
-        <ListItemText
-        primary="About"
         sx={{ display: 'flex', justifyContent: 'left' }}
         />
       </ListItem>
