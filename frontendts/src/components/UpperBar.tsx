@@ -13,13 +13,16 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
+import NavTabs from './NavTabs';
 
 import { drawerWidth } from '../app/App';
 
 import { selectIsLoggedIn } from '../features/user/userSlice'
+import { selectSelectedPortfolio } from '../features/portfolio/portfolioSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from '../app/store'
+import { Divider } from '@mui/material';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean,
@@ -51,6 +54,7 @@ export default function UpperBar(props: UpperBarProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const dispatch = useDispatch<AppDispatch>();
   const isLoggedIn = useSelector(selectIsLoggedIn);
+  const selectedPortfolio = useSelector(selectSelectedPortfolio);
   const navigate = useNavigate();
 
   const matches = useMediaQuery('(min-width:800px)');
@@ -205,6 +209,15 @@ export default function UpperBar(props: UpperBarProps) {
             </Grid>
           </Grid>
         </Toolbar>
+        {
+          (isLoggedIn && selectedPortfolio.name !== '') &&
+          <>
+            <Divider
+            sx={{ borderBottomColor: "white" }}
+            />
+            <NavTabs />
+          </>
+        }
       </AppBar>
     </React.Fragment>
   );

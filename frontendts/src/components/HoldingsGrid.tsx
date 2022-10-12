@@ -168,7 +168,7 @@ export default function HoldingsGrid() {
         boxShadow: 3,
         borderRadius: 3,
         '& .super-app-theme--header': {
-          backgroundColor: "primary.main",
+          backgroundColor: "primary.light",
           color: 'white',
           fontSize: fontSize
         },

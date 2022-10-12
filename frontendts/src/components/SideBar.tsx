@@ -169,7 +169,16 @@ export default function SideBar(props: Props) {
   const drawerNotLoggedIn = (
     <>
       <ListItem
-      onClick={() => navigate("/")}
+      onClick={() => {
+        dispatch(selectPortfolio({
+          'pk': '',
+          'name': '',
+          "holdings_url": '',
+          "purchases_url": '',
+          "alerts_url": ''
+        }))
+        navigate("/")
+      }}
       >
         <ListItemIcon>
           <HomeIcon />
@@ -180,7 +189,16 @@ export default function SideBar(props: Props) {
         />
       </ListItem>
       <ListItem
-      onClick={() => navigate("/quote")}
+      onClick={() => {
+        dispatch(selectPortfolio({
+          'pk': '',
+          'name': '',
+          "holdings_url": '',
+          "purchases_url": '',
+          "alerts_url": ''
+        }))
+        navigate("/quote")
+      }}
       >
         <ListItemIcon>
           <SearchIcon />

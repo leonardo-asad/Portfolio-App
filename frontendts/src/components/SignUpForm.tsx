@@ -41,10 +41,10 @@ export default function SignUpForm(props: Props) {
             item
             xs={false}
             sm={4}
-            md={7}
+            md={6}
             maxHeight= "700px"
             sx={{
-              backgroundImage: 'url(finance2.jpg)',
+              backgroundImage: 'url(exchange03.jpg)',
               backgroundRepeat: 'no-repeat',
               backgroundColor: (t) =>
                 t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -57,10 +57,10 @@ export default function SignUpForm(props: Props) {
         item
         xs={11}
         sm={11}
-        md={5}
+        md={6}
         maxHeight= "700px"
         component={Paper}
-        elevation={6}
+        elevation={0}
         square
         >
           <Box

@@ -1,13 +1,12 @@
-import * as React from 'react';
 import { Navigate, useOutlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import NavTabs from "../components/NavTabs";
 import {
   selectIsLoggedIn,
 } from "../features/user/userSlice";
-import { selectSelectedPortfolio } from '../features/portfolio/portfolioSlice';
-
-export const drawerWidth = 240;
+import {
+  selectSelectedPortfolio
+} from "../features/portfolio/portfolioSlice";
+import { Toolbar } from "@mui/material";
 
 export const ProtectedLayout = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -21,14 +20,12 @@ export const ProtectedLayout = () => {
   return (
     <>
       {
-        selectedPortfolio.name !== "" &&
-        <>
-          <NavTabs />
-        </>
+        selectedPortfolio.name !== '' &&
+        <Toolbar
+        variant="dense"
+        />
       }
-      <>
-        {outlet}
-      </>
+      {outlet}
     </>
   );
 };
