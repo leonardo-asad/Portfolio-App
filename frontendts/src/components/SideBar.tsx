@@ -235,13 +235,13 @@ export default function SideBar(props: Props) {
         <Toolbar />
         <Divider />
         <List>
+          {drawerNotLoggedIn}
           {
             isLoggedIn &&
             <>
               {drawerLoggedIn}
             </>
           }
-          {drawerNotLoggedIn}
         </List>
       </Drawer>
       <Drawer
@@ -255,13 +255,13 @@ export default function SideBar(props: Props) {
         <Toolbar />
         <Divider />
         <List>
+          {drawerNotLoggedIn}
           {
             isLoggedIn &&
             <>
               {drawerLoggedIn}
             </>
           }
-          {drawerNotLoggedIn}
         </List>
       </Drawer>
     </Box>

@@ -26,7 +26,6 @@ import Holdings from "../features/portfolio/holdings";
 import Trades from "../features/portfolio/trades";
 import UpperBar from '../components/UpperBar';
 import SideBar from '../components/SideBar';
-import { Toolbar } from '@mui/material';
 
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../theme'
@@ -80,28 +79,22 @@ function App() {
           sideBarOpen={sideBarOpen}
           handleSideBarToogle={handleSideBarToogle}
           />
-          <Box
-          component="main"
-          sx={{ flexGrow: 1, p: 2, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-          >
-            <Toolbar />
-            <Routes>
-              <Route element={<HomeLayout />}>
-                <Route path="/" element={<Home />}/>
-                <Route path="/quote" element={<div>Make a Quote</div>}/>
-              </Route>
+          <Routes>
+            <Route element={<HomeLayout />}>
+              <Route path="/" element={<Home />}/>
+              <Route path="/quote" element={<div>Make a Quote</div>}/>
+            </Route>
 
-              <Route element={<AuthenticateLayout />}>
-                <Route path="/login" element={<LogIn />}/>
-                <Route path="/signup" element={<SignUp />}/>
-              </Route>
+            <Route element={<AuthenticateLayout />}>
+              <Route path="/login" element={<LogIn />}/>
+              <Route path="/signup" element={<SignUp />}/>
+            </Route>
 
-              <Route path="/portfolio" element={<ProtectedLayout />}>
-                <Route path="holdings" element={<Holdings />}/>
-                <Route path="trades" element={<Trades />}/>
-              </Route>
-            </Routes>
-          </Box>
+            <Route path="/portfolio" element={<ProtectedLayout />}>
+              <Route path="holdings" element={<Holdings />}/>
+              <Route path="trades" element={<Trades />}/>
+            </Route>
+          </Routes>
         </Router>
       </Box>
     </ThemeProvider>
