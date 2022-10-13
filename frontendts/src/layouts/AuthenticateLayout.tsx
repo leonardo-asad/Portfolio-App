@@ -10,7 +10,7 @@ export const AuthenticateLayout = () => {
   const outlet = useOutlet();
 
   if (isLoggedIn) {
-    return <Navigate to="/portfolio/holdings" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return (
