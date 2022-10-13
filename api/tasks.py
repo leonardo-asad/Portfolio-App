@@ -1,4 +1,4 @@
-from api.email import send_alert_email
+from api.email_alert import send_alert_email
 from celery import shared_task
 from .helpers import lookup
 

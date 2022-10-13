@@ -110,3 +110,17 @@ class IntervalScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = IntervalSchedule
         fields = ['every', 'period']
+
+class StockProfileSerializer(serializers.Serializer):
+    country = serializers.CharField(max_length=16)
+    currency = serializers.CharField(max_length=16)
+    exchange = serializers.CharField(max_length=32)
+    finnhubIndustry = serializers.CharField(max_length=32)
+    ipo = serializers.DateField()
+    logo = serializers.URLField(allow_blank=True)
+    marketCapitalization = serializers.FloatField()
+    name = serializers.CharField(max_length=16)
+    phone = serializers.IntegerField()
+    shareOutstanding = serializers.DecimalField(max_digits = 24 ,decimal_places=2)
+    ticker = serializers.CharField(max_length=16)
+    weburl = serializers.URLField(allow_blank=True)

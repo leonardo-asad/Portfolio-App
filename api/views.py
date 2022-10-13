@@ -1,3 +1,4 @@
+from logging import raiseExceptions
 import os
 import json
 import datetime
@@ -6,7 +7,7 @@ from rest_framework import permissions, status, viewsets, generics
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 
 from backend import settings
@@ -14,10 +15,9 @@ from .models import Portfolio, Purchase
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 from .serializers import UserSerializerWithToken, UserSerializer, \
      PortfolioSerializer, PortfolioHoldingsSerializer, PurchaseSerializer, \
-     PeriodicTaskSerializer
+     PeriodicTaskSerializer, StockProfileSerializer
 from .permissions import IsOwner
-from .helpers import lookup
-
+from .helpers import lookup, get_profile
 
 class CreateUser(APIView):
     """
@@ -175,6 +175,29 @@ def PurchaseCreateView(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def StockProfileView(request):
+    if request.method == "GET":
+        try:
+            symbol = request.query_params["symbol"]
+        except:
+            return Response({"detail": "Bad Symbol Request"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        profile = get_profile(symbol)
+
+        if profile == None:
+            return Response({"detail": "Finhub API is not responding. Please try againg."},
+                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        profile_serialized = StockProfileSerializer(data=profile)
+
+        if profile_serialized.is_valid(raise_exception=True):
+            return Response(profile_serialized.data, status=status.HTTP_200_OK)
+
+        return Response(profile_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
 def periodic_task_list(request, pk):
