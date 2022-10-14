@@ -204,7 +204,7 @@ export default function SideBar(props: Props) {
           <SearchIcon />
         </ListItemIcon>
         <ListItemText
-        primary="Make a Quote"
+        primary="Search Stock"
         sx={{ display: 'flex', justifyContent: 'left' }}
         />
       </ListItem>

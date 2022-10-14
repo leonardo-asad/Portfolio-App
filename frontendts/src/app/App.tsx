@@ -26,6 +26,7 @@ import Holdings from "../features/portfolio/holdings";
 import Trades from "../features/portfolio/trades";
 import UpperBar from '../components/UpperBar';
 import SideBar from '../components/SideBar';
+import SearchStock from '../features/searchStock/SearchStock';
 
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../theme'
@@ -82,7 +83,7 @@ function App() {
           <Routes>
             <Route element={<HomeLayout />}>
               <Route path="/" element={<Home />}/>
-              <Route path="/quote" element={<div>Make a Quote</div>}/>
+              <Route path="/quote" element={<SearchStock />}/>
             </Route>
 
             <Route element={<AuthenticateLayout />}>
