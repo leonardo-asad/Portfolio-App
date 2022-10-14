@@ -1,4 +1,6 @@
 import json
+from locale import currency
+from typing_extensions import Required
 
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -111,16 +113,13 @@ class IntervalScheduleSerializer(serializers.ModelSerializer):
         model = IntervalSchedule
         fields = ['every', 'period']
 
-class StockProfileSerializer(serializers.Serializer):
-    country = serializers.CharField(max_length=16)
-    currency = serializers.CharField(max_length=16)
-    exchange = serializers.CharField(max_length=32)
-    finnhubIndustry = serializers.CharField(max_length=32)
-    ipo = serializers.DateField()
-    logo = serializers.URLField(allow_blank=True)
-    marketCapitalization = serializers.CharField(max_length=32)
-    name = serializers.CharField(max_length=16)
-    phone = serializers.CharField(max_length=32)
-    shareOutstanding = serializers.DecimalField(max_digits = 24 ,decimal_places=2)
-    ticker = serializers.CharField(max_length=16)
-    weburl = serializers.URLField(allow_blank=True)
+class SearchResultSerializer(serializers.Serializer):
+    symbol = serializers.CharField(max_length=32)
+    name = serializers.CharField(max_length=48)
+    type = serializers.CharField(max_length=16, required=False)
+    region = serializers.CharField(max_length=16, required=False)
+    marketOpen = serializers.TimeField(required=False)
+    marketClose = serializers.TimeField(required=False)
+    timezone = serializers.CharField(max_length=16, required=False)
+    currency = serializers.CharField(max_length=16, required=False)
+    matchScore = serializers.FloatField(required=False)

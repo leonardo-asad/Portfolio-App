@@ -27,12 +27,13 @@ def lookup(symbol):
 
 def get_profile(symbol):
     """
-    Lookup the profile of the Company
+    This API returns the company information, financial ratios, and other key metrics for the equity specified.
+    Data is generally refreshed on the same day a company reports its latest earnings and financials.
     """
     # Contact API
     try:
-        api_key = os.environ.get("API_KEY")
-        url = f"https://finnhub.io/api/v1/stock/profile2?symbol={symbol}&token={api_key}"
+        api_key = os.environ.get("API_KEY_ALPHAVANTAGE")
+        url = f"https://www.alphavantage.co/query?function=OVERVIEW&symbol={symbol}&apikey={api_key}"
         response = requests.get(url)
         response.raise_for_status()
     except requests.RequestException:
@@ -41,11 +42,52 @@ def get_profile(symbol):
     # Parse response
     try:
         profile = response.json()
-        return profile
+        profile_formated = {}
+        for key, value in profile.items():
+            profile_formated[key.lower()] = value
+
+        return profile_formated
+
+    except (KeyError, TypeError, ValueError):
+        return None
+
+def search_stock(query):
+    """
+    We've got you covered! The Search Endpoint returns the best-matching symbols and market information based on keywords of your choice.
+    The search results also contain match scores that provide you with the full flexibility to develop your own search and filtering logic.
+    """
+    # Contact API
+    try:
+        api_key = os.environ.get("API_KEY_ALPHAVANTAGE")
+        url = f"https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={query}&apikey={api_key}"
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.RequestException:
+        return None
+
+    # Parse response
+    try:
+        result = response.json()
+        bestMatches = result.get("bestMatches")
+        if len(bestMatches) > 0:
+            formatedBestMatches = [
+                {
+                'symbol': match['1. symbol'],
+                'name': match['2. name'],
+                'type': match['3. type'],
+                'region': match['4. region'],
+                'marketOpen': match['5. marketOpen'],
+                'marketClose': match['6. marketClose'],
+                'timezone': match['7. timezone'],
+                'currency': match['8. currency'],
+                'matchScore': match['9. matchScore'],
+                } for match in bestMatches]
+
+        return formatedBestMatches
 
     except (KeyError, TypeError, ValueError):
         return None
 
 
 if __name__ == "__main__":
-    print(get_profile("AAPL"))
+    print(get_profile("IBM"))

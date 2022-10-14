@@ -15,9 +15,9 @@ from .models import Portfolio, Purchase
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 from .serializers import UserSerializerWithToken, UserSerializer, \
      PortfolioSerializer, PortfolioHoldingsSerializer, PurchaseSerializer, \
-     PeriodicTaskSerializer, StockProfileSerializer
+     PeriodicTaskSerializer, SearchResultSerializer
 from .permissions import IsOwner
-from .helpers import lookup, get_profile
+from .helpers import lookup, get_profile, search_stock
 
 class CreateUser(APIView):
     """
@@ -192,12 +192,30 @@ def StockProfileView(request):
             return Response({"detail": "Finhub API is not responding. Please try againg."},
                              status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        profile_serialized = StockProfileSerializer(data=profile)
+        return Response(profile, status.HTTP_200_OK)
 
-        if profile_serialized.is_valid(raise_exception=True):
-            return Response(profile_serialized.data, status=status.HTTP_200_OK)
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def StockSearchView(request):
+    if request.method == "GET":
+        try:
+            query = request.query_params["query"]
+        except:
+            return Response({"detail": "Bad Query Request"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(profile_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        result = search_stock(query)
+
+        if result == None:
+            return Response({"detail": "Finhub API is not responding. Please try againg."},
+                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        result_serialized = SearchResultSerializer(data=result, many=True)
+
+        if result_serialized.is_valid(raise_exception=True):
+            return Response(result_serialized.data, status=status.HTTP_200_OK)
+
+        return Response(result_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
 def periodic_task_list(request, pk):
