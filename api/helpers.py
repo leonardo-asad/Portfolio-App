@@ -69,6 +69,7 @@ def search_stock(query):
     try:
         result = response.json()
         bestMatches = result.get("bestMatches")
+        print(bestMatches)
         if len(bestMatches) > 0:
             formatedBestMatches = [
                 {
@@ -83,7 +84,8 @@ def search_stock(query):
                 'matchScore': match['9. matchScore'],
                 } for match in bestMatches]
 
-        return formatedBestMatches
+            return formatedBestMatches
+        return []
 
     except (KeyError, TypeError, ValueError):
         return None

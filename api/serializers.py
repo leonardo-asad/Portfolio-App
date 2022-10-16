@@ -115,7 +115,7 @@ class IntervalScheduleSerializer(serializers.ModelSerializer):
 
 class SearchResultSerializer(serializers.Serializer):
     symbol = serializers.CharField(max_length=32)
-    name = serializers.CharField(max_length=48)
+    name = serializers.CharField(max_length=64)
     type = serializers.CharField(max_length=16, required=False)
     region = serializers.CharField(max_length=16, required=False)
     marketOpen = serializers.TimeField(required=False)

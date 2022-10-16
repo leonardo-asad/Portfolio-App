@@ -4,8 +4,18 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-export default function SearchForm() {
+interface Props {
+  handleSearchStock: (query: string) => void;
+}
+
+export default function SearchForm(props: Props) {
   const [keyword, setKeyword] = React.useState('');
+
+  const handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void = (event) => {
+    event.preventDefault();
+    props.handleSearchStock(keyword);
+    setKeyword('');
+  }
 
   return (
     <>
@@ -13,10 +23,7 @@ export default function SearchForm() {
       <Typography variant="body1" gutterBottom>The Search Endpoint returns the best-matching symbols and market information based on keywords of your choice</Typography>
       <Box
       component="form"
-      onSubmit={(event) => {
-        event.preventDefault();
-        console.log(keyword);
-      }}
+      onSubmit={handleSubmit}
       sx={{
         display: 'flex',
         '& > :not(style)': { my: 2, mr: 2, width: '25ch' },

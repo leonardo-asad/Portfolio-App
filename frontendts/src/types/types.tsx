@@ -32,6 +32,12 @@ export interface PortfolioInitialState {
   failedToAddTrade: boolean,
 }
 
+export interface StockSliceInitialState {
+  searchStockResult: any[],
+  isSearchingStock: boolean,
+  failedToSearchStock: boolean,
+}
+
 export interface User {
   username: string,
   password: string,

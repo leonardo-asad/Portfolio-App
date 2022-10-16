@@ -26,7 +26,7 @@ import Holdings from "../features/portfolio/holdings";
 import Trades from "../features/portfolio/trades";
 import UpperBar from '../components/UpperBar';
 import SideBar from '../components/SideBar';
-import SearchStock from '../features/searchStock/SearchStock';
+import SearchStock from '../features/stock/SearchStock';
 
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../theme'

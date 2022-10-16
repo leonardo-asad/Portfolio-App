@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from '../features/user/userSlice'
 import portfolioReducer from '../features/portfolio/portfolioSlice'
+import stockReducer from '../features/stock/stockSlice'
 
 const store = configureStore({
   reducer: {
     user: userReducer,
-    portfolio: portfolioReducer
+    portfolio: portfolioReducer,
+    stock: stockReducer,
   }
 })
 
