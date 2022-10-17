@@ -1,6 +1,5 @@
 import json
 from locale import currency
-from typing_extensions import Required
 
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
