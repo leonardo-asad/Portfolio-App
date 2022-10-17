@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 ## To use Postgres with Docker Compose, define the variable as "compose"
 ## To use Heroku Postrgres, define the variable as "heroku". To use Heroku Postgres you need to define the env variable DATABASE_URL
 
-database_connect = 'localhost'
+database_connect = 'heroku'
 
 if database_connect == 'localhost':
     DATABASES = {
@@ -154,19 +154,19 @@ USE_L10N = True
 # CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 
 # Connect to Redis on Heroku
-CELERY_BROKER_URL = os.environ.get("REDIS_URL")
+# CELERY_BROKER_URL = os.environ.get("REDIS_URL")
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.environ.get('REDIS_URL'),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": os.environ.get('REDIS_URL'),
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+# }
 
-CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+# CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -234,13 +234,13 @@ SIMPLE_JWT = {
 }
 
 # gmail_send/settings.py
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'portfoliomanager96@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'portfoliomanager96@gmail.com'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'portfoliomanager96@gmail.com'
+# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = 'portfoliomanager96@gmail.com'
 
 # Heroku Settings
 django_on_heroku.settings(locals())
