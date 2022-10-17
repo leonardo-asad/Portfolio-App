@@ -18,7 +18,7 @@ import NavTabs from './NavTabs';
 import { drawerWidth } from '../app/App';
 
 import { selectIsLoggedIn } from '../features/user/userSlice'
-import { selectSelectedPortfolio } from '../features/portfolio/portfolioSlice';
+import { selectSelectedPortfolio, selectPortfolio } from '../features/portfolio/portfolioSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from '../app/store'
@@ -64,6 +64,20 @@ export default function UpperBar(props: UpperBarProps) {
   const handleLogOut:(event: React.MouseEvent<HTMLElement>) => void = () => {
     setAnchorEl(null);
     dispatch({type: 'user/removeUser'});
+  }
+
+  const handleUserProfile:(event: React.MouseEvent<HTMLElement>) => void = () => {
+    setAnchorEl(null);
+    if (selectedPortfolio.name !== '') {
+      dispatch(selectPortfolio({
+        pk: '',
+        name: '',
+        holdings_url: '',
+        purchases_url: '',
+        alerts_url: ''
+      }))
+    }
+    navigate("/userProfile");
   }
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -172,8 +186,7 @@ export default function UpperBar(props: UpperBarProps) {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={handleUserProfile}>Profile</MenuItem>
                     <MenuItem onClick={handleLogOut}>Logout</MenuItem>
                   </Menu>
                 </>

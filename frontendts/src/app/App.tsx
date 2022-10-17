@@ -27,6 +27,7 @@ import Trades from "../features/portfolio/trades";
 import UpperBar from '../components/UpperBar';
 import SideBar from '../components/SideBar';
 import SearchStock from '../features/stock/SearchStock';
+import UserProfile from '../components/UserProfile';
 
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../theme'
@@ -89,6 +90,10 @@ function App() {
             <Route element={<AuthenticateLayout />}>
               <Route path="/login" element={<LogIn />}/>
               <Route path="/signup" element={<SignUp />}/>
+            </Route>
+
+            <Route element={<ProtectedLayout />}>
+              <Route path="/userProfile" element={<UserProfile />} />
             </Route>
 
             <Route path="/portfolio" element={<ProtectedLayout />}>
