@@ -31,7 +31,7 @@ export default function Home() {
             Welcome to Smart Investments!
           </Typography>
           <Typography variant="body1" gutterBottom>
-            Search information about your prefered Stocks and watch the latest news in the market.
+            Search information about your prefered Stocks or Create a new Account to track your investments in Stocks and ETFs.
           </Typography>
           <Button
           variant="contained"
