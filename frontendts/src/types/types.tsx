@@ -36,6 +36,7 @@ export interface StockSliceInitialState {
   searchStockResult: any[],
   isSearchingStock: boolean,
   failedToSearchStock: boolean,
+  noMatchingStock: boolean,
 }
 
 export interface User {
