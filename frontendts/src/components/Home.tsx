@@ -17,7 +17,7 @@ export default function Home() {
         Hello {username} !!
       </Typography>
       <Typography variant="body1" gutterBottom>
-        To begin, please select a portfolio to view your holdings, or create a new portfolio if you haven't one.
+        Search Information of Stocks, ETFs and Mutual Funds. In addition, you can track your Portfolio/s and their composition.
       </Typography>
     </>
   )
