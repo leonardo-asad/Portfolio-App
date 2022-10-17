@@ -35,6 +35,13 @@ export default function Home() {
           </Typography>
           <Button
           variant="contained"
+          sx={{ mt: 2, mr: 2 }}
+          onClick={() => navigate("/quote")}
+          >
+            Search Stock
+          </Button>
+          <Button
+          variant="contained"
           sx={{ mt: 2 }}
           onClick={() => navigate("/signup")}
           >
