@@ -14,7 +14,7 @@ export default function UserProfile() {
     <Box
     sx={{ m: 2 }}
     >
-      <Typography sx={{ my:1 }}>USER PROFILE:</Typography>
+      <Typography variant="h5" gutterBottom sx={{ my:1 }}>USER PROFILE:</Typography>
       <Typography sx={{ my:1 }}>Username: {username}</Typography>
 
     </Box>
