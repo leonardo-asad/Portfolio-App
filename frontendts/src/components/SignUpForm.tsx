@@ -44,7 +44,7 @@ export default function SignUpForm(props: Props) {
             md={6}
             maxHeight= "700px"
             sx={{
-              backgroundImage: 'url(exchange03.jpg)',
+              backgroundImage: 'url(static/exchange03.jpg)',
               backgroundRepeat: 'no-repeat',
               backgroundColor: (t) =>
                 t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],

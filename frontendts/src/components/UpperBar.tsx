@@ -137,7 +137,7 @@ export default function UpperBar(props: UpperBarProps) {
                     mr: 2
                     }}
                     alt="Logo"
-                    src={"iconMarket.png"}
+                    src={"static/iconMarket.png"}
                     />
                     <Typography
                       sx={{
