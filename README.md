@@ -3,7 +3,8 @@
 This web app keeps track of your investments in Stocks and ETFs. It presents to the user a detailed description of the composition of their portfolio/s and how much weight each asset has in relation to the total worth of their portfolio.
 
 # Stack
-![webstack](https://user-images.githubusercontent.com/64209661/171496008-7614b374-8c44-4421-8432-6f2328a34158.png)
+![image](https://user-images.githubusercontent.com/64209661/196314253-928c7d15-4a3b-4302-b2bd-be7d294f009d.png)
+
 
 # Explore the app
 
