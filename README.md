@@ -28,6 +28,8 @@ code .
 SECRET_KEY="Secret Key Django"
 #Finhub Api Key
 API_KEY="Finnhub Api Key"
+#Alpha Vantage Api Key
+API_KEY_ALPHAVANTAGE="AlphaVantage Key"
 #gmail_send/settings.py
 EMAIL_HOST_PASSWORD="Email Host Password"
 #Postgres DB environment variable
