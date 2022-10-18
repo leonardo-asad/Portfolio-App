@@ -34,10 +34,9 @@ API_KEY_ALPHAVANTAGE="AlphaVantage Key"
 POSTGRES_PASSWORD="password"
 ```
 3) The app uses a third party API (Finnhub) to lookup for the prices of the stocks. Get a free API key and store it under the name API_KEY in the .env file. It also uses AlphaVantage API to search stocks symbols according the user input. In the future it will be unified and only AlphaVantage will be used.
-4) Store the Django secret key under the name SECRET_KEY in the .env file
-5) The app uses the Email Backend service to send alerts to the users. Change the host email in backend/settings.py and store the password under the variable EMAIL_HOST_PASSWORD in the .env file.
-6) POSTGRES_PASSWORD should be specified to start the PostgresDB Service with Docker.
-7) Check backend/settings.py to connect to the postgresDB locally.
+4) Store the Django secret key under the name SECRET_KEY in the .env file.
+5) POSTGRES_PASSWORD should be specified to start the PostgresDB Service with Docker.
+6) Check backend/settings.py to connect to the postgresDB locally.
 
 DATABASES = {
     'default': {
@@ -50,7 +49,7 @@ DATABASES = {
     }
 }
 
-8) Install Docker and Docker Compose
-9) In the root folder run "docker compose -f "docker-compose.yml" up -d --build".
-10) Run migrations
-11) The website will run on localhost:8000
+7) Install Docker and Docker Compose
+8) In the root folder run "docker compose -f "docker-compose.yml" up -d --build".
+9) Run migrations
+10) The website will run on localhost:8000
